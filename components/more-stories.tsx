@@ -1,11 +1,12 @@
 import Link from "next/link";
 
-import Avatar from "./avatar";
-import CoverImage from "./cover-image";
-import DateComponent from "./date";
+
 
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { moreStoriesQuery } from "@/sanity/lib/queries";
+import CoverImage from "./cover-image";
+import DateComponent from "./date";
+import Avatar from "./avatar";
 
 export default async function MoreStories(params: {
   skip: string;
@@ -29,7 +30,7 @@ export default async function MoreStories(params: {
                 </Link>
               </h3>
               <div className="mb-4 text-lg">
-                <DateComponent dateString={post.date} />
+                <DateComponent  dateString={post.date} />
               </div>
               {excerpt && (
                 <p className="text-pretty mb-4 text-lg leading-relaxed">

@@ -10,8 +10,8 @@ import {
 import { Inter } from "next/font/google";
 import { draftMode } from "next/headers";
 
-import AlertBanner from "./alert-banner";
-import PortableText from "./portable-text";
+import AlertBanner from "../../components/alert-banner";
+import PortableText from "../../components/portable-text";
 
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";

@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { Suspense } from "react";
 
-import Avatar from "./avatar";
-import CoverImage from "./cover-image";
-import DateComponent from "./date";
-import MoreStories from "./more-stories";
-import Onboarding from "./onboarding";
-import PortableText from "./portable-text";
+// import Avatar from "../../components/avatar";
+// import CoverImage from "../../components/cover-image";
+// import DateComponent from "../../components/date";
+// import MoreStories from "./more-stories";
+// import Onboarding from "../../components/onboarding";
+// import PortableText from "../../components/portable-text";
 
 import type { HeroQueryResult } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
@@ -24,6 +24,12 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
+import CoverImage from "@/components/cover-image";
+import DateComponent from "@/components/date";
+import Avatar from "@/components/avatar";
+import Onboarding from "@/components/onboarding";
+import MoreStories from "@/components/more-stories";
+import HeroPost from "@/components/landing/HeroPost";
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
@@ -47,45 +53,45 @@ function Intro(props: { title: string | null | undefined; description: any }) {
   );
 }
 
-function HeroPost({
-  title,
-  slug,
-  excerpt,
-  coverImage,
-  date,
-  author,
-}: Pick<
-  Exclude<HeroQueryResult, null>,
-  "title" | "coverImage" | "date" | "excerpt" | "author" | "slug"
->) {
-  return (
-    <article>
-      <Link className="group mb-8 block md:mb-16" href={`/posts/${slug}`}>
-        <CoverImage image={coverImage} priority />
-      </Link>
-      <div className="mb-20 md:mb-28 md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8">
-        <div>
-          <h3 className="text-pretty mb-4 text-4xl leading-tight lg:text-6xl">
-            <Link href={`/posts/${slug}`} className="hover:underline">
-              {title}
-            </Link>
-          </h3>
-          <div className="mb-4 text-lg md:mb-0">
-            <DateComponent dateString={date} />
-          </div>
-        </div>
-        <div>
-          {excerpt && (
-            <p className="text-pretty mb-4 text-lg leading-relaxed">
-              {excerpt}
-            </p>
-          )}
-          {author && <Avatar name={author.name} picture={author.picture} />}
-        </div>
-      </div>
-    </article>
-  );
-}
+// function HeroPost({
+//   title,
+//   slug,
+//   excerpt,
+//   coverImage,
+//   date,
+//   author,
+// }: Pick<
+//   Exclude<HeroQueryResult, null>,
+//   "title" | "coverImage" | "date" | "excerpt" | "author" | "slug"
+// >) {
+//   return (
+//     <article>
+//       <Link className="group mb-8 block md:mb-16" href={`/posts/${slug}`}>
+//         <CoverImage image={coverImage} priority />
+//       </Link>
+//       <div className="mb-20 md:mb-28 md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8">
+//         <div>
+//           <h3 className="text-pretty mb-4 text-4xl leading-tight lg:text-6xl">
+//             <Link href={`/posts/${slug}`} className="hover:underline">
+//               {title}
+//             </Link>
+//           </h3>
+//           <div className="mb-4 text-lg md:mb-0">
+//             <DateComponent dateString={date} />
+//           </div>
+//         </div>
+//         <div>
+//           {excerpt && (
+//             <p className="text-pretty mb-4 text-lg leading-relaxed">
+//               {excerpt}
+//             </p>
+//           )}
+//           {author && <Avatar name={author.name} picture={author.picture} />}
+//         </div>
+//       </div>
+//     </article>
+//   );
+// }
 
 export default async function Page() {
   const [settings, heroPost] = await Promise.all([

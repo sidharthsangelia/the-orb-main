@@ -5,16 +5,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import Avatar from "../../avatar";
-import CoverImage from "../../cover-image";
-import DateComponent from "../../date";
-import MoreStories from "../../more-stories";
-import PortableText from "../../portable-text";
+
 
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { postQuery, settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import Avatar from "@/components/avatar";
+import CoverImage from "@/components/cover-image";
+import DateComponent from "@/components/date";
+import MoreStories from "@/components/more-stories";
+import CustomPortableText from "@/components/portable-text";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -96,7 +97,7 @@ export default async function PostPage({ params }: Props) {
           </div>
         </div>
         {post.content?.length && (
-          <PortableText
+          <CustomPortableText
             className="mx-auto max-w-2xl"
             value={post.content as PortableTextBlock[]}
           />
