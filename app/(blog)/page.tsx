@@ -1,40 +1,18 @@
 import Link from "next/link";
 import { Suspense } from "react";
-
-// import Avatar from "../../components/avatar";
-// import CoverImage from "../../components/cover-image";
-// import DateComponent from "../../components/date";
-// import MoreStories from "./more-stories";
-// import Onboarding from "../../components/onboarding";
-// import PortableText from "../../components/portable-text";
-
-import type { HeroQueryResult } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { heroQuery, settingsQuery } from "@/sanity/lib/queries";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label";
-import CoverImage from "@/components/cover-image";
-import DateComponent from "@/components/date";
-import Avatar from "@/components/avatar";
 import Onboarding from "@/components/onboarding";
 import MoreStories from "@/components/more-stories";
 import HeroPost from "@/components/landing/HeroPost";
+import Header1 from "@/components/mvpblocks/header-1";
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
-function Intro(props: { title: string | null | undefined; description: any }) {
+function Intro(props: { title: string | null | undefined; description: any ; siteLogo: any}) {
   const title = props.title || demo.title;
+  const logo = props.siteLogo
   // const description = props.description?.length
   //   ? props.description
   //   : demo.description;
@@ -53,45 +31,7 @@ function Intro(props: { title: string | null | undefined; description: any }) {
   );
 }
 
-// function HeroPost({
-//   title,
-//   slug,
-//   excerpt,
-//   coverImage,
-//   date,
-//   author,
-// }: Pick<
-//   Exclude<HeroQueryResult, null>,
-//   "title" | "coverImage" | "date" | "excerpt" | "author" | "slug"
-// >) {
-//   return (
-//     <article>
-//       <Link className="group mb-8 block md:mb-16" href={`/posts/${slug}`}>
-//         <CoverImage image={coverImage} priority />
-//       </Link>
-//       <div className="mb-20 md:mb-28 md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8">
-//         <div>
-//           <h3 className="text-pretty mb-4 text-4xl leading-tight lg:text-6xl">
-//             <Link href={`/posts/${slug}`} className="hover:underline">
-//               {title}
-//             </Link>
-//           </h3>
-//           <div className="mb-4 text-lg md:mb-0">
-//             <DateComponent dateString={date} />
-//           </div>
-//         </div>
-//         <div>
-//           {excerpt && (
-//             <p className="text-pretty mb-4 text-lg leading-relaxed">
-//               {excerpt}
-//             </p>
-//           )}
-//           {author && <Avatar name={author.name} picture={author.picture} />}
-//         </div>
-//       </div>
-//     </article>
-//   );
-// }
+
 
 export default async function Page() {
   const [settings, heroPost] = await Promise.all([
@@ -102,8 +42,9 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="container mx-auto px-5">
-      <Intro title={settings?.title} description={settings?.description} />
+    <div className="container mx-auto mt-20 px-5">
+      {/* <Intro title={settings?.title} description={settings?.description} /> */}
+      {/* <Header1 title={settings?.title} description={settings?.description} logo={settings?.siteLogo} /> */}
     
       {heroPost ? (
        

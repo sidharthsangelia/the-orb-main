@@ -16,7 +16,10 @@ import PortableText from "../../components/portable-text";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
-import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import { resolveOpenGraphImage, urlForImage } from "@/sanity/lib/utils";
+import Header1 from "@/components/mvpblocks/header-1";
+import { ThemeProvider } from "@/components/theme-provider";
+import Footer from "@/components/Footer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch({
@@ -29,20 +32,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage);
   let metadataBase: URL | undefined = undefined;
-  try {
-    metadataBase = settings?.ogImage?.metadataBase
-      ? new URL(settings.ogImage.metadataBase)
-      : undefined;
-  } catch {
-    // ignore
-  }
+  // metadataBase property does not exist on ogImage, so we leave it undefined or set it as needed
   return {
     metadataBase,
     title: {
       template: `%s | ${title}`,
       default: title,
     },
-    description: toPlainText(description),
+    description: Array.isArray(description) ? toPlainText(description) : description,
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },
@@ -61,16 +58,35 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await sanityFetch({ query: settingsQuery });
+  const siteSettings = data
+
   const footer = data?.footer || [];
-  const { isEnabled: isDraftMode } = await draftMode();
+  // const { isEnabled: isDraftMode } = await draftMode();
 
   return (
     <html lang="en" className={`${inter.variable} bg-white text-black`}>
       <body>
-        <section className="min-h-screen">
-          {isDraftMode && <AlertBanner />}
-          <main>{children}</main>
-          <footer className="bg-accent-1 border-accent-2 border-t">
+          {/* {isDraftMode && <AlertBanner />} */}
+
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+        <Header1
+          title={data?.title}
+          description={data?.description}
+          logo={
+            data?.logo?.asset ? urlForImage(data.logo).url() : undefined
+          }
+        />
+          {/* <section className="min-h-screen"> */}
+            {children}
+          {/* </section> */}
+            {siteSettings && <Footer siteSettings={siteSettings} />}
+          </ThemeProvider>
+          {/* <footer className="bg-accent-1 border-accent-2 border-t">
             <div className="container mx-auto px-5">
               {footer.length > 0 ? (
                 <PortableText
@@ -99,9 +115,8 @@ export default async function RootLayout({
                 </div>
               )}
             </div>
-          </footer>
-        </section>
-        {isDraftMode && <VisualEditing />}
+          </footer> */}
+        {/* {isDraftMode && <VisualEditing />} */}
         <SpeedInsights />
       </body>
     </html>
