@@ -14,7 +14,11 @@ import AboutUs2 from '@/components/mvpblocks/about-us-2'
 import HeroPostsGrid from "@/components/landing/HeroPost";
 import TriplePostGrid from "@/components/TriplePostGrid";
 import Earth from "@/components/mvpblocks/Globe";
-import { OurPartners } from "@/components/landing/OurPartners";
+import { OurPartners } from "@/components/about/OurPartners";
+import { MissionVisionSection } from "@/components/about/MissionVision";
+import { StatsSection } from "@/components/about/Stats";
+import { CoreValuesSection } from "@/components/about/CoreValues";
+import { CTA } from "@/components/about/Cta";
 export const revalidate = 10; // Revalidate every 10 seconds
 
 function Intro(props: { title: string | null | undefined; description: any ; siteLogo: any}) {
@@ -63,7 +67,10 @@ export default async function Page() {
               markerColor={[1, 0, 0.33]}
               glowColor={[1, 0, 0.3]}
             /> */}
-       <AboutUs2/>
+       {/* <AboutUs2/> */}
+       <MissionVisionSection/>
+       <StatsSection/>
+
         {/* {heroPostGrid ? (
         <HeroPostsGrid posts={heroPostGrid} />
       ) : null} */}
@@ -92,6 +99,9 @@ export default async function Page() {
             }))}
         />
       )}
+
+      <CoreValuesSection/>
+      <CTA/>
       {/* {heroPost?._id && (
         <aside>
           <h2 className="mb-8 text-6xl font-bold leading-tight tracking-tighter md:text-7xl">

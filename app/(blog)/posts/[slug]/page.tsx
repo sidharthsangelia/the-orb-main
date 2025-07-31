@@ -14,6 +14,7 @@ import CoverImage from "@/components/cover-image";
 import DateComponent from "@/components/date";
 import MoreStories from "@/components/more-stories";
 import CustomPortableText from "@/components/portable-text";
+import { CTA } from "@/components/about/Cta";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -59,7 +60,7 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
-      <article className="mx-auto mt-12 max-w-4xl">
+      <article className="mx-auto mt-12 mb-16 max-w-4xl">
         {/* Title */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-6 leading-tight">
           {post.title}
@@ -86,6 +87,10 @@ export default async function PostPage({ params }: Props) {
           />
         )}
       </article>
+
+     <span className="mt-16 ">
+      <CTA/>
+     </span>
 
       {/* More Stories */}
       <aside className="mx-auto max-w-5xl mt-24 border-t border-border pt-16">
