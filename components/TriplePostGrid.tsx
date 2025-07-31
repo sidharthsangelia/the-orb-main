@@ -26,7 +26,7 @@ function PostCard({ post }: { post: Post }) {
       <Link href={`/posts/${post.slug}`}>
         <div
           className={cn(
-            "cursor-pointer overflow-hidden relative card h-96 rounded-lg shadow-xl w-full flex flex-col justify-between p-4",
+            "cursor-pointer overflow-hidden relative card h-96 rounded-lg shadow-xl w-full flex flex-col justify-between p-8",
             "bg-cover bg-center"
           )}
           style={{
@@ -34,7 +34,7 @@ function PostCard({ post }: { post: Post }) {
           }}
         >
           {/* Hover overlay */}
-          <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60 rounded-md"></div>
+          <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60 rounded-lg"></div>
           
           {/* Author section */}
           <div className="flex flex-row items-center space-x-4 z-10">

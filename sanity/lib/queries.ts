@@ -125,3 +125,27 @@ export const partnersQuery = defineQuery(`*[_type == "partner"] | order(_created
   "logo": logo.asset->url,
   website
 }`);
+
+export const categoriesQuery = defineQuery(`
+  *[_type == "category"] | order(title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    description,
+    "color": coalesce(color.hex, "#3B82F6"),
+    "image": image.asset->url,
+    "postCount": count(*[_type == "post" && references(^._id)])
+  }
+`);
+
+export const categoryQuery = defineQuery(`
+  *[_type == "category" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    description,
+    "color": coalesce(color.hex, "#3B82F6"),
+    "image": image.asset->url,
+    seo
+  }
+`);

@@ -3,128 +3,202 @@
 @tailwind utilities;
 
 :root {
-  --background: 45 41% 87%;
-  --foreground: 180 3% 5%;
-  --card: 45 41% 95%;
-  --card-foreground: 180 3% 5%;
+  /* Light Mode - Natural, Airy, Elegant */
+  --background: 45 41% 89%; /* Soft ivory base */
+  --foreground: 180 6% 8%; /* Deep charcoal for text */
 
-  --popover: 45 41% 95%;
-  --popover-foreground: 180 3% 5%;
+  --card: 45 41% 94%; /* Lighter ivory for cards */
+  --card-foreground: 180 6% 8%;
 
-  --primary: 166 33% 47%; /* teal */
-  --primary-foreground: 45 41% 87%;
+  --popover: 45 41% 96%; /* Nearly white ivory */
+  --popover-foreground: 180 6% 8%;
 
-  --secondary: 139 21% 36%; /* moss green */
-  --secondary-foreground: 45 41% 87%;
+  --primary: 139 21% 36%; /* Earthy forest green */
+  --primary-foreground: 45 41% 96%;
 
-  --muted: 45 31% 91%;
-  --muted-foreground: 61 11% 31%;
+  --secondary: 166 33% 47%; /* Teal green accent */
+  --secondary-foreground: 45 41% 96%;
 
-  --accent: 139 21% 36%;
-  --accent-foreground: 45 41% 87%;
+  --muted: 45 31% 91%; /* Muted ivory */
+  --muted-foreground: 61 11% 31%; /* Olive tone for muted text */
 
-  --destructive: 0 70% 55%;
-  --destructive-foreground: 45 41% 87%;
+  --accent: 166 28% 52%; /* Slightly brighter teal for accents */
+  --accent-foreground: 45 41% 96%;
 
-  --border: 61 11% 31%;
-  --input: 45 31% 91%;
-  --ring: 166 33% 47%;
+  --destructive: 0 65% 51%; /* Muted red for warnings */
+  --destructive-foreground: 45 41% 96%;
 
-  --chart-1: 166 33% 47%;
-  --chart-2: 139 21% 36%;
-  --chart-3: 61 11% 31%;
-  --chart-4: 180 3% 5%;
-  --chart-5: 45 41% 87%;
+  --border: 45 21% 82%; /* Soft border from ivory family */
+  --input: 45 35% 93%; /* Input background */
+  --ring: 139 21% 36%; /* Focus ring matches primary */
 
-  --sidebar: 45 31% 91%;
-  --sidebar-foreground: 180 3% 5%;
+  /* Chart colors using palette variations */
+  --chart-1: 139 21% 36%; /* Forest green */
+  --chart-2: 166 33% 47%; /* Teal green */
+  --chart-3: 61 11% 31%; /* Olive tone */
+  --chart-4: 45 15% 65%; /* Mid-tone neutral */
+  --chart-5: 139 15% 25%; /* Darker forest green */
+
+  /* Sidebar specific colors */
+  --sidebar: 45 35% 92%; /* Slightly warmer sidebar */
+  --sidebar-foreground: 180 6% 8%;
   --sidebar-primary: 139 21% 36%;
-  --sidebar-primary-foreground: 45 41% 87%;
+  --sidebar-primary-foreground: 45 41% 96%;
   --sidebar-accent: 166 33% 47%;
-  --sidebar-accent-foreground: 45 41% 87%;
-  --sidebar-border: 61 11% 31%;
-  --sidebar-ring: 166 33% 47%;
+  --sidebar-accent-foreground: 45 41% 96%;
+  --sidebar-border: 45 21% 85%;
+  --sidebar-ring: 139 21% 36%;
 
-  --font-sans: Karla, sans-serif;
-  --font-serif: Lora, serif;
-  --font-mono: Space Mono, monospace;
+  /* Typography - Eco-friendly, readable fonts */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-serif: 'Crimson Text', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  --radius: 0.5rem;
+  /* Border radius for organic feel */
+  --radius: 0.75rem;
 
-  --shadow-2xs: 0px 4px 8px -2px hsl(61 11% 31% / 0.05);
-  --shadow-xs: 0px 4px 8px -2px hsl(61 11% 31% / 0.05);
-  --shadow-sm: 0px 4px 8px -2px hsl(61 11% 31% / 0.10), 0px 1px 2px -3px hsl(61 11% 31% / 0.10);
-  --shadow: 0px 4px 8px -2px hsl(61 11% 31% / 0.10), 0px 1px 2px -3px hsl(61 11% 31% / 0.10);
-  --shadow-md: 0px 4px 8px -2px hsl(61 11% 31% / 0.10), 0px 2px 4px -3px hsl(61 11% 31% / 0.10);
-  --shadow-lg: 0px 4px 8px -2px hsl(61 11% 31% / 0.10), 0px 4px 6px -3px hsl(61 11% 31% / 0.10);
-  --shadow-xl: 0px 4px 8px -2px hsl(61 11% 31% / 0.10), 0px 8px 10px -3px hsl(61 11% 31% / 0.10);
-  --shadow-2xl: 0px 4px 8px -2px hsl(61 11% 31% / 0.25);
+  /* Soft, natural shadows */
+  --shadow-2xs: 0px 1px 2px 0px hsl(61 11% 31% / 0.04);
+  --shadow-xs: 0px 1px 3px 0px hsl(61 11% 31% / 0.06);
+  --shadow-sm: 0px 2px 4px -1px hsl(61 11% 31% / 0.08), 0px 1px 2px -1px hsl(61 11% 31% / 0.06);
+  --shadow: 0px 4px 6px -2px hsl(61 11% 31% / 0.08), 0px 2px 4px -2px hsl(61 11% 31% / 0.06);
+  --shadow-md: 0px 6px 10px -3px hsl(61 11% 31% / 0.10), 0px 2px 4px -2px hsl(61 11% 31% / 0.06);
+  --shadow-lg: 0px 10px 15px -3px hsl(61 11% 31% / 0.12), 0px 4px 6px -2px hsl(61 11% 31% / 0.08);
+  --shadow-xl: 0px 20px 25px -5px hsl(61 11% 31% / 0.12), 0px 10px 10px -5px hsl(61 11% 31% / 0.06);
+  --shadow-2xl: 0px 25px 50px -12px hsl(61 11% 31% / 0.20);
 
-  --tracking-normal: 0rem;
+  /* Spacing and tracking */
+  --tracking-normal: -0.005em;
   --spacing: 0.25rem;
+
+  /* Additional eco-themed colors */
+  --success: 139 35% 45%; /* Success green */
+  --success-foreground: 45 41% 96%;
+  --warning: 45 85% 55%; /* Natural amber warning */
+  --warning-foreground: 61 11% 15%;
+  --info: 166 40% 50%; /* Info teal */
+  --info-foreground: 45 41% 96%;
 }
 
 .dark {
-  --background: 180 3% 5%; /* charcoal */
-  --foreground: 45 41% 87%; /* cream */
-  --card: 180 3% 8%;
-  --card-foreground: 45 41% 87%;
+  /* Dark Mode - Deep, Calming, Atmospheric */
+  --background: 180 6% 4%; /* Deep charcoal base */
+  --foreground: 45 35% 92%; /* Brighter warm ivory text */
 
-  --popover: 180 3% 5%;
-  --popover-foreground: 45 41% 87%;
+  --card: 180 6% 6%; /* Slightly lighter charcoal */
+  --card-foreground: 45 35% 92%;
 
-  --primary: 166 33% 47%;
-  --primary-foreground: 180 3% 5%;
+  --popover: 180 6% 5%; /* Popover background */
+  --popover-foreground: 45 35% 92%;
 
-  --secondary: 139 21% 36%;
-  --secondary-foreground: 45 41% 87%;
+  --primary: 166 40% 55%; /* Slightly more vibrant teal */
+  --primary-foreground: 180 6% 4%;
 
-  --muted: 180 3% 10%;
-  --muted-foreground: 61 11% 31%;
+  --secondary: 139 30% 45%; /* More vibrant forest green */
+  --secondary-foreground: 45 35% 92%;
 
-  --accent: 139 21% 36%;
-  --accent-foreground: 45 41% 87%;
+  --muted: 180 6% 8%; /* Muted dark background */
+  --muted-foreground: 45 20% 72%; /* Brighter muted text */
 
-  --destructive: 0 55% 45%;
-  --destructive-foreground: 45 41% 87%;
+  --accent: 166 40% 55%; /* More vibrant accent teal */
+  --accent-foreground: 180 6% 4%;
 
-  --border: 61 11% 31%;
-  --input: 180 3% 10%;
-  --ring: 166 33% 47%;
+  --destructive: 0 60% 52%; /* Slightly brighter red for dark mode */
+  --destructive-foreground: 45 35% 92%;
 
-  --chart-1: 166 33% 47%;
-  --chart-2: 139 21% 36%;
-  --chart-3: 61 11% 31%;
-  --chart-4: 45 41% 87%;
-  --chart-5: 180 3% 5%;
+  --border: 180 6% 14%; /* Slightly more visible borders */
+  --input: 180 6% 8%; /* Input background */
+  --ring: 166 40% 55%; /* Brighter focus ring */
 
-  --sidebar: 180 3% 8%;
-  --sidebar-foreground: 45 41% 87%;
-  --sidebar-primary: 139 21% 36%;
-  --sidebar-primary-foreground: 45 41% 87%;
-  --sidebar-accent: 166 33% 47%;
-  --sidebar-accent-foreground: 45 41% 87%;
-  --sidebar-border: 61 11% 31%;
-  --sidebar-ring: 166 33% 47%;
+  /* Chart colors for dark mode */
+  --chart-1: 166 40% 55%; /* Vibrant teal */
+  --chart-2: 139 30% 45%; /* Vibrant forest green */
+  --chart-3: 45 30% 75%; /* Brighter neutral */
+  --chart-4: 61 20% 45%; /* More vibrant olive tone */
+  --chart-5: 166 30% 38%; /* Darker teal */
 
-  --font-sans: Karla, sans-serif;
-  --font-serif: Lora, serif;
-  --font-mono: Space Mono, monospace;
+  /* Dark sidebar */
+  --sidebar: 180 6% 6%;
+  --sidebar-foreground: 45 35% 92%;
+  --sidebar-primary: 139 30% 45%;
+  --sidebar-primary-foreground: 45 35% 92%;
+  --sidebar-accent: 166 40% 55%;
+  --sidebar-accent-foreground: 180 6% 4%;
+  --sidebar-border: 180 6% 14%;
+  --sidebar-ring: 166 40% 55%;
 
-  --radius: 0.5rem;
+  /* Same typography */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-serif: 'Crimson Text', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 8px 10px -1px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0px 2px 4px 0px hsl(0 0% 0% / 0.25);
+  --radius: 0.75rem;
+
+  /* Deeper shadows for dark mode */
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.15);
+  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.20);
+  --shadow-sm: 0px 2px 4px -1px hsl(0 0% 0% / 0.25), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow: 0px 4px 6px -2px hsl(0 0% 0% / 0.25), 0px 2px 4px -2px hsl(0 0% 0% / 0.15);
+  --shadow-md: 0px 6px 10px -3px hsl(0 0% 0% / 0.30), 0px 2px 4px -2px hsl(0 0% 0% / 0.20);
+  --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.35), 0px 4px 6px -2px hsl(0 0% 0% / 0.25);
+  --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.40), 0px 10px 10px -5px hsl(0 0% 0% / 0.20);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.50);
+
+  --tracking-normal: -0.005em;
+  --spacing: 0.25rem;
+
+  /* Dark mode eco colors */
+  --success: 139 38% 52%;
+  --success-foreground: 180 6% 4%;
+  --warning: 45 80% 65%;
+  --warning-foreground: 61 11% 10%;
+  --info: 166 45% 58%;
+  --info-foreground: 180 6% 4%;
 }
 
 body {
   letter-spacing: var(--tracking-normal);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Additional utility classes for the eco theme */
+.eco-gradient-primary {
+  background: linear-gradient(135deg, 
+    hsl(var(--primary)) 0%, 
+    hsl(var(--secondary)) 100%
+  );
+}
+
+.eco-gradient-accent {
+  background: linear-gradient(135deg, 
+    hsl(var(--accent)) 0%, 
+    hsl(var(--primary)) 100%
+  );
+}
+
+.eco-glass {
+  background: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* Focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: 
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 @layer base {

@@ -92,7 +92,7 @@ export default async function PostPage({ params }: Props) {
       <CTA/>
      </span>
 
-      {/* More Stories */}
+      {/* More Stories
       <aside className="mx-auto max-w-5xl mt-24 border-t border-border pt-16">
         <h2 className="text-3xl sm:text-4xl font-semibold text-foreground mb-8">
           Recent Stories
@@ -100,7 +100,25 @@ export default async function PostPage({ params }: Props) {
         <Suspense>
           <MoreStories skip={post._id} limit={2} />
         </Suspense>
-      </aside>
+      </aside> */}
+
+      {/* Related Stories */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-12 text-center">
+              Continue Reading
+            </h2>
+            <Suspense fallback={
+              <div className="flex justify-center items-center py-12">
+                <div className="text-muted-foreground">Loading related stories...</div>
+              </div>
+            }>
+              <MoreStories skip={post._id} limit={3} />
+            </Suspense>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

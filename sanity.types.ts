@@ -1233,6 +1233,28 @@ export type PartnersQueryResult = Array<{
   logo: string | null;
   website: string | null;
 }>;
+// Variable: categoriesQuery
+// Query: *[_type == "category"] | order(title asc) {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    "postCount": count(*[_type == "post" && references(^._id)])  }
+export type CategoriesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  description: string | null;
+  color: string | "#3B82F6";
+  image: string | null;
+  postCount: number;
+}>;
+// Variable: categoryQuery
+// Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    seo  }
+export type CategoryQueryResult = {
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  description: string | null;
+  color: string | "#3B82F6";
+  image: string | null;
+  seo: Seo | null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
@@ -1252,5 +1274,7 @@ declare module "@sanity/client" {
     "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": HeroPostsGridQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": TripleCardGridQueryResult;
     "*[_type == \"partner\"] | order(_createdAt desc) {\n  _id,\n  title,\n  \"logo\": logo.asset->url,\n  website\n}": PartnersQueryResult;
+    "\n  *[_type == \"category\"] | order(title asc) {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    \"postCount\": count(*[_type == \"post\" && references(^._id)])\n  }\n": CategoriesQueryResult;
+    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    seo\n  }\n": CategoryQueryResult;
   }
 }

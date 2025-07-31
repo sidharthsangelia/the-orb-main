@@ -377,40 +377,7 @@ export default function AllPostsPage() {
         </div>
       </div>
 
-      {/* Mission Values Banner */}
-      {/* <div className="bg-gradient-to-r from-primary/5 via-background to-secondary/5 border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                <Leaf className="h-5 w-5 text-primary" />
-              </div>
-              <div className="text-left">
-                <h3 className="font-semibold text-foreground">Planet First</h3>
-                <p className="text-sm text-muted-foreground">Sustainable solutions for future generations</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center">
-                <Users className="h-5 w-5 text-secondary" />
-              </div>
-              <div className="text-left">
-                <h3 className="font-semibold text-foreground">Youth Empowerment</h3>
-                <p className="text-sm text-muted-foreground">Young voices catalyzing climate action</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                <Target className="h-5 w-5 text-primary" />
-              </div>
-              <div className="text-left">
-                <h3 className="font-semibold text-foreground">Knowledge for Action</h3>
-                <p className="text-sm text-muted-foreground">Accessible insights for real impact</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+     
 
       {/* Posts Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -468,28 +435,7 @@ export default function AllPostsPage() {
       
       {/* Bottom CTA Section - Mission focused */}
       {!loading && posts.length > 0 && (
-        // <div className="bg-gradient-to-r from-primary to-secondary text-primary-foreground">
-        //   <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        //     <h2 className="text-3xl md:text-4xl font-bold mb-4">
-        //       Join India's Green Transformation
-        //     </h2>
-        //     <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-        //       Be part of the generation leading climate action. Get the latest stories of 
-        //       sustainable innovation and youth-driven change delivered to your inbox.
-        //     </p>
-        //     <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-        //       <Input
-        //         type="email"
-        //         placeholder="Enter your email"
-        //         className="flex-1 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/70 focus:border-primary-foreground/40"
-        //       />
-        //       <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold">
-        //         Join the Movement
-        //       </Button>
-        //     </div>
-        //   </div>
-        // </div>
-
+        
         <CTA/>
       )}
     </div>
