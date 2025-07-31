@@ -36,12 +36,12 @@ const navItems: NavItem[] = [
         description: "Authentic youth perspectives",
         icon: <Users className="h-4 w-4" />,
       },
-      { 
-        name: "Visual Content", 
-        href: "/stories/visual", 
-        description: "Engaging visual narratives",
-        icon: <Camera className="h-4 w-4" />,
-      },
+      // { 
+      //   name: "Visual Content", 
+      //   href: "/stories/visual", 
+      //   description: "Engaging visual narratives",
+      //   icon: <Camera className="h-4 w-4" />,
+      // },
     ],
   },
   {
@@ -61,12 +61,12 @@ const navItems: NavItem[] = [
         description: "Learn about climate action",
         icon: <Leaf className="h-4 w-4" />,
       },
-      { 
-        name: "Community Tools", 
-        href: "/resources/tools", 
-        description: "Tools for climate action",
-        icon: <Users className="h-4 w-4" />,
-      },
+      // { 
+      //   name: "Community Tools", 
+      //   href: "/resources/tools", 
+      //   description: "Tools for climate action",
+      //   icon: <Users className="h-4 w-4" />,
+      // },
     ],
   },
   { name: "Community", href: "/community" },

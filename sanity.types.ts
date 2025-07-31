@@ -617,6 +617,258 @@ export type PostSlugsResult = Array<{
 }>;
 
 // Source: ./sanity/lib/queries.ts
+// Variable: featuredPostsQuery
+// Query: *[_type == "post" && defined(slug.current) && featured == true]   | order(date desc, _updatedAt desc) [0...3] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type FeaturedPostsQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
+// Variable: recentPostsQuery
+// Query: *[_type == "post" && defined(slug.current)]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type RecentPostsQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
+// Variable: postsByCategoryQuery
+// Query: *[_type == "post" && defined(slug.current) && category->slug.current == $categorySlug]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type PostsByCategoryQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
+// Variable: postsByAuthorQuery
+// Query: *[_type == "post" && defined(slug.current) && author->slug.current == $authorSlug]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type PostsByAuthorQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
+// Variable: relatedPostsQuery
+// Query: *[_type == "post" && defined(slug.current) && _id != $postId &&     (category->_id == $categoryId || author->_id == $authorId)]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type RelatedPostsQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
+// Variable: searchPostsQuery
+// Query: *[_type == "post" && defined(slug.current) &&     (title match $searchTerm + "*" || excerpt match $searchTerm + "*" ||      pt::text(content) match $searchTerm + "*")]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type SearchPostsQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
 export type SettingsQueryResult = {
@@ -700,7 +952,7 @@ export type SettingsQueryResult = {
   }>;
 } | null;
 // Variable: heroQuery
-// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
 export type HeroQueryResult = {
   content: Array<{
     children?: Array<{
@@ -770,9 +1022,11 @@ export type HeroQueryResult = {
       _type: "image";
     } | null;
   } | null;
+  category: null;
+  readingTime: number;
 } | null;
 // Variable: moreStoriesQuery
-// Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
 export type MoreStoriesQueryResult = Array<{
   _id: string;
   status: "draft" | "published";
@@ -810,9 +1064,11 @@ export type MoreStoriesQueryResult = Array<{
       _type: "image";
     } | null;
   } | null;
+  category: null;
+  readingTime: number;
 }>;
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
 export type PostQueryResult = {
   content: Array<{
     children?: Array<{
@@ -882,9 +1138,11 @@ export type PostQueryResult = {
       _type: "image";
     } | null;
   } | null;
+  category: null;
+  readingTime: number;
 } | null;
 // Variable: heroPostsGridQuery
-// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
 export type HeroPostsGridQueryResult = Array<{
   _id: string;
   status: "draft" | "published";
@@ -922,9 +1180,11 @@ export type HeroPostsGridQueryResult = Array<{
       _type: "image";
     } | null;
   } | null;
+  category: null;
+  readingTime: number;
 }>;
 // Variable: tripleCardGridQuery
-// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {    _id,    "status": select(_originalId in path("drafts.**") => "draft", "published"),    "title": coalesce(title, "Untitled"),    "slug": slug.current,    excerpt,    coverImage,    "date": coalesce(date, _updatedAt),    "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
 export type TripleCardGridQueryResult = Array<{
   _id: string;
   status: "draft" | "published";
@@ -962,6 +1222,8 @@ export type TripleCardGridQueryResult = Array<{
       _type: "image";
     } | null;
   } | null;
+  category: null;
+  readingTime: number;
 }>;
 // Variable: partnersQuery
 // Query: *[_type == "partner"] | order(_createdAt desc) {  _id,  title,  "logo": logo.asset->url,  website}
@@ -977,12 +1239,18 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"post\" && defined(slug.current)]{\"slug\": slug.current}": PostSlugsResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && featured == true] \n  | order(date desc, _updatedAt desc) [0...3] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": FeaturedPostsQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": RecentPostsQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && category->slug.current == $categorySlug] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": PostsByCategoryQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && author->slug.current == $authorSlug] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": PostsByAuthorQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && _id != $postId && \n    (category->_id == $categoryId || author->_id == $authorId)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": RelatedPostsQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && \n    (title match $searchTerm + \"*\" || excerpt match $searchTerm + \"*\" || \n     pt::text(content) match $searchTerm + \"*\")] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": SearchPostsQueryResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": HeroQueryResult;
-    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": MoreStoriesQueryResult;
-    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": PostQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": HeroPostsGridQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {\n    _id,\n    \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n    \"title\": coalesce(title, \"Untitled\"),\n    \"slug\": slug.current,\n    excerpt,\n    coverImage,\n    \"date\": coalesce(date, _updatedAt),\n    \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n  }\n": TripleCardGridQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": HeroQueryResult;
+    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": MoreStoriesQueryResult;
+    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": PostQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": HeroPostsGridQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": TripleCardGridQueryResult;
     "*[_type == \"partner\"] | order(_createdAt desc) {\n  _id,\n  title,\n  \"logo\": logo.asset->url,\n  website\n}": PartnersQueryResult;
   }
 }
