@@ -116,7 +116,7 @@ export default function LucyHero() {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
               }}
-              className="text-muted-foreground mb-8 text-lg leading-relaxed"
+              className="text-foreground mb-8 text-lg leading-relaxed"
             >
               Empowering the next generation to bridge awareness and action in
               sustainability. We are the narrators, educators, and agents of
