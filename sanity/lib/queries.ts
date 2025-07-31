@@ -32,3 +32,23 @@ export const postQuery = defineQuery(`
     ${postFields}
   }
 `);
+
+export const heroPostsGridQuery = defineQuery(`
+  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {
+    ${postFields}
+  }
+`);
+
+export const tripleCardGridQuery = defineQuery(`
+  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {
+    _id,
+    "status": select(_originalId in path("drafts.**") => "draft", "published"),
+    "title": coalesce(title, "Untitled"),
+    "slug": slug.current,
+    excerpt,
+    coverImage,
+    "date": coalesce(date, _updatedAt),
+    "author": author->{"name": coalesce(name, "Anonymous"), picture},
+  }
+`);
+

@@ -2,12 +2,18 @@ import Link from "next/link";
 import { Suspense } from "react";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { heroQuery, settingsQuery } from "@/sanity/lib/queries";
+import { heroPostsGridQuery, heroQuery, settingsQuery, tripleCardGridQuery } from "@/sanity/lib/queries";
 import Onboarding from "@/components/onboarding";
 import MoreStories from "@/components/more-stories";
 import HeroPost from "@/components/landing/HeroPost";
 import Header1 from "@/components/mvpblocks/header-1";
-
+import Hero from "@/components/mvpblocks/Hero";
+import LucyHero from "@/components/mvpblocks/mockup-hero";
+import GradientHero from "@/components/mvpblocks/Hero";
+import AboutUs2 from '@/components/mvpblocks/about-us-2'
+import HeroPostsGrid from "@/components/landing/HeroPost";
+import TriplePostGrid from "@/components/TriplePostGrid";
+import Earth from "@/components/mvpblocks/Globe";
 export const revalidate = 10; // Revalidate every 10 seconds
 
 function Intro(props: { title: string | null | undefined; description: any ; siteLogo: any}) {
@@ -34,19 +40,32 @@ function Intro(props: { title: string | null | undefined; description: any ; sit
 
 
 export default async function Page() {
-  const [settings, heroPost] = await Promise.all([
+  const [settings, heroPost, heroPostGrid,  tripleCardPosts] = await Promise.all([
     sanityFetch({
       query: settingsQuery,
     }),
     sanityFetch({ query: heroQuery }),
+    sanityFetch({ query: heroPostsGridQuery }),
+     sanityFetch({ query: tripleCardGridQuery }),
   ]);
 
   return (
-    <div className="container mx-auto mt-20 px-5">
+    <div className=" mx-auto ">
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
       {/* <Header1 title={settings?.title} description={settings?.description} logo={settings?.siteLogo} /> */}
-    
+      <LucyHero/>
+    {/* <GradientHero/>
+      <Earth
+              baseColor={[1, 0, 0.3]}
+              markerColor={[1, 0, 0.33]}
+              glowColor={[1, 0, 0.3]}
+            /> */}
+       <AboutUs2/>
+        {/* {heroPostGrid ? (
+        <HeroPostsGrid posts={heroPostGrid} />
+      ) : null} */}
       {heroPost ? (
+        // <HeroPostsGrid posts={heroPostGrid}/>
        
         <HeroPost
           title={heroPost.title}
@@ -59,7 +78,18 @@ export default async function Page() {
       ) : (
         <Onboarding />
       )}
-      {heroPost?._id && (
+
+      {tripleCardPosts && (
+        <TriplePostGrid
+          posts={tripleCardPosts
+            .filter((post: any) => typeof post.slug === "string")
+            .map((post: any) => ({
+              ...post,
+              slug: post.slug as string,
+            }))}
+        />
+      )}
+      {/* {heroPost?._id && (
         <aside>
           <h2 className="mb-8 text-6xl font-bold leading-tight tracking-tighter md:text-7xl">
             More Stories
@@ -68,7 +98,7 @@ export default async function Page() {
             <MoreStories skip={heroPost._id} limit={100} />
           </Suspense>
         </aside>
-      )}
+      )} */}
     </div>
   );
 }

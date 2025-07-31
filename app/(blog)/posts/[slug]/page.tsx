@@ -5,8 +5,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-
-
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { postQuery, settingsQuery } from "@/sanity/lib/queries";
@@ -37,11 +35,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const post = await sanityFetch({
-    query: postQuery,
-    params,
-    stega: false,
-  });
+  const post = await sanityFetch({ query: postQuery, params, stega: false });
   const previousImages = (await parent).openGraph?.images || [];
   const ogImage = resolveOpenGraphImage(post?.coverImage);
 
@@ -52,7 +46,7 @@ export async function generateMetadata(
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },
-  } satisfies Metadata;
+  };
 }
 
 export default async function PostPage({ params }: Props) {
@@ -61,51 +55,41 @@ export default async function PostPage({ params }: Props) {
     sanityFetch({ query: settingsQuery }),
   ]);
 
-  if (!post?._id) {
-    return notFound();
-  }
+  if (!post?._id) return notFound();
 
   return (
-    <div className="container mx-auto px-5">
-      <h2 className="mb-16 mt-10 text-2xl font-bold leading-tight tracking-tight md:text-4xl md:tracking-tighter">
-        <Link href="/" className="hover:underline">
-          {settings?.title || demo.title}
-        </Link>
-      </h2>
-      <article>
-        <h1 className="text-balance mb-12 text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
+    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <article className="mx-auto mt-12 max-w-4xl">
+        {/* Title */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-6 leading-tight">
           {post.title}
         </h1>
-        <div className="hidden md:mb-12 md:block">
+
+        {/* Author + Date */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 text-muted-foreground">
           {post.author && (
             <Avatar name={post.author.name} picture={post.author.picture} />
           )}
+          <DateComponent dateString={post.date} />
         </div>
-        <div className="mb-8 sm:mx-0 md:mb-16">
+
+        {/* Cover Image */}
+        <div className="mb-12">
           <CoverImage image={post.coverImage} priority />
         </div>
-        <div className="mx-auto max-w-2xl">
-          <div className="mb-6 block md:hidden">
-            {post.author && (
-              <Avatar name={post.author.name} picture={post.author.picture} />
-            )}
-          </div>
-          <div className="mb-6 text-lg">
-            <div className="mb-4 text-lg">
-              <DateComponent dateString={post.date} />
-            </div>
-          </div>
-        </div>
+
+        {/* Blog Body */}
         {post.content?.length && (
           <CustomPortableText
-            className="mx-auto max-w-2xl"
+            className="prose dark:prose-invert prose-lg max-w-none text-foreground"
             value={post.content as PortableTextBlock[]}
           />
         )}
       </article>
-      <aside>
-        <hr className="border-accent-2 mb-24 mt-28" />
-        <h2 className="mb-8 text-6xl font-bold leading-tight tracking-tighter md:text-7xl">
+
+      {/* More Stories */}
+      <aside className="mx-auto max-w-5xl mt-24 border-t border-border pt-16">
+        <h2 className="text-3xl sm:text-4xl font-semibold text-foreground mb-8">
           Recent Stories
         </h2>
         <Suspense>

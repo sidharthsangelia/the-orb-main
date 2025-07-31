@@ -228,7 +228,7 @@ export default function AboutUs() {
   ];
 
   return (
-    <section className="relative w-full overflow-hidden py-16 md:py-24 bg-gradient-to-b from-[#eae4d2]/20 via-transparent to-[#509e8e]/5">
+    <section className="relative w-full overflow-hidden py-16 md:py-24 ">
       {/* Organic background pattern */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#509e8e]/10 rounded-full blur-3xl"></div>
@@ -255,7 +255,7 @@ export default function AboutUs() {
       <div className="relative z-10 container mx-auto max-w-7xl px-4 md:px-6">
         {/* Hero Section */}
         <div ref={heroRef} className="mx-auto mb-20 max-w-5xl text-center">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -307,7 +307,7 @@ export default function AboutUs() {
               Join Our Movement
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </motion.div>
+          </motion.div> */}
         </div>
 
         {/* Stats Section */}
