@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { heroPostsGridQuery, heroQuery, settingsQuery, tripleCardGridQuery } from "@/sanity/lib/queries";
+import { heroPostsGridQuery, heroQuery, partnersQuery, settingsQuery, tripleCardGridQuery } from "@/sanity/lib/queries";
 import Onboarding from "@/components/onboarding";
 import MoreStories from "@/components/more-stories";
 import HeroPost from "@/components/landing/HeroPost";
@@ -14,6 +14,7 @@ import AboutUs2 from '@/components/mvpblocks/about-us-2'
 import HeroPostsGrid from "@/components/landing/HeroPost";
 import TriplePostGrid from "@/components/TriplePostGrid";
 import Earth from "@/components/mvpblocks/Globe";
+import { OurPartners } from "@/components/landing/OurPartners";
 export const revalidate = 10; // Revalidate every 10 seconds
 
 function Intro(props: { title: string | null | undefined; description: any ; siteLogo: any}) {
@@ -40,13 +41,14 @@ function Intro(props: { title: string | null | undefined; description: any ; sit
 
 
 export default async function Page() {
-  const [settings, heroPost, heroPostGrid,  tripleCardPosts] = await Promise.all([
+  const [settings, heroPost, heroPostGrid,  tripleCardPosts, partners] = await Promise.all([
     sanityFetch({
       query: settingsQuery,
     }),
     sanityFetch({ query: heroQuery }),
     sanityFetch({ query: heroPostsGridQuery }),
      sanityFetch({ query: tripleCardGridQuery }),
+     sanityFetch({ query: partnersQuery }),
   ]);
 
   return (
@@ -54,6 +56,7 @@ export default async function Page() {
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
       {/* <Header1 title={settings?.title} description={settings?.description} logo={settings?.siteLogo} /> */}
       <LucyHero/>
+      <OurPartners partners={partners}/>
     {/* <GradientHero/>
       <Earth
               baseColor={[1, 0, 0.3]}

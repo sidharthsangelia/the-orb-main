@@ -24,6 +24,7 @@ import seo from "./sanity/schemas/documents/seo";
 import category from "./sanity/schemas/documents/category";
 import carouselPost from "./sanity/schemas/documents/carouselPost";
 import { colorInput } from "@sanity/color-input";
+import { partner } from "./sanity/schemas/singletons/partners";
 
 const homeLocation = {
   title: "Home",
@@ -38,6 +39,7 @@ export default defineConfig({
     types: [
       // Singletons
       settings,
+      partner,
       // Documents
       post,
       author,
