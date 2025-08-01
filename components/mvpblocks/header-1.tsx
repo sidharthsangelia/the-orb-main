@@ -20,19 +20,20 @@ interface NavItem {
 const navItems: NavItem[] = [
   { name: "Home", href: "/" },
   { 
-    name: "Stories", 
-    href: "/stories",
+    name: "Posts", 
+    // href: "/stories",
+    href: "/posts",
     hasDropdown: true,
     dropdownItems: [
       {
         name: "Climate Stories",
-        href: "/stories/climate",
+        href: "/posts/climate",
         description: "Real stories from the ground",
         icon: <Globe className="h-4 w-4" />,
       },
       {
         name: "Youth Voices",
-        href: "/stories/youth",
+        href: "/posts/youth",
         description: "Authentic youth perspectives",
         icon: <Users className="h-4 w-4" />,
       },
