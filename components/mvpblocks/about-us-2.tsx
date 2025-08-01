@@ -2,11 +2,14 @@
 
 import { BackgroundPattern } from "../about/BackgroundPattern";
 import { CoreValuesSection } from "../about/CoreValues";
+ 
 import { CTA } from "../about/Cta";
 import { HeroSection } from "../about/HeroSection";
 import { JourneyTimeline } from "../about/JourneyTimline";
 import { MissionVisionSection } from "../about/MissionVision";
 import { StatsSection } from "../about/Stats";
+import TeamSectionVariant6 from "../about/Team";
+import Team3 from "../about/Team";
 import { WhatWeDo } from "../about/WhatWeDo";
 
   
@@ -35,7 +38,9 @@ export default function AboutUs() {
 
         {/* Journey Timeline */}
         <JourneyTimeline />
-
+       
+        {/* Our Team */}
+{/* <TeamSectionVariant6/> */}
         {/* Call to Action */}
         <CTA />
       </div>
