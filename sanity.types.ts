@@ -185,6 +185,8 @@ export type Category = {
     alt?: string;
     _type: "image";
   };
+  featured?: boolean;
+  order?: number;
   seo?: Seo;
 };
 
@@ -260,6 +262,7 @@ export type Post = {
   };
   status?: "draft" | "published" | "archived";
   featured?: boolean;
+  isTrending?: boolean;
   readingTime?: number;
   relatedPosts?: Array<{
     _ref: string;
@@ -797,48 +800,6 @@ export type RecentPostsQueryResult = Array<{
   category: null;
   readingTime: number;
 }>;
-// Variable: postsByCategoryQuery
-// Query: *[_type == "post" && defined(slug.current) && category->slug.current == $categorySlug]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
-export type PostsByCategoryQueryResult = Array<{
-  _id: string;
-  status: "draft" | "published";
-  title: string | "Untitled";
-  slug: string | null;
-  excerpt: string | null;
-  coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-  } | null;
-  date: string;
-  author: {
-    name: string | "Anonymous";
-    picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: "image";
-    } | null;
-  } | null;
-  category: null;
-  readingTime: number;
-}>;
 // Variable: postsByAuthorQuery
 // Query: *[_type == "post" && defined(slug.current) && author->slug.current == $authorSlug]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
 export type PostsByAuthorQueryResult = Array<{
@@ -1321,6 +1282,48 @@ export type TripleCardGridQueryResult = Array<{
   category: null;
   readingTime: number;
 }>;
+// Variable: trendingPostsQuery
+// Query: *[_type == "post" && defined(slug.current) && isTrending == true] | order(date desc) [0...10] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type TrendingPostsQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+  category: null;
+  readingTime: number;
+}>;
 // Variable: partnersQuery
 // Query: *[_type == "partner"] | order(_createdAt desc) {  _id,  title,  "logo": logo.asset->url,  website}
 export type PartnersQueryResult = Array<{
@@ -1330,14 +1333,26 @@ export type PartnersQueryResult = Array<{
   website: string | null;
 }>;
 // Variable: categoriesQuery
-// Query: *[_type == "category"] | order(title asc) {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    "postCount": count(*[_type == "post" && references(^._id)])  }
+// Query: *[_type == "category" && defined(slug.current)] | order(title asc) {    _id,    title,    slug,    description,    color,    image,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])  }
 export type CategoriesQueryResult = Array<{
   _id: string;
   title: string | null;
-  slug: string | null;
+  slug: Slug | null;
   description: string | null;
-  color: string | "#3B82F6";
-  image: string | null;
+  color: Color | null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
   postCount: number;
 }>;
 // Variable: categoryQuery
@@ -1373,6 +1388,63 @@ export type CarouselPostsQueryResult = Array<{
   } | null;
   publishedAt: string | null;
 }>;
+// Variable: sidebarCategoriesQuery
+// Query: *[_type == "category" && defined(slug.current)]   | order(order asc, title asc) [0...8] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    featured,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"])  }
+export type SidebarCategoriesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  description: string | null;
+  color: string | "#3B82F6";
+  image: string | null;
+  featured: boolean | null;
+  postCount: number;
+}>;
+// Variable: trendingPostsMarqueeQuery
+// Query: *[_type == "post" && defined(slug.current) && isTrending == true && status == "published"]   | order(date desc) [0...10] {    _id,    title,    "slug": slug.current,    "author": author->name,    "category": category->title,    "date": coalesce(date, _updatedAt)  }
+export type TrendingPostsMarqueeQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  author: string | null;
+  category: null;
+  date: string;
+}>;
+// Variable: featuredCategoriesQuery
+// Query: *[_type == "category" && defined(slug.current) && featured == true]   | order(order asc, title asc) [0...6] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"])  }
+export type FeaturedCategoriesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  description: string | null;
+  color: string | "#3B82F6";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  postCount: number;
+}>;
+// Variable: categoryWithPostsQuery
+// Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"]),    seo  }
+export type CategoryWithPostsQueryResult = {
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  description: string | null;
+  color: string | "#3B82F6";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  postCount: number;
+  seo: Seo | null;
+} | null;
 // Variable: founderMessageQuery
 // Query: *[_type == "founderMessage" && isActive == true][0] {    _id,    _createdAt,    _updatedAt,    title,    slug,    founderName,    founderTitle,    founderImage {      asset-> {        _id,        url,        metadata {          dimensions {            width,            height,            aspectRatio          },          lqip        }      },      alt,      hotspot,      crop    },    message,    featuredQuote {      text,      showQuote    },    seo {      metaTitle,      metaDescription,      ogImage {        asset-> {          url        }      }    },    publishedAt,    isActive  }
 export type FounderMessageQueryResult = {
@@ -1503,7 +1575,6 @@ declare module "@sanity/client" {
     "*[_type == \"post\" && defined(slug.current)]{\"slug\": slug.current}": PostSlugsResult;
     "\n  *[_type == \"post\" && defined(slug.current) && featured == true] \n  | order(date desc, _updatedAt desc) [0...3] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": FeaturedPostsQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": RecentPostsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && category->slug.current == $categorySlug] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": PostsByCategoryQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current) && author->slug.current == $authorSlug] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": PostsByAuthorQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current) && _id != $postId && \n    (category->_id == $categoryId || author->_id == $authorId)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": RelatedPostsQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current) && \n    (title match $searchTerm + \"*\" || excerpt match $searchTerm + \"*\" || \n     pt::text(content) match $searchTerm + \"*\")] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": SearchPostsQueryResult;
@@ -1513,10 +1584,15 @@ declare module "@sanity/client" {
     "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": PostQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": HeroPostsGridQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": TripleCardGridQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && isTrending == true] | order(date desc) [0...10] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n  }\n": TrendingPostsQueryResult;
     "*[_type == \"partner\"] | order(_createdAt desc) {\n  _id,\n  title,\n  \"logo\": logo.asset->url,\n  website\n}": PartnersQueryResult;
-    "\n  *[_type == \"category\"] | order(title asc) {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    \"postCount\": count(*[_type == \"post\" && references(^._id)])\n  }\n": CategoriesQueryResult;
+    "\n  *[_type == \"category\" && defined(slug.current)] | order(title asc) {\n    _id,\n    title,\n    slug,\n    description,\n    color,\n    image,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  }\n": CategoriesQueryResult;
     "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    seo\n  }\n": CategoryQueryResult;
     "*[_type == \"carouselPost\"] | order(publishedAt desc){\n  _id,\n  title,\n  slug,\n  slides[]{\n    image{\n      asset->{\n        url\n      },\n      alt\n    },\n    caption,\n    order\n  },\n  description,\n  author->{\n    name\n  },\n  publishedAt\n}": CarouselPostsQueryResult;
+    "\n  *[_type == \"category\" && defined(slug.current)] \n  | order(order asc, title asc) [0...8] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    featured,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"])\n  }\n": SidebarCategoriesQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current) && isTrending == true && status == \"published\"] \n  | order(date desc) [0...10] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"author\": author->name,\n    \"category\": category->title,\n    \"date\": coalesce(date, _updatedAt)\n  }\n": TrendingPostsMarqueeQueryResult;
+    "\n  *[_type == \"category\" && defined(slug.current) && featured == true] \n  | order(order asc, title asc) [0...6] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"])\n  }\n": FeaturedCategoriesQueryResult;
+    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"]),\n    seo\n  }\n": CategoryWithPostsQueryResult;
     "\n  *[_type == \"founderMessage\" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageQueryResult;
     "\n  *[_type == \"founderMessage\" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageBySlugQueryResult;
   }

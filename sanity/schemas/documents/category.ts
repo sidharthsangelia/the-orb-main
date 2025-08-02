@@ -1,6 +1,3 @@
-// =======================
-// 2. CATEGORY MODEL
-// =======================
 // schemas/documents/category.ts
 import { TagIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
@@ -56,6 +53,20 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "featured",
+      title: "Featured Category",
+      type: "boolean",
+      description: "Display this category prominently in the sidebar",
+      initialValue: false,
+    }),
+    defineField({
+      name: "order",
+      title: "Display Order",
+      type: "number",
+      description: "Order of display in category listings (lower numbers first)",
+      initialValue: 0,
+    }),
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",
@@ -65,6 +76,14 @@ export default defineType({
     select: {
       title: "title",
       media: "image",
+      featured: "featured",
+    },
+    prepare({ title, media, featured }) {
+      return {
+        title: featured ? `⭐ ${title}` : title,
+        media,
+        subtitle: featured ? "Featured Category" : "",
+      };
     },
   },
 });

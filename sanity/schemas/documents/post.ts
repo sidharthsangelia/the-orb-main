@@ -6,19 +6,22 @@ import { defineField, defineType } from "sanity";
 // Function to calculate reading time with TypeScript
 const calculateReadingTime = (content: any[]): number => {
   if (!content || !Array.isArray(content)) return 1;
-  
+
   const wordsPerMinute = 200;
   const textContent = content
-    .filter((block: any) => block._type === 'block')
-    .map((block: any) => 
-      block.children
-        ?.filter((child: any) => child._type === 'span')
-        ?.map((span: any) => span.text)
-        ?.join('') || ''
+    .filter((block: any) => block._type === "block")
+    .map(
+      (block: any) =>
+        block.children
+          ?.filter((child: any) => child._type === "span")
+          ?.map((span: any) => span.text)
+          ?.join("") || ""
     )
-    .join(' ');
-  
-  const wordCount = textContent.split(/\s+/).filter((word: string) => word.length > 0).length;
+    .join(" ");
+
+  const wordCount = textContent
+    .split(/\s+/)
+    .filter((word: string) => word.length > 0).length;
   return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 };
 
@@ -51,7 +54,7 @@ export default defineType({
       title: "Content",
       type: "array",
       of: [
-        { 
+        {
           type: "block",
           styles: [
             { title: "Normal", value: "normal" },
@@ -85,9 +88,9 @@ export default defineType({
         },
         {
           type: "image",
-          options: { 
+          options: {
             hotspot: true,
-            accept: 'image/*'
+            accept: "image/*",
           },
           fields: [
             {
@@ -102,7 +105,6 @@ export default defineType({
             },
           ],
         },
-        
       ],
     }),
     defineField({
@@ -119,7 +121,7 @@ export default defineType({
       type: "image",
       options: {
         hotspot: true,
-        accept: 'image/*',
+        accept: "image/*",
         aiAssist: {
           imageDescriptionField: "alt",
         },
@@ -199,10 +201,19 @@ export default defineType({
       description: "Feature this post on homepage and important sections",
     }),
     defineField({
+      name: "isTrending",
+      title: "Trending Post",
+      type: "boolean",
+      description:
+        "Mark this post as trending to feature it in the trending section",
+      initialValue: false,
+    }),
+    defineField({
       name: "readingTime",
       title: "Reading Time (minutes)",
       type: "number",
-      description: "Auto-calculated from content. You can override manually if needed.",
+      description:
+        "Auto-calculated from content. You can override manually if needed.",
       initialValue: 1,
     }),
     defineField({
