@@ -26,6 +26,7 @@ import carouselPost from "./sanity/schemas/documents/carouselPost";
 import { colorInput } from "@sanity/color-input";
 import { partner } from "./sanity/schemas/singletons/partners";
 import about from "./sanity/schemas/documents/about";
+import { founderMessage } from "./sanity/schemas/documents/founder";
 
 const homeLocation = {
   title: "Home",
@@ -47,7 +48,8 @@ export default defineConfig({
       category,
       seo,
       carouselPost,
-      about
+      about,
+      founderMessage
 
     ],
   },

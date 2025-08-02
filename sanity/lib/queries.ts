@@ -149,3 +149,177 @@ export const categoryQuery = defineQuery(`
     seo
   }
 `);
+ 
+
+export const carouselPostsQuery = defineQuery(`*[_type == "carouselPost"] | order(publishedAt desc){
+  _id,
+  title,
+  slug,
+  slides[]{
+    image{
+      asset->{
+        url
+      },
+      alt
+    },
+    caption,
+    order
+  },
+  description,
+  author->{
+    name
+  },
+  publishedAt
+}`);
+
+
+
+// Query to get the active founder message
+export const founderMessageQuery = defineQuery(`
+  *[_type == "founderMessage" && isActive == true][0] {
+    _id,
+    _createdAt,
+    _updatedAt,
+    title,
+    slug,
+    founderName,
+    founderTitle,
+    founderImage {
+      asset-> {
+        _id,
+        url,
+        metadata {
+          dimensions {
+            width,
+            height,
+            aspectRatio
+          },
+          lqip
+        }
+      },
+      alt,
+      hotspot,
+      crop
+    },
+    message,
+    featuredQuote {
+      text,
+      showQuote
+    },
+    seo {
+      metaTitle,
+      metaDescription,
+      ogImage {
+        asset-> {
+          url
+        }
+      }
+    },
+    publishedAt,
+    isActive
+  }
+`)
+
+// Query to get founder message by slug
+export const founderMessageBySlugQuery = defineQuery(
+  `
+  *[_type == "founderMessage" && slug.current == $slug && isActive == true][0] {
+    _id,
+    _createdAt,
+    _updatedAt,
+    title,
+    slug,
+    founderName,
+    founderTitle,
+    founderImage {
+      asset-> {
+        _id,
+        url,
+        metadata {
+          dimensions {
+            width,
+            height,
+            aspectRatio
+          },
+          lqip
+        }
+      },
+      alt,
+      hotspot,
+      crop
+    },
+    message,
+    featuredQuote {
+      text,
+      showQuote
+    },
+    seo {
+      metaTitle,
+      metaDescription,
+      ogImage {
+        asset-> {
+          url
+        }
+      }
+    },
+    publishedAt,
+    isActive
+  }
+`
+)
+
+// TypeScript interfaces
+export interface SanityImage {
+  asset: {
+    _id: string
+    url: string
+    metadata: {
+      dimensions: {
+        width: number
+        height: number
+        aspectRatio: number
+      }
+      lqip?: string
+    }
+  }
+  alt: string
+  hotspot?: {
+    x: number
+    y: number
+  }
+  crop?: {
+    top: number
+    bottom: number
+    left: number
+    right: number
+  }
+}
+
+export interface FounderMessage {
+  _id: string
+  _createdAt: string
+  _updatedAt: string
+  title: string
+  slug: {
+    current: string
+  }
+  founderName: string
+  founderTitle: string
+  founderImage: SanityImage
+  message: any[] // Portable text blocks
+  featuredQuote?: {
+    text: string
+    showQuote: boolean
+  }
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+    ogImage?: {
+      asset: {
+        url: string
+      }
+    }
+  }
+  publishedAt: string
+  isActive: boolean
+}

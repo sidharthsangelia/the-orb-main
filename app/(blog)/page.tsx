@@ -22,6 +22,7 @@ import { CTA } from "@/components/about/Cta";
 import TriplePostCard  from "@/components/TriplePostGrid";
 import PostCard from "@/components/TriplePostGrid";
 import PostRowGrid from "@/components/TriplePostGrid";
+
 export const revalidate = 10; // Revalidate every 10 seconds
 
 function Intro(props: { title: string | null | undefined; description: any ; siteLogo: any}) {
@@ -103,6 +104,8 @@ export default async function Page() {
     }
   />
 )}
+
+{/* <CarouselSwiper/> */}
 
       <CoreValuesSection/>
       <CTA/>

@@ -8,9 +8,11 @@ import {
   TreePine,
   Users,
   Globe,
-  Target
+  Target,
+  Mail
 } from 'lucide-react';
 import { StatItems } from './StatItems';
+import Link from 'next/link';
  
 
 export const HeroSection = () => {
@@ -63,11 +65,12 @@ export const HeroSection = () => {
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <button 
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="group inline-flex items-center px-8 py-4 border-2 border-primary/30 bg-background/50 backdrop-blur-sm rounded-xl font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
+                
+                className="group  px-8 py-4 border-2 border-primary/30 bg-background/50 backdrop-blur-sm rounded-xl font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
               >
-                <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span>Watch Our Story</span>
+                <Link href="/founder/message" className='flex items-center gap-2  '>
+                <Mail className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                <span>Founder's Message</span></Link>
               </button>
             </div>
           </div>
