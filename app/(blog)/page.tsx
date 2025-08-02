@@ -60,41 +60,35 @@ export default async function Page() {
   ]);
 
   return (
-    <div className=" mx-auto ">
+    <div className="    ">
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
       {/* <Header1 title={settings?.title} description={settings?.description} logo={settings?.siteLogo} /> */}
       <LucyHero/>
       <OurPartners partners={partners}/>
-    {/* <GradientHero/>
-      <Earth
-              baseColor={[1, 0, 0.3]}
-              markerColor={[1, 0, 0.33]}
-              glowColor={[1, 0, 0.3]}
-            /> */}
-       {/* <AboutUs2/> */}
+      <div className="   container mx-auto px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+
+ 
        <MissionVisionSection/>
        <StatsSection/>
 
-        {/* {heroPostGrid ? (
-        <HeroPostsGrid posts={heroPostGrid} />
-      ) : null} */}
+       
       {heroPost ? (
         // <HeroPostsGrid posts={heroPostGrid}/>
-       
+        
         <HeroPost
-          title={heroPost.title}
-          slug={heroPost.slug}
-          coverImage={heroPost.coverImage}
-          excerpt={heroPost.excerpt}
-          date={heroPost.date}
-          author={heroPost.author}
+        title={heroPost.title}
+        slug={heroPost.slug}
+        coverImage={heroPost.coverImage}
+        excerpt={heroPost.excerpt}
+        date={heroPost.date}
+        author={heroPost.author}
         />
       ) : (
         <Onboarding />
       )}
 
   {tripleCardPosts && (
-  <PostRowGrid
+    <PostRowGrid
     posts={tripleCardPosts
       .filter((post: any) => typeof post.slug === "string")
       .map((post: any) => ({
@@ -102,23 +96,16 @@ export default async function Page() {
         slug: post.slug as string,
       }))
     }
-  />
-)}
+    />
+  )}
 
-{/* <CarouselSwiper/> */}
+ 
 
       <CoreValuesSection/>
       <CTA/>
-      {/* {heroPost?._id && (
-        <aside>
-          <h2 className="mb-8 text-6xl font-bold leading-tight tracking-tighter md:text-7xl">
-            More Stories
-          </h2>
-          <Suspense>
-            <MoreStories skip={heroPost._id} limit={100} />
-          </Suspense>
-        </aside>
-      )} */}
+
+  </div>
+   
     </div>
   );
 }

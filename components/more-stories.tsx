@@ -1,7 +1,4 @@
 import Link from "next/link";
-
-
-
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { moreStoriesQuery } from "@/sanity/lib/queries";
 import CoverImage from "./cover-image";
@@ -16,29 +13,42 @@ export default async function MoreStories(params: {
 
   return (
     <section className="container mx-auto px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <div className="mb-32 grid grid-cols-1 gap-y-20 md:grid-cols-2 md:gap-x-16 md:gap-y-32 lg:gap-x-32">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
         {data?.map((post) => {
           const { _id, title, slug, coverImage, excerpt, author } = post;
           return (
-            <article key={_id}>
-              <Link href={`/posts/${slug}`} className="group mb-5 block">
+            <article
+              key={_id}
+              className="group rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow bg-white dark:bg-zinc-900 border border-border/40"
+            >
+              <Link href={`/posts/${slug}`} className="block">
                 <CoverImage image={coverImage} priority={false} />
               </Link>
-              <h3 className="text-balance mb-3 text-3xl leading-snug">
-                <Link href={`/posts/${slug}`} className="hover:underline">
-                  {title}
-                </Link>
-              </h3>
-              <div className="mb-4 text-lg flex items-center gap-2 ">
-                  {author && <Avatar name={author.name} picture={author.picture} />}
-                <DateComponent  dateString={post.date} />
+
+              <div className="p-5">
+                <h3 className="text-xl font-semibold mb-2 leading-tight group-hover:text-primary transition-colors">
+                  <Link href={`/posts/${slug}`} className="hover:underline">
+                    {title}
+                  </Link>
+                </h3>
+
+                <div className="mb-3 flex items-center gap-3 text-sm text-muted-foreground">
+                  {author && (
+                    <Avatar
+                      name={author.name}
+                      picture={author.picture}
+                  
+                    />
+                  )}
+                  <DateComponent dateString={post.date} />
+                </div>
+
+                {excerpt && (
+                  <p className="text-sm text-muted-foreground line-clamp-3">
+                    {excerpt}
+                  </p>
+                )}
               </div>
-              {excerpt && (
-                <p className="text-pretty mb-4 text-lg leading-relaxed">
-                  {excerpt}
-                </p>
-              )}
-            
             </article>
           );
         })}
