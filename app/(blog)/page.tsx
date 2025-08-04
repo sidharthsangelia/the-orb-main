@@ -71,7 +71,7 @@ export default async function Page() {
   return (
     <div className="    ">
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
-      {/* <Header1 title={settings?.title} description={settings?.description} logo={settings?.siteLogo} /> */}
+ 
       <div className="   container mx-auto ">
         <LucyHero />
         <OurPartners partners={partners} />
