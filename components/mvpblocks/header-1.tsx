@@ -23,27 +23,8 @@ const navItems: NavItem[] = [
     name: "Posts", 
     // href: "/stories",
     href: "/posts",
-    hasDropdown: true,
-    dropdownItems: [
-      {
-        name: "Climate Stories",
-        href: "/posts/climate",
-        description: "Real stories from the ground",
-        icon: <Globe className="h-4 w-4" />,
-      },
-      {
-        name: "Youth Voices",
-        href: "/posts/youth",
-        description: "Authentic youth perspectives",
-        icon: <Users className="h-4 w-4" />,
-      },
-      // { 
-      //   name: "Visual Content", 
-      //   href: "/stories/visual", 
-      //   description: "Engaging visual narratives",
-      //   icon: <Camera className="h-4 w-4" />,
-      // },
-    ],
+    hasDropdown: false,
+  
   },
   {
     name: "Resources",
