@@ -2,7 +2,13 @@ import Link from "next/link";
 import { Suspense } from "react";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { heroPostsGridQuery, heroQuery, partnersQuery, settingsQuery, tripleCardGridQuery } from "@/sanity/lib/queries";
+import {
+  heroPostsGridQuery,
+  heroQuery,
+  partnersQuery,
+  settingsQuery,
+  tripleCardGridQuery,
+} from "@/sanity/lib/queries";
 import Onboarding from "@/components/onboarding";
 import MoreStories from "@/components/more-stories";
 import HeroPost from "@/components/landing/HeroPost";
@@ -10,24 +16,28 @@ import Header1 from "@/components/mvpblocks/header-1";
 import Hero from "@/components/mvpblocks/Hero";
 import LucyHero from "@/components/mvpblocks/mockup-hero";
 import GradientHero from "@/components/mvpblocks/Hero";
-import AboutUs2 from '@/components/mvpblocks/about-us-2'
+import AboutUs2 from "@/components/mvpblocks/about-us-2";
 import HeroPostsGrid from "@/components/landing/HeroPost";
- 
+
 import Earth from "@/components/mvpblocks/Globe";
 import { OurPartners } from "@/components/about/OurPartners";
 import { MissionVisionSection } from "@/components/about/MissionVision";
 import { StatsSection } from "@/components/about/Stats";
 import { CoreValuesSection } from "@/components/about/CoreValues";
 import { CTA } from "@/components/about/Cta";
-import TriplePostCard  from "@/components/TriplePostGrid";
+import TriplePostCard from "@/components/TriplePostGrid";
 import PostCard from "@/components/TriplePostGrid";
 import PostRowGrid from "@/components/TriplePostGrid";
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
-function Intro(props: { title: string | null | undefined; description: any ; siteLogo: any}) {
+function Intro(props: {
+  title: string | null | undefined;
+  description: any;
+  siteLogo: any;
+}) {
   const title = props.title || demo.title;
-  const logo = props.siteLogo
+  const logo = props.siteLogo;
   // const description = props.description?.length
   //   ? props.description
   //   : demo.description;
@@ -46,66 +56,58 @@ function Intro(props: { title: string | null | undefined; description: any ; sit
   );
 }
 
-
-
 export default async function Page() {
-  const [settings, heroPost, heroPostGrid,  tripleCardPosts, partners] = await Promise.all([
-    sanityFetch({
-      query: settingsQuery,
-    }),
-    sanityFetch({ query: heroQuery }),
-    sanityFetch({ query: heroPostsGridQuery }),
-     sanityFetch({ query: tripleCardGridQuery }),
-     sanityFetch({ query: partnersQuery }),
-  ]);
+  const [settings, heroPost, heroPostGrid, tripleCardPosts, partners] =
+    await Promise.all([
+      sanityFetch({
+        query: settingsQuery,
+      }),
+      sanityFetch({ query: heroQuery }),
+      sanityFetch({ query: heroPostsGridQuery }),
+      sanityFetch({ query: tripleCardGridQuery }),
+      sanityFetch({ query: partnersQuery }),
+    ]);
 
   return (
     <div className="    ">
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
       {/* <Header1 title={settings?.title} description={settings?.description} logo={settings?.siteLogo} /> */}
-      <LucyHero/>
-      <OurPartners partners={partners}/>
-      <div className="   container mx-auto px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <div className="   container mx-auto ">
+        <LucyHero />
+        <OurPartners partners={partners} />
 
- 
-       <MissionVisionSection/>
-       <StatsSection/>
+        <MissionVisionSection />
+        <StatsSection />
 
-       
-      {heroPost ? (
-        // <HeroPostsGrid posts={heroPostGrid}/>
-        
-        <HeroPost
-        title={heroPost.title}
-        slug={heroPost.slug}
-        coverImage={heroPost.coverImage}
-        excerpt={heroPost.excerpt}
-        date={heroPost.date}
-        author={heroPost.author}
-        />
-      ) : (
-        <Onboarding />
-      )}
+        {heroPost ? (
+          // <HeroPostsGrid posts={heroPostGrid}/>
 
-  {tripleCardPosts && (
-    <PostRowGrid
-    posts={tripleCardPosts
-      .filter((post: any) => typeof post.slug === "string")
-      .map((post: any) => ({
-        ...post,
-        slug: post.slug as string,
-      }))
-    }
-    />
-  )}
+          <HeroPost
+            title={heroPost.title}
+            slug={heroPost.slug}
+            coverImage={heroPost.coverImage}
+            excerpt={heroPost.excerpt}
+            date={heroPost.date}
+            author={heroPost.author}
+          />
+        ) : (
+          <Onboarding />
+        )}
 
- 
+        {tripleCardPosts && (
+          <PostRowGrid
+            posts={tripleCardPosts
+              .filter((post: any) => typeof post.slug === "string")
+              .map((post: any) => ({
+                ...post,
+                slug: post.slug as string,
+              }))}
+          />
+        )}
 
-      <CoreValuesSection/>
-      <CTA/>
-
-  </div>
-   
+        <CoreValuesSection />
+        <CTA />
+      </div>
     </div>
   );
 }
