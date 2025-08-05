@@ -554,6 +554,7 @@ export default function ResourcesPage() {
       {/* Bottom Spacing */}
       <div className="py-20" />
       <CTA />
+      
     </div>
   );
 }
