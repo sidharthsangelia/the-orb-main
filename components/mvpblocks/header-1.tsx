@@ -28,28 +28,34 @@ const navItems: NavItem[] = [
   },
   {
     name: "Resources",
-    href: "/resources",
-    hasDropdown: true,
-    dropdownItems: [
-      {
-        name: "Guides & Handbooks",
-        href: "/resources/guides",
-        description: "DIY sustainability guides",
-        icon: <BookOpen className="h-4 w-4" />,
-      },
-      {
-        name: "Educational Content",
-        href: "/resources/education",
-        description: "Learn about climate action",
-        icon: <Leaf className="h-4 w-4" />,
-      },
-      // { 
-      //   name: "Community Tools", 
-      //   href: "/resources/tools", 
-      //   description: "Tools for climate action",
-      //   icon: <Users className="h-4 w-4" />,
-      // },
-    ],
+  href: "/resources",
+  hasDropdown: true,
+  dropdownItems: [
+    {
+      name: "Guides & Handbooks",
+      href: "/resources/guides",
+      description: "DIY sustainability guides",
+      icon: <BookOpen className="h-4 w-4" />,
+    },
+    {
+      name: "Educational Content",
+      href: "/resources/education",
+      description: "Learn about climate action",
+      icon: <Leaf className="h-4 w-4" />,
+    },
+    {
+      name: "Climate Stories",
+      href: "/resources/climate-stories",
+      description: "NGO impact and case studies",
+      icon: <Camera className="h-4 w-4" />, // Suggested icon for climate content
+    },
+    {
+      name: "Youth Voices",
+      href: "/resources/youth-voices",
+      description: "Blogs by connected youth",
+      icon: <Users className="h-4 w-4" />, // Suggested icon for youth blogs
+    },
+  ],
   },
   { name: "Community", href: "/community" },
   { name: "About", href: "/about" },
