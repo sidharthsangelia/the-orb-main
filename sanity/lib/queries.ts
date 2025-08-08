@@ -581,3 +581,47 @@ export const aboutPageQuery = defineQuery(
   }
 `
 )
+
+export const communityPageQuery = defineQuery(
+  `*[_type == "communityPage"][0] {
+  heroSection {
+    badge,
+    mainHeading,
+    secondaryHeading,
+    description,
+    joinMovementUrl,
+    founderMessageUrl,
+    impactStats[] {
+      value,
+      label,
+      icon
+    }
+  },
+  testimonialsSection {
+    title,
+    description,
+    testimonials[] {
+      name,
+      role,
+      content,
+      avatar
+    }
+  },
+  achievementsSection {
+    title,
+    description,
+    achievements[] {
+      title,
+      description,
+      icon
+    }
+  },
+  ctaSection {
+    title,
+    description,
+    primaryButtonText,
+    secondaryButtonText,
+    hashtags
+  }
+}`
+)

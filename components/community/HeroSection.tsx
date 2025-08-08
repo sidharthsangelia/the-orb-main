@@ -13,17 +13,29 @@ import {
 } from 'lucide-react';
 import { StatItems } from './StatItems';
 import Link from 'next/link';
- 
+import { HeroSectionData } from '@/types/community';
 
-export const HeroSection = () => {
+interface HeroSectionProps {
+  data: HeroSectionData;
+}
+
+// Icon mapping for dynamic icon rendering
+const iconMap = {
+  TreePine,
+  Users,
+  Globe,
+  Target
+};
+
+export const HeroSection = ({ data }: HeroSectionProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const impactStats = [
-    { value: 12847, label: "Trees Planted", icon: TreePine, delay: 0 },
-    { value: 2500, label: "Youth Connected", icon: Users, delay: 200 },
-    { value: 156, label: "Communities", icon: Globe, delay: 400 },
-    { value: 89, label: "Active Projects", icon: Target, delay: 600 }
-  ];
+  const impactStats = data.impactStats.map((stat, index) => ({
+    value: stat.value,
+    label: stat.label,
+    icon: iconMap[stat.icon],
+    delay: index * 200
+  }));
 
   return (
     <section className="relative min-h-screen flex items-center pt-16">
@@ -40,23 +52,23 @@ export const HeroSection = () => {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full border border-primary/30">
                 <Leaf className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">#YouthForPlanet Movement</span>
+                <span className="text-sm font-medium text-primary">{data.badge}</span>
               </div>
               <h1 className="text-5xl lg:text-7xl font-bold">
                 <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Build the
+                  {data.mainHeading}
                 </span>
                 <br />
-                <span className="text-foreground">Future Together</span>
+                <span className="text-foreground">{data.secondaryHeading}</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-                Join India's most vibrant community of planet-conscious youth transforming climate awareness into actionable change.
+                {data.description}
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="https://forms.google.com/your-form-link" 
+                href={data.joinMovementUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-xl font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-500 hover:scale-105"
@@ -65,12 +77,12 @@ export const HeroSection = () => {
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <button 
-                
-                className="group  px-8 py-4 border-2 border-primary/30 bg-background/50 backdrop-blur-sm rounded-xl font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
+                className="group px-8 py-4 border-2 border-primary/30 bg-background/50 backdrop-blur-sm rounded-xl font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
               >
-                <Link href="/founder/message" className='flex items-center gap-2  '>
-                <Mail className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span>Founder's Message</span></Link>
+                <Link href={data.founderMessageUrl} className='flex items-center gap-2'>
+                  <Mail className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <span>Founder's Message</span>
+                </Link>
               </button>
             </div>
           </div>
