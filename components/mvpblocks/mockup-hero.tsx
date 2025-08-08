@@ -13,8 +13,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import PhoneMockup from "@/components/ui/phone-mockup";
 import { useTheme } from "next-themes";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Leaf } from "lucide-react";
 import Earth from "@/components/mvpblocks/Globe";
+import Link from "next/link";
 
 export default function LucyHero() {
   const { theme } = useTheme();
@@ -53,7 +54,7 @@ export default function LucyHero() {
   }) => (
     <span
       className={cn(
-        "from-primary dark:from-primary bg-gradient-to-r via-rose-400 to-rose-300 bg-clip-text text-transparent dark:via-rose-300 dark:to-red-400",
+        "bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent",
         className
       )}
     >
@@ -62,11 +63,14 @@ export default function LucyHero() {
   );
 
   return (
-    <div
-      ref={heroRef}
-      className="container   relative min-h-screen w-full overflow-hidden py-16"
-    >
-        <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
+    <>
+    {/* Updated Background Effects - matching community hero */}
+      <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
+        {/* Animated Background Elements */}
+        <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-accent/20 to-primary/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-conic from-primary/10 via-secondary/10 to-accent/10 rounded-full blur-3xl animate-spin-slow opacity-30"></div>
+
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(166_33%_47%_/_0.15),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(166_33%_47%_/_0.1),rgba(180,3,5,0))]"></div>
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_90%,hsl(139_21%_36%_/_0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_10%_90%,hsl(139_21%_36%_/_0.06),transparent_50%)]"></div>
@@ -77,11 +81,15 @@ export default function LucyHero() {
         <div className="absolute inset-0 [background-image:linear-gradient(hsl(166_33%_47%_/_0.05)_1px,transparent_1px),linear-gradient(to_right,hsl(166_33%_47%_/_0.05)_1px,transparent_1px)] [background-size:40px_40px] opacity-[0.03] dark:[background-image:linear-gradient(hsl(139_21%_36%_/_0.03)_1px,transparent_1px),linear-gradient(to_right,hsl(139_21%_36%_/_0.03)_1px,transparent_1px)] dark:opacity-[0.02]"></div>
       </motion.div>
 
+        <div
+          ref={heroRef}
+          className="container relative  overflow-hidden py-16"
+        >
       <motion.div
         className="relative z-10 container mx-auto max-w-7xl"
         style={{ y: contentY }}
       >
-        <div className="grid items-center  gap-12 md:grid-cols-2">
+        <div className="grid items-center gap-12 md:grid-cols-2">
           <motion.div
             variants={{
               hidden: { opacity: 0, x: -50 },
@@ -98,6 +106,7 @@ export default function LucyHero() {
             animate={controls}
             className="flex flex-col  text-center md:ml-20 md:text-left"
           >
+            {/* Updated heading with gradient styling */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -105,9 +114,10 @@ export default function LucyHero() {
               }}
             >
               <h2 className="text-foreground mb-6 text-4xl leading-tight font-bold tracking-tight md:text-5xl lg:text-6xl">
-                {/* LU-cy bridges <GradientText>Web3</GradientText> and{' '}
-                <GradientText>AI</GradientText> platforms for dev teams */}
-                The Órb: Youth-Led Action for a Sustainable India
+                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                  The Órb:
+                </span>{' '}
+                Youth-Led Action for a Sustainable India
               </h2>
             </motion.div>
 
@@ -121,12 +131,10 @@ export default function LucyHero() {
               Empowering the next generation to bridge awareness and action in
               sustainability. We are the narrators, educators, and agents of
               change, believing that sustainable living is not a luxury, but a
-              necessity for all.{" "}
-              {/* <span className="text-foreground font-semibold">
-                Endless potential.
-              </span> */}
+              necessity for all.
             </motion.p>
 
+            {/* Updated buttons matching community hero style */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -139,10 +147,15 @@ export default function LucyHero() {
                 whileTap={{ scale: 0.95 }}
                 className="relative"
               >
-                <Button className="relative rounded-full">
-                  Explore
-                  <Sparkles className="h-4 w-4" />
+                <Link href="/posts" className="flex items-center gap-2">
+                
+                <Button className="relative group inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-full font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-500 hover:scale-105">
+                  <span className="flex items-center gap-2">
+                    Explore
+                    <Sparkles className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </Button>
+                </Link>
               </motion.div>
 
               <motion.div
@@ -151,49 +164,21 @@ export default function LucyHero() {
                 className="relative"
               >
                 <div className="bg-background/50 absolute inset-0 -z-10 rounded-full backdrop-blur-sm"></div>
+                <Link href="/about" className="flex items-center gap-2">
+                
                 <Button
                   variant="outline"
-                  className="border-primary/20 hover:border-primary/30 hover:bg-primary/5 rounded-full backdrop-blur-sm transition-all duration-300"
-                >
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  className="group px-8 py-4 border-2 border-primary/30 bg-background/50 rounded-full text-primary hover:text-primary backdrop-blur-sm font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
+                  >
+                  <span className="flex items-center gap-2">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </Button>
+                  </Link>
               </motion.div>
             </motion.div>
-
-            {/* <motion.div
-              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="mt-10 flex flex-wrap justify-center gap-3 md:justify-start"
-            >
-              {["Web3 Ready", "AI Powered", "Developer First"].map(
-                (feature, index) => (
-                  <motion.div
-                    key={feature}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    className="text-foreground relative rounded-full px-4 py-1.5 text-sm font-medium shadow-sm"
-                  >
-                    <div className="border-primary/10 bg-background/80 dark:bg-background/30 absolute inset-0 rounded-full border backdrop-blur-md dark:border-white/5"></div>
-                    <div className="via-primary/20 dark:via-primary/30 absolute bottom-0 left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-rose-500/0 to-rose-500/0 dark:from-blue-500/0 dark:to-indigo-500/0"></div>
-
-                    <span className="relative z-10">{feature}</span>
-                  </motion.div>
-                )
-              )}
-            </motion.div> */}
           </motion.div>
 
-          {/* <Earth
-            baseColor={isDark ? [0.18, 0.22, 0.18] : [0.282, 0.439, 0.322]} // darker moss green for dark mode
-            markerColor={[0.314, 0.62, 0.557]} // teal (same for both modes)
-            glowColor={isDark ? [0.314, 0.62, 0.557] : [0.918, 0.894, 0.824]} // teal glow for dark, cream for light
-            theta={0.25}
-            dark={isDark ? 0.3 : 1} // less darkness in dark mode for better visibility
-            diffuse={isDark ? 1.8 : 1.2} // more diffusion in dark mode
-            mapSamples={40000}
-            mapBrightness={isDark ? 8 : 6} // brighter in dark mode
-          /> */}
           <Earth
             baseColor={[0.282, 0.439, 0.322]} // moss green
             markerColor={[0.314, 0.62, 0.557]} // teal
@@ -204,67 +189,9 @@ export default function LucyHero() {
             mapSamples={40000}
             mapBrightness={6}
           />
-
-          {/* <motion.div
-            variants={{
-              hidden: { opacity: 0, scale: 0.9 },
-              visible: {
-                opacity: 1,
-                scale: 1,
-                transition: {
-                  duration: 0.8,
-                  type: 'spring',
-                  stiffness: 100,
-                },
-              },
-            }}
-            initial="hidden"
-            animate={controls}
-            ref={mockupRef}
-            className="relative mx-auto flex bg-violet-600 justify-center"
-            style={{
-              transformStyle: 'preserve-3d',
-              perspective: '1000px',
-            }}
-          
-          >
-
-                <Earth
-            baseColor={isDark ? [0.18, 0.22, 0.18] : [0.282, 0.439, 0.322]} // darker moss green for dark mode
-            markerColor={[0.314, 0.62, 0.557]} // teal (same for both modes)
-            glowColor={isDark ? [0.314, 0.62, 0.557] : [0.918, 0.894, 0.824]} // teal glow for dark, cream for light
-            theta={0.25}
-            dark={isDark ? 0.3 : 1} // less darkness in dark mode for better visibility
-            diffuse={isDark ? 1.8 : 1.2} // more diffusion in dark mode
-            mapSamples={40000}
-            mapBrightness={isDark ? 8 : 6} // brighter in dark mode
-          />
-            <motion.div
-              className="relative z-10"
-              style={{
-                transformStyle: 'preserve-3d',
-                rotateX: rotateX,
-                rotateY: rotateY,
-                scale: isHovered ? 1.05 : 1,
-                transition: 'scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
-            >
-              <PhoneMockup
-                imageUrl={
-                  isDark
-                    ? 'https://blocks.mvp-subha.me/mobile-dark.webp'
-                    : 'https://blocks.mvp-subha.me/mobile-light.webp'
-                }
-                alt="LU-cy mobile app"
-                glowColor={
-                  isDark ? 'rgba(229, 62, 62, 0.5)' : 'rgba(229, 62, 62, 0.25)'
-                }
-                className="max-w-[380px]"
-              />
-            </motion.div>
-          </motion.div> */}
         </div>
       </motion.div>
     </div>
+    </>
   );
 }

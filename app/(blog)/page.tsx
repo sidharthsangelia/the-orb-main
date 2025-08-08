@@ -11,24 +11,19 @@ import {
   tripleCardGridQuery,
 } from "@/sanity/lib/queries";
 import Onboarding from "@/components/onboarding";
-import MoreStories from "@/components/more-stories";
+ 
 import HeroPost from "@/components/landing/HeroPost";
-import Header1 from "@/components/mvpblocks/header-1";
-import Hero from "@/components/mvpblocks/Hero";
+ 
 import LucyHero from "@/components/mvpblocks/mockup-hero";
-import GradientHero from "@/components/mvpblocks/Hero";
-import AboutUs2 from "@/components/mvpblocks/about-us-2";
-import HeroPostsGrid from "@/components/landing/HeroPost";
-
-import Earth from "@/components/mvpblocks/Globe";
+ 
 import { OurPartners } from "@/components/about/OurPartners";
 import { MissionVisionSection } from "@/components/about/MissionVision";
 import { StatsSection } from "@/components/about/Stats";
 import { CoreValuesSection } from "@/components/about/CoreValues";
 import { CTA } from "@/components/about/Cta";
-import TriplePostCard from "@/components/TriplePostGrid";
-import PostCard from "@/components/TriplePostGrid";
+ 
 import PostRowGrid from "@/components/TriplePostGrid";
+
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
@@ -149,7 +144,9 @@ export default async function Page() {
           />
         )}
 
+ 
         <CoreValuesSection coreValues={data.coreValues} />
+
         <CTA />
       </div>
     </div>
