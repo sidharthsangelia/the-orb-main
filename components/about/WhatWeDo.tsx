@@ -2,44 +2,86 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Camera, BookOpen, FileText, Video, Users, Play } from 'lucide-react';
+import { Camera, BookOpen, FileText, Video, Users, Play, Leaf, Globe, Heart, Lightbulb, Target, Shield, Zap } from 'lucide-react';
 
-export const WhatWeDo = () => {
+interface Activity {
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+interface WhatWeDoProps {
+  activities: Activity[];
+}
+
+// Icon mapping for Lucide React icons
+const iconMap: Record<string, any> = {
+  Camera,
+  BookOpen,
+  FileText,
+  Video,
+  Users,
+  Play,
+  Leaf,
+  Globe,
+  Heart,
+  Lightbulb,
+  Target,
+  Shield,
+  Zap,
+  // Add more icons as needed
+};
+
+const getIconComponent = (iconName?: string) => {
+  if (!iconName) return <Camera className="h-6 w-6" />;
+  
+  const IconComponent = iconMap[iconName];
+  if (IconComponent) {
+    return <IconComponent className="h-6 w-6" />;
+  }
+  // Fallback to Camera icon if icon name not found
+  return <Camera className="h-6 w-6" />;
+};
+
+export const WhatWeDo = ({ activities }: WhatWeDoProps) => {
   const servicesRef = useRef(null);
   const servicesInView = useInView(servicesRef, { once: true, amount: 0.3 });
 
-  const services = [
+  // Default activities if none provided
+  const defaultActivities = [
     {
       title: 'Visual Climate Stories',
       description: 'Compelling visual narratives that explain, engage, and energize young minds about sustainability.',
-      icon: <Camera className="h-6 w-6" />,
+      icon: 'Camera',
     },
     {
       title: 'Interactive Guides',
       description: 'DIY handbooks and practical guides to help youth live more consciously and sustainably.',
-      icon: <BookOpen className="h-6 w-6" />,
+      icon: 'BookOpen',
     },
     {
       title: 'Youth-Led Journalism',
       description: 'Fresh, local perspectives on climate issues through authentic youth-driven reporting.',
-      icon: <FileText className="h-6 w-6" />,
+      icon: 'FileText',
     },
     {
       title: 'Educational Content',
       description: 'Bite-sized explainers and deep-dive content that makes sustainability relatable and reachable.',
-      icon: <Video className="h-6 w-6" />,
+      icon: 'Video',
     },
     {
       title: 'Community Building',
       description: 'Creating spaces for climate-conscious youth to connect, collaborate, and create change together.',
-      icon: <Users className="h-6 w-6" />,
+      icon: 'Users',
     },
     {
       title: 'Documentary Projects',
       description: 'Coming soon - tracking India\'s sustainability evolution through powerful documentary storytelling.',
-      icon: <Play className="h-6 w-6" />,
+      icon: 'Play',
     },
   ];
+
+  const displayActivities = activities && activities.length > 0 ? activities : defaultActivities;
 
   return (
     <div ref={servicesRef} className="mb-24">
@@ -56,14 +98,14 @@ export const WhatWeDo = () => {
           Inform, Inspire, Initiate
         </p>
         <p className="text-[#575846] dark:text-[#eae4d2]/70 text-lg max-w-4xl mx-auto leading-relaxed">
-          Through engaging multimedia content, community-based education, and hands-on projects, 
-          we inspire a generation to take charge of India's climate narrative. Every post, podcast, 
+          Through engaging multimedia content, community-based education, and hands-on projects,
+          we inspire a generation to take charge of India's climate narrative. Every post, podcast,
           or page is a step toward action.
         </p>
       </motion.div>
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service, index) => (
+        {displayActivities.map((service, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 30 }}
@@ -73,7 +115,7 @@ export const WhatWeDo = () => {
           >
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-[#487052] to-[#509e8e] text-white group-hover:scale-110 transition-transform duration-300">
-                {service.icon}
+                {getIconComponent(service.icon)}
               </div>
               <h3 className="text-xl font-semibold text-[#0c0d0d] dark:text-[#eae4d2]">
                 {service.title}

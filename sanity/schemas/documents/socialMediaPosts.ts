@@ -1,4 +1,4 @@
-// schemas/socialMediaPosts.js
+// /schemas/socialMediaPosts.js
 const socialMediaPosts = {
   name: 'socialMediaPosts',
   title: 'Social Media Posts',
@@ -9,7 +9,25 @@ const socialMediaPosts = {
       title: 'Title',
       type: 'string',
       description: 'Internal title for this social media collection',
-      validation: (Rule) => Rule.required()
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'showInstagram',
+      title: 'Show Instagram Section',
+      type: 'boolean',
+      initialValue: true
+    },
+    {
+      name: 'showLinkedin',
+      title: 'Show LinkedIn Section',
+      type: 'boolean',
+      initialValue: true
+    },
+    {
+      name: 'showTwitter',
+      title: 'Show Twitter Section',
+      type: 'boolean',
+      initialValue: true
     },
     {
       name: 'instagramPosts',
@@ -18,40 +36,30 @@ const socialMediaPosts = {
       of: [
         {
           type: 'object',
-          name: 'instagramPost',
-          title: 'Instagram Post',
           fields: [
             {
-              name: 'embedUrl',
-              title: 'Instagram Embed URL',
+              name: 'embedHtml',
+              title: 'Instagram Embed HTML',
               type: 'text',
-              description: 'Instagram post embed URL (e.g., https://www.instagram.com/p/POST_ID/embed)',
-              validation: (Rule) => Rule.required()
+              description: 'Paste the full Instagram embed HTML code here',
+              validation: Rule => Rule.required()
             },
             {
               name: 'fallbackDescription',
               title: 'Fallback Description',
               type: 'text',
-              description: 'Description to show if embed fails to load',
-              validation: (Rule) => Rule.required().max(200)
+              validation: Rule => Rule.required().max(200)
             },
             {
               name: 'isActive',
               title: 'Active',
               type: 'boolean',
-              description: 'Show this post on the website',
               initialValue: true
             }
-          ],
-          preview: {
-            select: {
-              title: 'fallbackDescription',
-              subtitle: 'embedUrl'
-            }
-          }
+          ]
         }
       ],
-      validation: (Rule) => Rule.max(3).error('Maximum 3 Instagram posts allowed')
+      validation: Rule => Rule.max(3)
     },
     {
       name: 'linkedinPosts',
@@ -60,40 +68,30 @@ const socialMediaPosts = {
       of: [
         {
           type: 'object',
-          name: 'linkedinPost',
-          title: 'LinkedIn Post',
           fields: [
             {
-              name: 'embedUrl',
-              title: 'LinkedIn Embed URL',
+              name: 'embedHtml',
+              title: 'LinkedIn Embed HTML',
               type: 'text',
-              description: 'LinkedIn post embed URL',
-              validation: (Rule) => Rule.required()
+              description: 'Paste the full LinkedIn embed HTML code here',
+              validation: Rule => Rule.required()
             },
             {
               name: 'fallbackDescription',
               title: 'Fallback Description',
               type: 'text',
-              description: 'Description to show if embed fails to load',
-              validation: (Rule) => Rule.required().max(200)
+              validation: Rule => Rule.required().max(200)
             },
             {
               name: 'isActive',
               title: 'Active',
               type: 'boolean',
-              description: 'Show this post on the website',
               initialValue: true
             }
-          ],
-          preview: {
-            select: {
-              title: 'fallbackDescription',
-              subtitle: 'embedUrl'
-            }
-          }
+          ]
         }
       ],
-      validation: (Rule) => Rule.max(3).error('Maximum 3 LinkedIn posts allowed')
+      validation: Rule => Rule.max(3)
     },
     {
       name: 'twitterPosts',
@@ -102,40 +100,30 @@ const socialMediaPosts = {
       of: [
         {
           type: 'object',
-          name: 'twitterPost',
-          title: 'Twitter Post',
           fields: [
             {
-              name: 'embedUrl',
-              title: 'Twitter/X Embed URL',
+              name: 'embedHtml',
+              title: 'Twitter Embed HTML',
               type: 'text',
-              description: 'Twitter/X post embed URL',
-              validation: (Rule) => Rule.required()
+              description: 'Paste the full Twitter embed HTML code here',
+              validation: Rule => Rule.required()
             },
             {
               name: 'fallbackDescription',
               title: 'Fallback Description',
               type: 'text',
-              description: 'Description to show if embed fails to load',
-              validation: (Rule) => Rule.required().max(200)
+              validation: Rule => Rule.required().max(200)
             },
             {
               name: 'isActive',
               title: 'Active',
               type: 'boolean',
-              description: 'Show this post on the website',
               initialValue: true
             }
-          ],
-          preview: {
-            select: {
-              title: 'fallbackDescription',
-              subtitle: 'embedUrl'
-            }
-          }
+          ]
         }
       ],
-      validation: (Rule) => Rule.max(3).error('Maximum 3 Twitter posts allowed')
+      validation: Rule => Rule.max(3)
     },
     {
       name: 'lastUpdated',
@@ -144,22 +132,7 @@ const socialMediaPosts = {
       initialValue: () => new Date().toISOString(),
       readOnly: true
     }
-  ],
-  preview: {
-    select: {
-      title: 'title',
-      subtitle: 'lastUpdated'
-    },
-    prepare(selection) {
-      const { title, lastUpdated } = selection;
-      return {
-        title: title || 'Social Media Posts',
-        subtitle: lastUpdated 
-          ? `Updated: ${new Date(lastUpdated).toLocaleDateString()}` 
-          : 'No update date'
-      };
-    }
-  }
+  ]
 };
 
 export default socialMediaPosts;

@@ -140,6 +140,27 @@
         },
         "optional": true
       },
+      "showInstagram": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "showLinkedin": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "showTwitter": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
       "instagramPosts": {
         "type": "objectAttribute",
         "value": {
@@ -147,7 +168,7 @@
           "of": {
             "type": "object",
             "attributes": {
-              "embedUrl": {
+              "embedHtml": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -167,13 +188,6 @@
                   "type": "boolean"
                 },
                 "optional": true
-              },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "instagramPost"
-                }
               }
             },
             "rest": {
@@ -198,7 +212,7 @@
           "of": {
             "type": "object",
             "attributes": {
-              "embedUrl": {
+              "embedHtml": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -218,13 +232,6 @@
                   "type": "boolean"
                 },
                 "optional": true
-              },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "linkedinPost"
-                }
               }
             },
             "rest": {
@@ -249,7 +256,7 @@
           "of": {
             "type": "object",
             "attributes": {
-              "embedUrl": {
+              "embedHtml": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -269,13 +276,6 @@
                   "type": "boolean"
                 },
                 "optional": true
-              },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "twitterPost"
-                }
               }
             },
             "rest": {
@@ -778,6 +778,64 @@
         },
         "optional": true
       },
+      "tagline": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "introText": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "stats": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "value": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "label": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "_type": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string",
+                  "value": "stat"
+                }
+              }
+            },
+            "rest": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "optional": true
+      },
       "mission": {
         "type": "objectAttribute",
         "value": {
@@ -807,6 +865,13 @@
                 "optional": true
               },
               "description": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "icon": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
@@ -935,6 +1000,20 @@
               }
             }
           }
+        },
+        "optional": true
+      },
+      "seoTitle": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "seoDescription": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
         },
         "optional": true
       }

@@ -36,25 +36,25 @@ export type SocialMediaPosts = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  showInstagram?: boolean;
+  showLinkedin?: boolean;
+  showTwitter?: boolean;
   instagramPosts?: Array<{
-    embedUrl?: string;
+    embedHtml?: string;
     fallbackDescription?: string;
     isActive?: boolean;
-    _type: "instagramPost";
     _key: string;
   }>;
   linkedinPosts?: Array<{
-    embedUrl?: string;
+    embedHtml?: string;
     fallbackDescription?: string;
     isActive?: boolean;
-    _type: "linkedinPost";
     _key: string;
   }>;
   twitterPosts?: Array<{
-    embedUrl?: string;
+    embedHtml?: string;
     fallbackDescription?: string;
     isActive?: boolean;
-    _type: "twitterPost";
     _key: string;
   }>;
   lastUpdated?: string;
@@ -132,11 +132,20 @@ export type AboutPage = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  tagline?: string;
+  introText?: string;
+  stats?: Array<{
+    value?: string;
+    label?: string;
+    _type: "stat";
+    _key: string;
+  }>;
   mission?: string;
   vision?: string;
   coreValues?: Array<{
     title?: string;
     description?: string;
+    icon?: string;
     _type: "value";
     _key: string;
   }>;
@@ -154,6 +163,8 @@ export type AboutPage = {
     _type: "milestone";
     _key: string;
   }>;
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export type CarouselPost = {
@@ -1688,22 +1699,25 @@ export type FounderMessageBySlugQueryResult = {
   isActive: boolean | null;
 } | null;
 // Variable: socialMediaPostsQuery
-// Query: *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {    _id,    title,    "instagramPosts": instagramPosts[isActive == true] {      embedUrl,      fallbackDescription,      isActive    },    "linkedinPosts": linkedinPosts[isActive == true] {      embedUrl,      fallbackDescription,      isActive    },    "twitterPosts": twitterPosts[isActive == true] {      embedUrl,      fallbackDescription,      isActive    },    lastUpdated,    _createdAt,    _updatedAt  }
+// Query: *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {    _id,    title,    showInstagram,    showLinkedin,    showTwitter,    "instagramPosts": instagramPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "linkedinPosts": linkedinPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "twitterPosts": twitterPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    lastUpdated,    _createdAt,    _updatedAt  }
 export type SocialMediaPostsQueryResult = {
   _id: string;
   title: string | null;
+  showInstagram: boolean | null;
+  showLinkedin: boolean | null;
+  showTwitter: boolean | null;
   instagramPosts: Array<{
-    embedUrl: string | null;
+    embedHtml: string | null;
     fallbackDescription: string | null;
     isActive: boolean | null;
   }> | null;
   linkedinPosts: Array<{
-    embedUrl: string | null;
+    embedHtml: string | null;
     fallbackDescription: string | null;
     isActive: boolean | null;
   }> | null;
   twitterPosts: Array<{
-    embedUrl: string | null;
+    embedHtml: string | null;
     fallbackDescription: string | null;
     isActive: boolean | null;
   }> | null;
@@ -1753,7 +1767,7 @@ declare module "@sanity/client" {
     "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    order,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n": CategoryWithPostsQueryResult;
     "\n  *[_type == \"founderMessage\" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageQueryResult;
     "\n  *[_type == \"founderMessage\" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageBySlugQueryResult;
-    "\n  *[_type == \"socialMediaPosts\"] | order(_createdAt desc) [0] {\n    _id,\n    title,\n    \"instagramPosts\": instagramPosts[isActive == true] {\n      embedUrl,\n      fallbackDescription,\n      isActive\n    },\n    \"linkedinPosts\": linkedinPosts[isActive == true] {\n      embedUrl,\n      fallbackDescription,\n      isActive\n    },\n    \"twitterPosts\": twitterPosts[isActive == true] {\n      embedUrl,\n      fallbackDescription,\n      isActive\n    },\n    lastUpdated,\n    _createdAt,\n    _updatedAt\n  }\n": SocialMediaPostsQueryResult;
+    "\n  *[_type == \"socialMediaPosts\"] | order(_createdAt desc) [0] {\n    _id,\n    title,\n    showInstagram,\n    showLinkedin,\n    showTwitter,\n    \"instagramPosts\": instagramPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    \"linkedinPosts\": linkedinPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    \"twitterPosts\": twitterPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    lastUpdated,\n    _createdAt,\n    _updatedAt\n  }\n": SocialMediaPostsQueryResult;
     "\n*[_type == \"communityRole\"]{\n  key,\n  title,\n  impact,\n  description,\n  skills,\n  color,\n  icon,\n  actions\n} | order(title asc)\n": COMMUNITY_ROLES_QUERYResult;
   }
 }

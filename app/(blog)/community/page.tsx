@@ -29,8 +29,8 @@ const CommunityPage = () => {
      <TestimonialsSection />
 
       {/* Social Media Feed Section */}
-  
-            {/* <SocialMediaFeed /> */}
+{/*   
+            <SocialMediaFeed /> */}
          
 
       {/* Achievements Showcase */}

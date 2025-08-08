@@ -4,59 +4,80 @@ import { useRef } from 'react';
 import { Users, Globe, FileText, TreePine } from 'lucide-react';
 import { StatItem } from './StatItem';
 
-export const StatsSection = () => {
+interface StatData {
+  value: string;
+  label: string;
+}
+
+interface StatsSectionProps {
+  stats: StatData[];
+}
+
+// Icon mapping for different stat types - you can expand this based on your needs
+const getIconForStat = (label: string, index: number) => {
+  const lowerLabel = label.toLowerCase();
+  
+  if (lowerLabel.includes('youth') || lowerLabel.includes('aware')) {
+    return <Users className="h-5 w-5" />;
+  } else if (lowerLabel.includes('engaged') || lowerLabel.includes('global')) {
+    return <Globe className="h-5 w-5" />;
+  } else if (lowerLabel.includes('stories') || lowerLabel.includes('published') || lowerLabel.includes('content')) {
+    return <FileText className="h-5 w-5" />;
+  } else if (lowerLabel.includes('cities') || lowerLabel.includes('locations') || lowerLabel.includes('reached')) {
+    return <TreePine className="h-5 w-5" />;
+  }
+  
+  // Default icons based on index if no match found
+  const defaultIcons = [<Users className="h-5 w-5" />, <Globe className="h-5 w-5" />, <FileText className="h-5 w-5" />, <TreePine className="h-5 w-5" />];
+  return defaultIcons[index % defaultIcons.length];
+};
+
+const getColorForStat = (index: number) => {
+  const colors = [
+    'from-[#487052] to-[#509e8e]',
+    'from-[#509e8e] to-[#487052]',
+    'from-[#575846] to-[#487052]',
+    'from-[#487052] to-[#575846]',
+  ];
+  return colors[index % colors.length];
+};
+
+// Extract numeric value and suffix from string like "94%" or "50,000+"
+const parseStatValue = (value: string) => {
+  const numericValue = value.replace(/[^\d]/g, '');
+  const suffix = value.replace(/[\d,]/g, '');
+  return {
+    numericValue: parseInt(numericValue) || 0,
+    suffix: suffix
+  };
+};
+
+export const StatsSection = ({ stats }: StatsSectionProps) => {
   const statsRef = useRef(null);
 
-  const stats = [
-    {
-      value: 94,
-      label: 'Youth Aware of Climate Change',
-      icon: <Users className="h-5 w-5" />,
-      delay: 0,
-      color: 'from-[#487052] to-[#509e8e]',
-      suffix: '%',
-    },
-    {
-      value: 50000,
-      label: 'Youth Engaged',
-      icon: <Globe className="h-5 w-5" />,
-      delay: 0.1,
-      color: 'from-[#509e8e] to-[#487052]',
-      suffix: '+',
-    },
-    {
-      value: 200,
-      label: 'Stories Published',
-      icon: <FileText className="h-5 w-5" />,
-      delay: 0.2,
-      color: 'from-[#575846] to-[#487052]',
-      suffix: '+',
-    },
-    {
-      value: 25,
-      label: 'Cities Reached',
-      icon: <TreePine className="h-5 w-5" />,
-      delay: 0.3,
-      color: 'from-[#487052] to-[#575846]',
-      suffix: '+',
-    },
-  ];
+  if (!stats || stats.length === 0) {
+    return null;
+  }
 
   return (
     <div ref={statsRef} className="mb-24">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => (
-          <StatItem
-            key={index}
-            value={stat.value}
-            label={stat.label}
-            icon={stat.icon}
-            delay={index * 0.1}
-            decimalPlaces={0}
-            color={stat.color}
-            suffix={stat.suffix}
-          />
-        ))}
+        {stats.map((stat, index) => {
+          const { numericValue, suffix } = parseStatValue(stat.value);
+          
+          return (
+            <StatItem
+              key={index}
+              value={numericValue}
+              label={stat.label}
+              icon={getIconForStat(stat.label, index)}
+              delay={index * 0.1}
+              decimalPlaces={0}
+              color={getColorForStat(index)}
+              suffix={suffix}
+            />
+          );
+        })}
       </div>
     </div>
   );

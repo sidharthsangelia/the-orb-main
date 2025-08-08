@@ -4,9 +4,21 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Target, Eye } from 'lucide-react';
 
-export const MissionVisionSection = () => {
+interface MissionVisionSectionProps {
+  mission?: string;
+  vision?: string;
+}
+
+export const MissionVisionSection = ({ mission, vision }: MissionVisionSectionProps) => {
   const missionRef = useRef(null);
   const missionInView = useInView(missionRef, { once: true, amount: 0.3 });
+
+  const defaultMission = "To empower businesses and communities with innovative digital solutions that drive sustainable growth, enhance user experiences, and create lasting environmental value in India's evolving green economy. We connect climate awareness with tangible action through youth-driven initiatives.";
+  
+  const defaultVision = "India is at a pivotal moment regarding its climate future. We envision a generation of empowered youth leading India's green transformation, where sustainable living is essential, not a privilege. We are the bridge between climate awareness and scalable action.";
+
+  const displayMission = mission || defaultMission;
+  const displayVision = vision || defaultVision;
 
   return (
     <div ref={missionRef} className="mb-24">
@@ -20,15 +32,13 @@ export const MissionVisionSection = () => {
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-[#487052] to-[#509e8e] text-white shadow-lg">
             <Target className="h-8 w-8" />
           </div>
-
+          
           <h2 className="text-3xl font-bold tracking-tight text-[#0c0d0d] dark:text-[#eae4d2]">
             Our Mission
           </h2>
-
+          
           <p className="text-[#575846] dark:text-[#eae4d2]/80 text-lg leading-relaxed">
-            To empower businesses and communities with innovative digital solutions that drive sustainable growth, 
-            enhance user experiences, and create lasting environmental value in India's evolving green economy. 
-            We connect climate awareness with tangible action through youth-driven initiatives.
+            {displayMission}
           </p>
         </motion.div>
 
@@ -41,15 +51,13 @@ export const MissionVisionSection = () => {
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-[#509e8e] to-[#487052] text-white shadow-lg">
             <Eye className="h-8 w-8" />
           </div>
-
+          
           <h2 className="text-3xl font-bold tracking-tight text-[#0c0d0d] dark:text-[#eae4d2]">
-            Our Vision  
+            Our Vision
           </h2>
-
+          
           <p className="text-[#575846] dark:text-[#eae4d2]/80 text-lg leading-relaxed">
-            India is at a pivotal moment regarding its climate future. We envision a generation of empowered youth 
-            leading India's green transformation, where sustainable living is essential, not a privilege. 
-            We are the bridge between climate awareness and scalable action.
+            {displayVision}
           </p>
         </motion.div>
       </div>

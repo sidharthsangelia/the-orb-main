@@ -3,11 +3,22 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 
-export const JourneyTimeline = () => {
+interface JourneyItem {
+  year: string;
+  title: string;
+  description?: string;
+}
+
+interface JourneyTimelineProps {
+  journey: JourneyItem[];
+}
+
+export const JourneyTimeline = ({ journey }: JourneyTimelineProps) => {
   const journeyRef = useRef(null);
   const journeyInView = useInView(journeyRef, { once: true, amount: 0.2 });
 
-  const journey = [
+  // Default journey if none provided
+  const defaultJourney = [
     {
       year: '2022',
       title: 'The Spark',
@@ -30,6 +41,8 @@ export const JourneyTimeline = () => {
     },
   ];
 
+  const displayJourney = journey && journey.length > 0 ? journey : defaultJourney;
+
   return (
     <div ref={journeyRef} className="mb-24">
       <motion.h2
@@ -43,8 +56,8 @@ export const JourneyTimeline = () => {
 
       <div className="relative max-w-4xl mx-auto">
         <div className="absolute left-8 top-8 bottom-8 w-0.5 bg-gradient-to-b from-[#487052] to-[#509e8e] hidden md:block"></div>
-        
-        {journey.map((item, index) => (
+                
+        {displayJourney.map((item, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, x: -20 }}
@@ -53,7 +66,7 @@ export const JourneyTimeline = () => {
             className="relative mb-12 md:ml-16"
           >
             <div className="absolute -left-20 top-6 hidden md:flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-[#487052] to-[#509e8e] ring-4 ring-[#eae4d2] dark:ring-[#0c0d0d]"></div>
-            
+                        
             <div className="p-8 rounded-2xl bg-[#eae4d2]/10 dark:bg-[#0c0d0d]/20 border border-[#575846]/10">
               <div className="flex items-center gap-4 mb-4">
                 <span className="px-4 py-2 rounded-full bg-gradient-to-r from-[#487052] to-[#509e8e] text-white font-bold text-sm">
@@ -63,9 +76,11 @@ export const JourneyTimeline = () => {
                   {item.title}
                 </h3>
               </div>
-              <p className="text-[#575846] dark:text-[#eae4d2]/70 text-lg leading-relaxed">
-                {item.description}
-              </p>
+              {item.description && (
+                <p className="text-[#575846] dark:text-[#eae4d2]/70 text-lg leading-relaxed">
+                  {item.description}
+                </p>
+              )}
             </div>
           </motion.div>
         ))}

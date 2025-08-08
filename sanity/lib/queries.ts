@@ -482,22 +482,26 @@ export interface FounderMessage {
 }
 
 
+// /sanity/lib/queries.ts
 export const socialMediaPostsQuery = defineQuery(`
   *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {
     _id,
     title,
-    "instagramPosts": instagramPosts[isActive == true] {
-      embedUrl,
+    showInstagram,
+    showLinkedin,
+    showTwitter,
+    "instagramPosts": instagramPosts[isActive == true]{
+      embedHtml,
       fallbackDescription,
       isActive
     },
-    "linkedinPosts": linkedinPosts[isActive == true] {
-      embedUrl,
+    "linkedinPosts": linkedinPosts[isActive == true]{
+      embedHtml,
       fallbackDescription,
       isActive
     },
-    "twitterPosts": twitterPosts[isActive == true] {
-      embedUrl,
+    "twitterPosts": twitterPosts[isActive == true]{
+      embedHtml,
       fallbackDescription,
       isActive
     },
@@ -507,10 +511,9 @@ export const socialMediaPostsQuery = defineQuery(`
   }
 `);
 
- 
-// TypeScript types for the data structure
+// TypeScript interfaces
 export interface SocialMediaPost {
-  embedUrl: string;
+  embedHtml: string;
   fallbackDescription: string;
   isActive: boolean;
 }
@@ -518,6 +521,9 @@ export interface SocialMediaPost {
 export interface SocialMediaData {
   _id: string;
   title: string;
+  showInstagram: boolean;
+  showLinkedin: boolean;
+  showTwitter: boolean;
   instagramPosts: SocialMediaPost[];
   linkedinPosts: SocialMediaPost[];
   twitterPosts: SocialMediaPost[];
@@ -539,5 +545,39 @@ export const COMMUNITY_ROLES_QUERY = defineQuery(
   icon,
   actions
 } | order(title asc)
+`
+)
+
+
+export const aboutPageQuery = defineQuery(
+  `
+  *[_type == "aboutPage"][0] {
+    title,
+    tagline,
+    introText,
+    stats[] {
+      value,
+      label
+    },
+    mission,
+    vision,
+    coreValues[] {
+      title,
+      description,
+      icon
+    },
+    whatWeDo[] {
+      title,
+      description,
+      icon
+    },
+    journey[] {
+      year,
+      title,
+      description
+    },
+    seoTitle,
+    seoDescription
+  }
 `
 )
