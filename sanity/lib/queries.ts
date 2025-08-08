@@ -480,3 +480,64 @@ export interface FounderMessage {
   publishedAt: string;
   isActive: boolean;
 }
+
+
+export const socialMediaPostsQuery = defineQuery(`
+  *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {
+    _id,
+    title,
+    "instagramPosts": instagramPosts[isActive == true] {
+      embedUrl,
+      fallbackDescription,
+      isActive
+    },
+    "linkedinPosts": linkedinPosts[isActive == true] {
+      embedUrl,
+      fallbackDescription,
+      isActive
+    },
+    "twitterPosts": twitterPosts[isActive == true] {
+      embedUrl,
+      fallbackDescription,
+      isActive
+    },
+    lastUpdated,
+    _createdAt,
+    _updatedAt
+  }
+`);
+
+ 
+// TypeScript types for the data structure
+export interface SocialMediaPost {
+  embedUrl: string;
+  fallbackDescription: string;
+  isActive: boolean;
+}
+
+export interface SocialMediaData {
+  _id: string;
+  title: string;
+  instagramPosts: SocialMediaPost[];
+  linkedinPosts: SocialMediaPost[];
+  twitterPosts: SocialMediaPost[];
+  lastUpdated: string;
+  _createdAt: string;
+  _updatedAt: string;
+}
+
+
+export const COMMUNITY_ROLES_QUERY = defineQuery(
+  `
+*[_type == "communityRole"]{
+  key,
+  title,
+  impact,
+  description,
+  skills,
+  color,
+  icon,
+  actions
+} | order(title asc)
+`
+)

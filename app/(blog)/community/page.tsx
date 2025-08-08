@@ -6,13 +6,13 @@ import { TestimonialsSection } from '@/components/community/Testemonial';
 import { EnhancedCTA } from '@/components/community/EnhancedCta';
 import { SocialMediaFeed } from '@/components/community/SocialMedia';
 import { Achievements } from '@/components/community/Achievement';
+import { revalidatePath } from 'next/cache';
 
  
 
 const CommunityPage = () => {
  
-
-   
+ 
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -30,7 +30,7 @@ const CommunityPage = () => {
 
       {/* Social Media Feed Section */}
   
-            <SocialMediaFeed />
+            {/* <SocialMediaFeed /> */}
          
 
       {/* Achievements Showcase */}

@@ -13,6 +13,53 @@
  */
 
 // Source: schema.json
+export type CommunityRole = {
+  _id: string;
+  _type: "communityRole";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  key?: string;
+  title?: string;
+  impact?: string;
+  description?: string;
+  skills?: Array<string>;
+  color?: string;
+  icon?: string;
+  actions?: Array<string>;
+};
+
+export type SocialMediaPosts = {
+  _id: string;
+  _type: "socialMediaPosts";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  instagramPosts?: Array<{
+    embedUrl?: string;
+    fallbackDescription?: string;
+    isActive?: boolean;
+    _type: "instagramPost";
+    _key: string;
+  }>;
+  linkedinPosts?: Array<{
+    embedUrl?: string;
+    fallbackDescription?: string;
+    isActive?: boolean;
+    _type: "linkedinPost";
+    _key: string;
+  }>;
+  twitterPosts?: Array<{
+    embedUrl?: string;
+    fallbackDescription?: string;
+    isActive?: boolean;
+    _type: "twitterPost";
+    _key: string;
+  }>;
+  lastUpdated?: string;
+};
+
 export type FounderMessage = {
   _id: string;
   _type: "founderMessage";
@@ -706,7 +753,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = CommunityRole | SocialMediaPosts | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(blog)/posts/[slug]/page.tsx
 // Variable: postSlugs
@@ -1640,6 +1687,42 @@ export type FounderMessageBySlugQueryResult = {
   publishedAt: string | null;
   isActive: boolean | null;
 } | null;
+// Variable: socialMediaPostsQuery
+// Query: *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {    _id,    title,    "instagramPosts": instagramPosts[isActive == true] {      embedUrl,      fallbackDescription,      isActive    },    "linkedinPosts": linkedinPosts[isActive == true] {      embedUrl,      fallbackDescription,      isActive    },    "twitterPosts": twitterPosts[isActive == true] {      embedUrl,      fallbackDescription,      isActive    },    lastUpdated,    _createdAt,    _updatedAt  }
+export type SocialMediaPostsQueryResult = {
+  _id: string;
+  title: string | null;
+  instagramPosts: Array<{
+    embedUrl: string | null;
+    fallbackDescription: string | null;
+    isActive: boolean | null;
+  }> | null;
+  linkedinPosts: Array<{
+    embedUrl: string | null;
+    fallbackDescription: string | null;
+    isActive: boolean | null;
+  }> | null;
+  twitterPosts: Array<{
+    embedUrl: string | null;
+    fallbackDescription: string | null;
+    isActive: boolean | null;
+  }> | null;
+  lastUpdated: string | null;
+  _createdAt: string;
+  _updatedAt: string;
+} | null;
+// Variable: COMMUNITY_ROLES_QUERY
+// Query: *[_type == "communityRole"]{  key,  title,  impact,  description,  skills,  color,  icon,  actions} | order(title asc)
+export type COMMUNITY_ROLES_QUERYResult = Array<{
+  key: string | null;
+  title: string | null;
+  impact: string | null;
+  description: string | null;
+  skills: Array<string> | null;
+  color: string | null;
+  icon: string | null;
+  actions: Array<string> | null;
+}>;
 
 // Query TypeMap
 import "@sanity/client";
@@ -1670,5 +1753,7 @@ declare module "@sanity/client" {
     "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    order,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n": CategoryWithPostsQueryResult;
     "\n  *[_type == \"founderMessage\" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageQueryResult;
     "\n  *[_type == \"founderMessage\" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageBySlugQueryResult;
+    "\n  *[_type == \"socialMediaPosts\"] | order(_createdAt desc) [0] {\n    _id,\n    title,\n    \"instagramPosts\": instagramPosts[isActive == true] {\n      embedUrl,\n      fallbackDescription,\n      isActive\n    },\n    \"linkedinPosts\": linkedinPosts[isActive == true] {\n      embedUrl,\n      fallbackDescription,\n      isActive\n    },\n    \"twitterPosts\": twitterPosts[isActive == true] {\n      embedUrl,\n      fallbackDescription,\n      isActive\n    },\n    lastUpdated,\n    _createdAt,\n    _updatedAt\n  }\n": SocialMediaPostsQueryResult;
+    "\n*[_type == \"communityRole\"]{\n  key,\n  title,\n  impact,\n  description,\n  skills,\n  color,\n  icon,\n  actions\n} | order(title asc)\n": COMMUNITY_ROLES_QUERYResult;
   }
 }
