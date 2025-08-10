@@ -20,6 +20,8 @@ import {
   Globe,
   Sparkles,
   Lightbulb
+
+  
 } from 'lucide-react';
 
 // Mock data - you'll replace this with Sanity CMS data
