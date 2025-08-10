@@ -1,156 +1,168 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
-import { 
-  Instagram,
-  Twitter,
-  Linkedin,
-  Video,
-  Image,
-  ThumbsUp,
-  MessageSquare,
-  Share2,
-  Award,
-  TrendingUp,
-  Users2,
-  Lightbulb,
-  Sprout,
-  Mail,
-  ArrowRight
-} from 'lucide-react';
-import { motion, useInView } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { Instagram, Twitter, Linkedin, AlertTriangle, Loader2, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { socialMediaPostsQuery, SocialMediaData, SocialMediaPost } from "@/sanity/lib/queries";
 
-// Social Media Feed Component
-export const SocialMediaFeed = () => {
-  const [activeTab, setActiveTab] = useState('instagram');
-  
-  const socialPosts = {
-    instagram: [
-      {
-        id: 1,
-        type: 'image',
-        content: 'Our tree plantation drive in Mumbai reached 1000 saplings! 🌱',
-        likes: 2847,
-        comments: 156,
-        shares: 89,
-        timestamp: '2 hours ago',
-        image: '/api/placeholder/300/300'
-      },
-      {
-        id: 2,
-        type: 'video',
-        content: 'Climate warriors from Delhi sharing their sustainability tips',
-        likes: 4521,
-        comments: 287,
-        shares: 145,
-        timestamp: '1 day ago',
-        image: '/api/placeholder/300/300'
+interface SocialMediaEmbedProps {
+  embedHtml: string;
+  fallbackDescription: string;
+  platform: string;
+}
+
+const SocialMediaEmbed: React.FC<SocialMediaEmbedProps> = ({ embedHtml, fallbackDescription, platform }) => {
+  useEffect(() => {
+    if (platform === "instagram" && (window as any).instgrm) {
+      (window as any).instgrm.Embeds.process();
+    }
+    if (platform === "twitter" && (window as any).twttr?.widgets) {
+      (window as any).twttr.widgets.load();
+    }
+    if (platform === "linkedin" && (window as any).IN?.parse) {
+      (window as any).IN.parse();
+    }
+  }, [embedHtml, platform]);
+
+  if (!embedHtml) {
+    return (
+      <div className="w-full h-96 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl flex flex-col items-center justify-center p-6 border border-border/50">
+        <AlertTriangle className="w-12 h-12 text-muted-foreground mb-4" />
+        <p className="text-sm text-muted-foreground text-center mb-4">{fallbackDescription}</p>
+        <a href="#" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200">
+          View on {platform}
+          <ExternalLink className="w-4 h-4" />
+        </a>
+      </div>
+    );
+  }
+
+  return <div className="relative w-full h-96 rounded-xl overflow-hidden" dangerouslySetInnerHTML={{ __html: embedHtml }} />;
+};
+
+export const SocialMediaFeed: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<"instagram" | "linkedin" | "twitter">("instagram");
+  const [socialData, setSocialData] = useState<SocialMediaData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSocialData = async () => {
+      try {
+        setLoading(true);
+        const data = await sanityFetch<SocialMediaData>(socialMediaPostsQuery);
+        setSocialData(data);
+      } catch (err: unknown) {
+        if (err instanceof Error) setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    ],
-    linkedin: [
-      {
-        id: 3,
-        type: 'article',
-        content: 'How Indian Youth Are Leading Climate Innovation - Latest Report',
-        likes: 1245,
-        comments: 78,
-        shares: 234,
-        timestamp: '3 hours ago',
-        image: '/api/placeholder/300/200'
-      }
-    ],
-    twitter: [
-      {
-        id: 4,
-        type: 'text',
-        content: 'Breaking: Our #YouthForPlanet campaign reaches 50M impressions! 🚀',
-        likes: 8934,
-        comments: 456,
-        shares: 1205,
-        timestamp: '4 hours ago'
-      }
-    ]
-  };
+    };
+    fetchSocialData();
+  }, []);
 
   const socialTabs = [
-    { key: 'instagram', icon: Instagram, label: 'Instagram' },
-    { key: 'linkedin', icon: Linkedin, label: 'LinkedIn' },
-    { key: 'twitter', icon: Twitter, label: 'Twitter' }
-  ];
-  
+    socialData?.showInstagram && {
+      key: "instagram" as const,
+      icon: Instagram,
+      label: "Instagram",
+      count: socialData?.instagramPosts?.length || 0
+    },
+    socialData?.showLinkedin && {
+      key: "linkedin" as const,
+      icon: Linkedin,
+      label: "LinkedIn",
+      count: socialData?.linkedinPosts?.length || 0
+    },
+    socialData?.showTwitter && {
+      key: "twitter" as const,
+      icon: Twitter,
+      label: "Twitter",
+      count: socialData?.twitterPosts?.length || 0
+    }
+  ].filter(Boolean);
+
+  const getCurrentPosts = (): SocialMediaPost[] => {
+    if (!socialData) return [];
+    switch (activeTab) {
+      case "instagram":
+        return socialData.instagramPosts || [];
+      case "linkedin":
+        return socialData.linkedinPosts || [];
+      case "twitter":
+        return socialData.twitterPosts || [];
+      default:
+        return [];
+    }
+  };
+
+  const currentPosts = getCurrentPosts();
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-background text-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+        <p className="mt-4 text-muted-foreground">Loading social media posts...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-background text-center">
+        <AlertTriangle className="w-12 h-12 text-destructive mx-auto mb-4" />
+        <p className="text-destructive mb-2">Unable to load social media posts</p>
+        <p className="text-sm text-muted-foreground">{error}</p>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Follow Our Impact
-            </span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Stay connected with our latest campaigns, success stories, and community highlights
-          </p>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Follow Our Impact</h2>
+          <p className="text-xl text-muted-foreground mt-2">Stay connected with our latest campaigns and stories</p>
         </div>
-        
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="flex justify-center">
-            <div className="bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-border/50 inline-flex">
-              {socialTabs.map(({ key, icon: Icon, label }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    activeTab === key 
-                      ? 'bg-background text-foreground shadow-lg shadow-primary/20 scale-105' 
-                      : 'hover:bg-background/50'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </button>
-              ))}
-            </div>
+
+        <div className="flex justify-center mb-8">
+          <div className="bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-border/50 inline-flex">
+            {socialTabs.map(
+              tab =>
+                tab && (
+                  <button
+                    key={tab.key}
+                    onClick={() => setActiveTab(tab.key)}
+                    disabled={tab.count === 0}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                      activeTab === tab.key
+                        ? "bg-background text-foreground shadow-lg shadow-primary/20 scale-105"
+                        : tab.count === 0
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-background/50"
+                    }`}
+                  >
+                    <tab.icon className="w-4 h-4" />
+                    {tab.label}
+                    {tab.count > 0 && <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">{tab.count}</span>}
+                  </button>
+                )
+            )}
           </div>
-          
+        </div>
+
+        {currentPosts.length === 0 ? (
+          <p className="text-center text-muted-foreground">No {activeTab} posts available</p>
+        ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {socialPosts[activeTab]?.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-4 hover:shadow-xl transition-all duration-500"
-              >
-                {post.image && (
-                  <div className="w-full h-48 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl mb-4 flex items-center justify-center">
-                    {post.type === 'video' ? 
-                      <Video className="w-12 h-12 text-primary" /> : 
-                      <Image className="w-12 h-12 text-primary" />
-                    }
-                  </div>
-                )}
-                <p className="text-sm leading-relaxed mb-4">{post.content}</p>
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-                  <span>{post.timestamp}</span>
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <ThumbsUp className="w-3 h-3" />
-                      {post.likes.toLocaleString()}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MessageSquare className="w-3 h-3" />
-                      {post.comments}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Share2 className="w-3 h-3" />
-                      {post.shares}
-                    </span>
-                  </div>
-                </div>
+            {currentPosts.map((post, index) => (
+              <motion.div key={`${activeTab}-${index}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: index * 0.1 }}>
+                <SocialMediaEmbed embedHtml={post.embedHtml} fallbackDescription={post.fallbackDescription} platform={activeTab} />
               </motion.div>
             ))}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

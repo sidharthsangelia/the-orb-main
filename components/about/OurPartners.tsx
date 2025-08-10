@@ -26,7 +26,7 @@ export function OurPartners({ partners }: OurPartnersProps) {
         </p>
       </div>
 
-      <Marquee pauseOnHover className="[--duration:30s]">
+      <Marquee pauseOnHover >
         {partners.map((partner) => (
           <a
             key={partner._id}

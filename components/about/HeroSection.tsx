@@ -6,9 +6,24 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sprout, ArrowRight } from 'lucide-react';
 
-export const HeroSection = () => {
+interface HeroSectionProps {
+  title?: string;
+  tagline?: string;
+  introText?: string;
+}
+
+export const HeroSection = ({ title, tagline, introText }: HeroSectionProps) => {
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true, amount: 0.3 });
+
+  const displayTitle = title || "Building Bridges Between Awareness & Action";
+  const displayTagline = tagline || "Building Bridges Between Awareness & Action";
+  const displayIntroText = introText || "We are The Órb - a dynamic media organization driven by youth, dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.";
+
+  // Split the title for styling - if it contains "Awareness & Action", split on that
+  const titleParts = displayTitle.includes('Awareness & Action') 
+    ? displayTitle.split('Awareness & Action')
+    : [displayTitle];
 
   return (
     <div ref={heroRef} className="mx-auto mb-20 max-w-5xl text-center">
@@ -38,10 +53,17 @@ export const HeroSection = () => {
         transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
         className="bg-gradient-to-b from-[#0c0d0d] via-[#575846] to-[#487052] dark:from-[#eae4d2] dark:via-[#eae4d2]/90 dark:to-[#509e8e] bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl lg:text-7xl"
       >
-        Building Bridges Between
-        <span className="block bg-gradient-to-r from-[#487052] to-[#509e8e] bg-clip-text text-transparent">
-          Awareness & Action
-        </span>
+        {titleParts.length > 1 ? (
+          <>
+            {titleParts[0]}
+            <span className="block bg-gradient-to-r from-[#487052] to-[#509e8e] bg-clip-text text-transparent">
+              Awareness & Action
+            </span>
+            {titleParts[1]}
+          </>
+        ) : (
+          displayTitle
+        )}
       </motion.h1>
 
       <motion.p
@@ -50,8 +72,15 @@ export const HeroSection = () => {
         transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         className="text-[#575846] dark:text-[#eae4d2]/80 mt-6 text-xl sm:text-2xl max-w-4xl mx-auto leading-relaxed"
       >
-        We are <strong className="text-[#487052] dark:text-[#509e8e]">The Órb</strong> - a dynamic media organization driven by youth, 
-        dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.
+        {displayIntroText.includes('The Órb') ? (
+          <>
+            {displayIntroText.split('The Órb')[0]}
+            <strong className="text-[#487052] dark:text-[#509e8e]">The Órb</strong>
+            {displayIntroText.split('The Órb')[1]}
+          </>
+        ) : (
+          displayIntroText
+        )}
       </motion.p>
 
       <motion.div
@@ -61,7 +90,7 @@ export const HeroSection = () => {
         className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center"
       >
         <Button 
-          size="lg" 
+          size="lg"
           className="bg-gradient-to-r from-[#487052] to-[#509e8e] hover:from-[#487052]/90 hover:to-[#509e8e]/90 text-white border-0 px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
         >
           Join Our Movement

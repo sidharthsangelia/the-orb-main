@@ -5,11 +5,54 @@ export default defineType({
   title: "About Page",
   type: "document",
   fields: [
+    // Page Title & Intro
     defineField({
       name: "title",
       title: "Page Title",
       type: "string",
       description: "Main title of the About page",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "tagline",
+      title: "Tagline",
+      type: "string",
+      description: "Short impactful line (e.g., 'Building Bridges Between Awareness & Action')",
+    }),
+    defineField({
+      name: "introText",
+      title: "Intro Text",
+      type: "text",
+      rows: 4,
+      description: "Brief introduction for the organization",
+    }),
+
+    // Key Metrics
+    defineField({
+      name: "stats",
+      title: "Key Statistics",
+      type: "array",
+      description: "Highlight impactful numbers",
+      of: [
+        {
+          type: "object",
+          name: "stat",
+          fields: [
+            defineField({
+              name: "value",
+              title: "Value",
+              type: "string", // e.g. "94%" or "50,000+"
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "label",
+              title: "Label",
+              type: "string",
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        },
+      ],
     }),
 
     // Mission
@@ -53,6 +96,14 @@ export default defineType({
               rows: 3,
               validation: (rule) => rule.required(),
             }),
+            defineField({
+              name: "icon",
+              title: "Lucide Icon Name",
+              type: "string",
+              description:
+                "Enter the Lucide React icon name (e.g., 'Leaf', 'Users', 'Globe'). This will be mapped in the frontend.",
+              validation: (rule) => rule.required(),
+            }),
           ],
         },
       ],
@@ -84,9 +135,10 @@ export default defineType({
             }),
             defineField({
               name: "icon",
-              title: "Icon (Optional)",
+              title: "Lucide Icon Name",
               type: "string",
-              description: "Add an emoji or icon name if needed",
+              description:
+                "Enter the Lucide React icon name (e.g., 'BookOpen', 'Camera', 'Users').",
             }),
           ],
         },
@@ -108,10 +160,7 @@ export default defineType({
               title: "Year",
               type: "string",
               validation: (rule) =>
-                rule.required().regex(/^\d{4}$/, {
-                  name: "year",
-                  invert: false,
-                }),
+                rule.required().regex(/^\d{4}$/, { name: "year" }),
             }),
             defineField({
               name: "title",
@@ -130,6 +179,19 @@ export default defineType({
       ],
     }),
 
-    
+    // SEO Fields
+    defineField({
+      name: "seoTitle",
+      title: "SEO Title",
+      type: "string",
+      description: "Meta title for search engines",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO Description",
+      type: "text",
+      rows: 3,
+      description: "Meta description for search engines",
+    }),
   ],
 });

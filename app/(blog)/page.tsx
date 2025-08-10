@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import {
+  aboutPageQuery,
   heroPostsGridQuery,
   heroQuery,
   partnersQuery,
@@ -10,24 +11,19 @@ import {
   tripleCardGridQuery,
 } from "@/sanity/lib/queries";
 import Onboarding from "@/components/onboarding";
-import MoreStories from "@/components/more-stories";
+ 
 import HeroPost from "@/components/landing/HeroPost";
-import Header1 from "@/components/mvpblocks/header-1";
-import Hero from "@/components/mvpblocks/Hero";
+ 
 import LucyHero from "@/components/mvpblocks/mockup-hero";
-import GradientHero from "@/components/mvpblocks/Hero";
-import AboutUs2 from "@/components/mvpblocks/about-us-2";
-import HeroPostsGrid from "@/components/landing/HeroPost";
-
-import Earth from "@/components/mvpblocks/Globe";
+ 
 import { OurPartners } from "@/components/about/OurPartners";
 import { MissionVisionSection } from "@/components/about/MissionVision";
 import { StatsSection } from "@/components/about/Stats";
 import { CoreValuesSection } from "@/components/about/CoreValues";
 import { CTA } from "@/components/about/Cta";
-import TriplePostCard from "@/components/TriplePostGrid";
-import PostCard from "@/components/TriplePostGrid";
+ 
 import PostRowGrid from "@/components/TriplePostGrid";
+
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
@@ -57,7 +53,7 @@ function Intro(props: {
 }
 
 export default async function Page() {
-  const [settings, heroPost, heroPostGrid, tripleCardPosts, partners] =
+  const [settings, heroPost, heroPostGrid, tripleCardPosts, partners, aboutData] =
     await Promise.all([
       sanityFetch({
         query: settingsQuery,
@@ -66,7 +62,50 @@ export default async function Page() {
       sanityFetch({ query: heroPostsGridQuery }),
       sanityFetch({ query: tripleCardGridQuery }),
       sanityFetch({ query: partnersQuery }),
+      sanityFetch({ query: aboutPageQuery }),
     ]);
+
+      // Fallback data in case Sanity data is not available
+      const defaultData: AboutPageData = {
+        title: "Building Bridges Between Awareness & Action",
+        tagline: "Building Bridges Between Awareness & Action",
+        introText: "We are The Órb - a dynamic media organization driven by youth, dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.",
+        stats: [
+          { value: "94%", label: "Youth Aware of Climate Change" },
+          { value: "50,000+", label: "Youth Engaged" },
+          { value: "200+", label: "Stories Published" },
+          { value: "25+", label: "Cities Reached" }
+        ],
+        mission: "To empower businesses and communities with innovative digital solutions that drive sustainable growth, enhance user experiences, and create lasting environmental value in India's evolving green economy. We connect climate awareness with tangible action through youth-driven initiatives.",
+        vision: "India is at a pivotal moment regarding its climate future. We envision a generation of empowered youth leading India's green transformation, where sustainable living is essential, not a privilege. We are the bridge between climate awareness and scalable action.",
+        coreValues: [
+          {
+            title: "Planet First",
+            description: "Every decision we make prioritizes environmental impact and sustainability for future generations.",
+            icon: "Leaf"
+          },
+          {
+            title: "Youth Empowerment",
+            description: "We believe young voices are the catalyst for meaningful climate action and systemic change.",
+            icon: "Users"
+          },
+          {
+            title: "Authentic Storytelling",
+            description: "We share real stories from the ground to humanize climate issues and inspire genuine action.",
+            icon: "Heart"
+          },
+          {
+            title: "Knowledge for Action",
+            description: "We transform complex climate science into accessible, actionable knowledge for everyday implementation.",
+            icon: "Lightbulb"
+          }
+        ],
+      
+        
+      };
+    
+      // Use Sanity data if available, otherwise use default data
+      const data = aboutData || defaultData;
 
   return (
     <div className="    ">
@@ -77,7 +116,7 @@ export default async function Page() {
         <OurPartners partners={partners} />
 
         <MissionVisionSection />
-        <StatsSection />
+         <StatsSection stats={data.stats} />
 
         {heroPost ? (
           // <HeroPostsGrid posts={heroPostGrid}/>
@@ -105,7 +144,9 @@ export default async function Page() {
           />
         )}
 
-        <CoreValuesSection />
+ 
+        <CoreValuesSection coreValues={data.coreValues} />
+
         <CTA />
       </div>
     </div>

@@ -537,3 +537,148 @@ export interface FounderMessage {
   publishedAt: string;
   isActive: boolean;
 }
+
+
+// /sanity/lib/queries.ts
+export const socialMediaPostsQuery = defineQuery(`
+  *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {
+    _id,
+    title,
+    showInstagram,
+    showLinkedin,
+    showTwitter,
+    "instagramPosts": instagramPosts[isActive == true]{
+      embedHtml,
+      fallbackDescription,
+      isActive
+    },
+    "linkedinPosts": linkedinPosts[isActive == true]{
+      embedHtml,
+      fallbackDescription,
+      isActive
+    },
+    "twitterPosts": twitterPosts[isActive == true]{
+      embedHtml,
+      fallbackDescription,
+      isActive
+    },
+    lastUpdated,
+    _createdAt,
+    _updatedAt
+  }
+`);
+
+// TypeScript interfaces
+export interface SocialMediaPost {
+  embedHtml: string;
+  fallbackDescription: string;
+  isActive: boolean;
+}
+
+export interface SocialMediaData {
+  _id: string;
+  title: string;
+  showInstagram: boolean;
+  showLinkedin: boolean;
+  showTwitter: boolean;
+  instagramPosts: SocialMediaPost[];
+  linkedinPosts: SocialMediaPost[];
+  twitterPosts: SocialMediaPost[];
+  lastUpdated: string;
+  _createdAt: string;
+  _updatedAt: string;
+}
+
+
+export const COMMUNITY_ROLES_QUERY = defineQuery(
+  `
+*[_type == "communityRole"]{
+  key,
+  title,
+  impact,
+  description,
+  skills,
+  color,
+  icon,
+  actions
+} | order(title asc)
+`
+)
+
+
+export const aboutPageQuery = defineQuery(
+  `
+  *[_type == "aboutPage"][0] {
+    title,
+    tagline,
+    introText,
+    stats[] {
+      value,
+      label
+    },
+    mission,
+    vision,
+    coreValues[] {
+      title,
+      description,
+      icon
+    },
+    whatWeDo[] {
+      title,
+      description,
+      icon
+    },
+    journey[] {
+      year,
+      title,
+      description
+    },
+    seoTitle,
+    seoDescription
+  }
+`
+)
+
+export const communityPageQuery = defineQuery(
+  `*[_type == "communityPage"][0] {
+  heroSection {
+    badge,
+    mainHeading,
+    secondaryHeading,
+    description,
+    joinMovementUrl,
+    founderMessageUrl,
+    impactStats[] {
+      value,
+      label,
+      icon
+    }
+  },
+  testimonialsSection {
+    title,
+    description,
+    testimonials[] {
+      name,
+      role,
+      content,
+      avatar
+    }
+  },
+  achievementsSection {
+    title,
+    description,
+    achievements[] {
+      title,
+      description,
+      icon
+    }
+  },
+  ctaSection {
+    title,
+    description,
+    primaryButtonText,
+    secondaryButtonText,
+    hashtags
+  }
+}`
+)

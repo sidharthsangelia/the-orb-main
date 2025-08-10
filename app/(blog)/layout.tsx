@@ -21,6 +21,7 @@ import Header1 from "@/components/mvpblocks/header-1";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
 
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch({
     query: settingsQuery,
@@ -118,6 +119,7 @@ export default async function RootLayout({
           </footer> */}
         {/* {isDraftMode && <VisualEditing />} */}
         <SpeedInsights />
+     
       </body>
     </html>
   );
