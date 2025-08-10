@@ -1427,8 +1427,71 @@ export type FeaturedCategoriesQueryResult = Array<{
   } | null;
   postCount: number;
 }>;
+// Variable: allCategorySlugsQuery
+// Query: *[_type == "category" && defined(slug.current)] {    "slug": slug.current  }
+export type AllCategorySlugsQueryResult = Array<{
+  slug: string | null;
+}>;
+// Variable: categoryWithRecentPostsQuery
+// Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    featured,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),    "recentPosts": *[_type == "post" && references(^._id) && defined(slug.current)]       | order(date desc) [0...3] {          _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture  },  "category": category->{    title,    "color": coalesce(color.hex, "#3B82F6")  },  "readingTime": round(length(pt::text(content)) / 5 / 180 )      }  }
+export type CategoryWithRecentPostsQueryResult = {
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  description: string | null;
+  color: string | "#3B82F6";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  featured: boolean | null;
+  postCount: number;
+  recentPosts: Array<{
+    _id: string;
+    status: "draft" | "published";
+    title: string | "Untitled";
+    slug: string | null;
+    excerpt: string | null;
+    coverImage: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      caption?: string;
+      _type: "image";
+    } | null;
+    date: string;
+    author: {
+      name: string | "Anonymous";
+      picture: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+    } | null;
+    category: null;
+    readingTime: number;
+  }>;
+} | null;
 // Variable: categoryWithPostsQuery
-// Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"]),    seo  }
+// Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    featured,    order,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),    seo {      metaTitle,      metaDescription,      ogImage {        asset-> {          url        }      }    }  }
 export type CategoryWithPostsQueryResult = {
   _id: string;
   title: string | null;
@@ -1442,8 +1505,18 @@ export type CategoryWithPostsQueryResult = {
     } | null;
     alt: string | null;
   } | null;
+  featured: boolean | null;
+  order: number | null;
   postCount: number;
-  seo: Seo | null;
+  seo: {
+    metaTitle: string | null;
+    metaDescription: string | null;
+    ogImage: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+  } | null;
 } | null;
 // Variable: founderMessageQuery
 // Query: *[_type == "founderMessage" && isActive == true][0] {    _id,    _createdAt,    _updatedAt,    title,    slug,    founderName,    founderTitle,    founderImage {      asset-> {        _id,        url,        metadata {          dimensions {            width,            height,            aspectRatio          },          lqip        }      },      alt,      hotspot,      crop    },    message,    featuredQuote {      text,      showQuote    },    seo {      metaTitle,      metaDescription,      ogImage {        asset-> {          url        }      }    },    publishedAt,    isActive  }
@@ -1592,7 +1665,9 @@ declare module "@sanity/client" {
     "\n  *[_type == \"category\" && defined(slug.current)] \n  | order(order asc, title asc) [0...8] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    featured,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"])\n  }\n": SidebarCategoriesQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current) && isTrending == true && status == \"published\"] \n  | order(date desc) [0...10] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"author\": author->name,\n    \"category\": category->title,\n    \"date\": coalesce(date, _updatedAt)\n  }\n": TrendingPostsMarqueeQueryResult;
     "\n  *[_type == \"category\" && defined(slug.current) && featured == true] \n  | order(order asc, title asc) [0...6] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"])\n  }\n": FeaturedCategoriesQueryResult;
-    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"]),\n    seo\n  }\n": CategoryWithPostsQueryResult;
+    "\n  *[_type == \"category\" && defined(slug.current)] {\n    \"slug\": slug.current\n  }\n": AllCategorySlugsQueryResult;
+    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n    \"recentPosts\": *[_type == \"post\" && references(^._id) && defined(slug.current)] \n      | order(date desc) [0...3] {\n        \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture\n  },\n  \"category\": category->{\n    title,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n\n      }\n  }\n": CategoryWithRecentPostsQueryResult;
+    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    order,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n": CategoryWithPostsQueryResult;
     "\n  *[_type == \"founderMessage\" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageQueryResult;
     "\n  *[_type == \"founderMessage\" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageBySlugQueryResult;
   }
