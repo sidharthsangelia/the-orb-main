@@ -2,22 +2,35 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ResourceCard, ResourceCardSkeleton } from "@/components/resources/ResourceCard";
 
-type ResourceItem = {
+import "swiper/css";
+import "swiper/css/navigation";
+
+interface Resource {
   _id: string;
   title: string;
   slug?: { current: string };
   description?: string;
   type?: string;
-  category?: string;
+  category?: { title: string; color?: { hex: string } };
   image?: string;
-};
+  date?: string;
+  author?: { name: string; picture?: string };
+  isFeatured?: boolean;
+  status?: "draft" | "published";
+  readTime?: number;
+}
 
 interface ResourceSectionClientProps {
   id: string;
   title: string;
   description: string;
-  items: ResourceItem[];
+  items: Resource[];
   type: string;
   href?: string;
   icon?: React.ReactNode;
@@ -47,43 +60,77 @@ export default function ResourceSectionClient({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center mb-8">
           {icon}
-          <h2 className="ml-3 text-2xl font-bold text-[#eae4d2]">{title}</h2>
+          <h2 className="ml-3 text-2xl font-bold text-foreground">{title}</h2>
         </div>
-        <p className="text-[#eae4d2]/70 mb-12">{description}</p>
+        <p className="text-muted-foreground mb-12">{description}</p>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items?.map((item) => (
-            <a
-              key={item._id}
-              href={`/${type}/${item.slug?.current}`}
-              className="flex flex-col bg-[#1a1b1b] border border-[#575846]/30 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:border-[#487052]/50 transition-all duration-200"
+        {items.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+              {icon}
+            </div>
+            <h3 className="text-2xl font-semibold text-foreground mb-2">
+              No {title.toLowerCase()} found
+            </h3>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              Check back later for new {title.toLowerCase()}.
+            </p>
+          </div>
+        ) : (
+          <div className="relative">
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={24}
+              slidesPerView={1}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 4 },
+              }}
+              navigation={{
+                prevEl: `.swiper-prev-${id}`,
+                nextEl: `.swiper-next-${id}`,
+              }}
+              className="swiper-container"
             >
-              {item.image && (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-48 object-cover"
-                />
-              )}
-              <div className="flex flex-col flex-1 p-6">
-                <h3 className="text-lg font-semibold text-[#eae4d2] mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-[#eae4d2]/70 line-clamp-3 mb-4">
-                  {item.description || ""}
-                </p>
-                <div className="mt-auto flex items-center justify-between text-xs text-[#eae4d2]/60">
-                  {item.type && <span>{item.type}</span>}
-                  {item.category && (
-                    <span className="px-2 py-0.5 rounded-full bg-[#487052]/20 text-[#8fd6a9]">
-                      {item.category}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
+              {items.map((item) => (
+                <SwiperSlide key={item._id}>
+                  <ResourceCard
+                    resource={{
+                      _id: item._id,
+                      title: item.title,
+                      slug: item.slug?.current || "",
+                      description: item.description,
+                      type: item.type,
+                      category: item.category,
+                      image: item.image,
+                      date: item.date,
+                      author: item.author,
+                      isFeatured: item.isFeatured,
+                      status: item.status,
+                      readTime: item.readTime,
+                    }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <Button
+              variant="outline"
+              size="sm"
+              className={`swiper-prev-${id} absolute top-1/2 left-0 -translate-y-1/2 z-10 flex items-center gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed`}
+              disabled={items.length <= 4}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className={`swiper-next-${id} absolute top-1/2 right-0 -translate-y-1/2 z-10 flex items-center gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed`}
+              disabled={items.length <= 4}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </motion.section>
   );

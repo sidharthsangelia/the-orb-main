@@ -13,6 +13,56 @@
  */
 
 // Source: schema.json
+export type CommunityPage = {
+  _id: string;
+  _type: "communityPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  heroSection?: {
+    badge?: string;
+    mainHeading?: string;
+    secondaryHeading?: string;
+    description?: string;
+    joinMovementUrl?: string;
+    founderMessageUrl?: string;
+    impactStats?: Array<{
+      value?: number;
+      label?: string;
+      icon?: "TreePine" | "Users" | "Globe" | "Target";
+      _key: string;
+    }>;
+  };
+  testimonialsSection?: {
+    title?: string;
+    description?: string;
+    testimonials?: Array<{
+      name?: string;
+      role?: string;
+      content?: string;
+      avatar?: string;
+      _key: string;
+    }>;
+  };
+  achievementsSection?: {
+    title?: string;
+    description?: string;
+    achievements?: Array<{
+      title?: string;
+      description?: string;
+      icon?: "Award" | "TrendingUp" | "Users2" | "Lightbulb";
+      _key: string;
+    }>;
+  };
+  ctaSection?: {
+    title?: string;
+    description?: string;
+    primaryButtonText?: string;
+    secondaryButtonText?: string;
+    hashtags?: string;
+  };
+};
+
 export type CommunityRole = {
   _id: string;
   _type: "communityRole";
@@ -764,7 +814,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = CommunityRole | SocialMediaPosts | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = CommunityPage | CommunityRole | SocialMediaPosts | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(blog)/posts/[slug]/page.tsx
 // Variable: postSlugs
@@ -1769,7 +1819,47 @@ export type AboutPageQueryResult = {
 } | null;
 // Variable: communityPageQuery
 // Query: *[_type == "communityPage"][0] {  heroSection {    badge,    mainHeading,    secondaryHeading,    description,    joinMovementUrl,    founderMessageUrl,    impactStats[] {      value,      label,      icon    }  },  testimonialsSection {    title,    description,    testimonials[] {      name,      role,      content,      avatar    }  },  achievementsSection {    title,    description,    achievements[] {      title,      description,      icon    }  },  ctaSection {    title,    description,    primaryButtonText,    secondaryButtonText,    hashtags  }}
-export type CommunityPageQueryResult = null;
+export type CommunityPageQueryResult = {
+  heroSection: {
+    badge: string | null;
+    mainHeading: string | null;
+    secondaryHeading: string | null;
+    description: string | null;
+    joinMovementUrl: string | null;
+    founderMessageUrl: string | null;
+    impactStats: Array<{
+      value: number | null;
+      label: string | null;
+      icon: "Globe" | "Target" | "TreePine" | "Users" | null;
+    }> | null;
+  } | null;
+  testimonialsSection: {
+    title: string | null;
+    description: string | null;
+    testimonials: Array<{
+      name: string | null;
+      role: string | null;
+      content: string | null;
+      avatar: string | null;
+    }> | null;
+  } | null;
+  achievementsSection: {
+    title: string | null;
+    description: string | null;
+    achievements: Array<{
+      title: string | null;
+      description: string | null;
+      icon: "Award" | "Lightbulb" | "TrendingUp" | "Users2" | null;
+    }> | null;
+  } | null;
+  ctaSection: {
+    title: string | null;
+    description: string | null;
+    primaryButtonText: string | null;
+    secondaryButtonText: string | null;
+    hashtags: string | null;
+  } | null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";

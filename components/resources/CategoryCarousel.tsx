@@ -1,12 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 interface Category {
   id: string;
   title: string;
   icon: React.ReactNode;
-  count?: number;
+  count: number;
 }
 
 interface CategoryCarouselProps {
@@ -15,57 +21,58 @@ interface CategoryCarouselProps {
 }
 
 export default function CategoryCarousel({ categories, onCategoryClick }: CategoryCarouselProps) {
-  const labelMap: Record<string, string> = {
-    guides: "guides",
-    education: "articles",
-    "climate-stories": "stories",
-    "youth-voices": "blogs",
-  };
-
-  // Animated counts state
-  const [animatedCounts, setAnimatedCounts] = useState<number[]>(() =>
-    categories.map(() => 0)
-  );
-
-  useEffect(() => {
-    categories.forEach((category, index) => {
-      const target = category.count ?? 0;
-      let start = 0;
-      const duration = 800; // ms
-      const startTime = performance.now();
-
-      const step = (now: number) => {
-        const progress = Math.min((now - startTime) / duration, 1);
-        const value = Math.floor(progress * target);
-        setAnimatedCounts((prev) => {
-          const updated = [...prev];
-          updated[index] = value;
-          return updated;
-        });
-        if (progress < 1) requestAnimationFrame(step);
-      };
-
-      requestAnimationFrame(step);
-    });
-  }, [categories]);
-
   return (
-    <div className="w-full flex justify-center">
-      <div className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 justify-center">
-        {categories.map((category, index) => (
-          <button
-            key={category.id}
-            onClick={() => onCategoryClick(category.id)}
-            className="flex-shrink-0 w-48 p-6 rounded-xl bg-[#1a1a1a] hover:bg-[#242424] transition-colors duration-300 text-center"
-          >
-            <div className="flex justify-center mb-4 text-[#8fd6a9]">{category.icon}</div>
-            <h3 className="text-lg font-semibold text-[#eae4d2]">{category.title}</h3>
-            <p className="mt-1 text-sm text-[#eae4d2]/70">
-              {animatedCounts[index]} {labelMap[category.id] || "articles"}
-            </p>
-          </button>
-        ))}
+    <div className="relative max-w-2xl mx-auto">
+      <Swiper
+  modules={[Navigation, Autoplay]}
+  spaceBetween={8} // reduced spacing
+  slidesPerView={1}
+  breakpoints={{
+    640: { slidesPerView: 2 },
+  }}
+  loop={true}
+  autoplay={{ delay: 5000, disableOnInteraction: false }}
+  navigation={{
+    prevEl: '.swiper-prev-category',
+    nextEl: '.swiper-next-category',
+  }}
+  className="swiper-container-category"
+>
+  {categories.map((category) => (
+    <SwiperSlide key={category.id} className="!flex justify-center">
+      <div
+        className="flex flex-col items-center justify-center w-full h-40 sm:h-64 bg-card border border-border rounded-lg cursor-pointer hover:bg-primary/10 hover:border-primary/30 transition-all duration-300 p-6 aspect-square"
+        onClick={() => onCategoryClick(category.id)}
+      >
+        <div className="mb-3">{category.icon}</div>
+        <h3 className="text-base sm:text-lg font-semibold text-foreground text-center">{category.title}</h3>
+        <p className="text-xs sm:text-sm text-muted-foreground text-center">{category.count} items</p>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="mt-3 text-primary hover:text-primary hover:bg-primary/10"
+        >
+          View →
+        </Button>
       </div>
+    </SwiperSlide>
+  ))}
+</Swiper>
+
+      <Button
+        variant="outline"
+        size="sm"
+        className="swiper-prev-category absolute top-1/2 left-[-40px] -translate-y-1/2 z-10 flex items-center gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="swiper-next-category absolute top-1/2 right-[-40px] -translate-y-1/2 z-10 flex items-center gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </Button>
     </div>
   );
 }

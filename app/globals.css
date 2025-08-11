@@ -260,3 +260,18 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+.swiper-container {
+  position: relative;
+  padding: 0 40px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: none;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  content: none;
+}
