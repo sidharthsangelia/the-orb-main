@@ -80,6 +80,10 @@
   --info-foreground: 45 41% 96%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .dark {
   /* Dark Mode - Deep, Calming, Atmospheric */
   --background: 180 6% 4%; /* Deep charcoal base */
@@ -255,4 +259,19 @@ body {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.swiper-container {
+  position: relative;
+  padding: 0 40px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: none;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  content: none;
 }

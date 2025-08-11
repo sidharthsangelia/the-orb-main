@@ -2,6 +2,63 @@
 import { defineQuery } from "next-sanity";
 
 // Enhanced post fields with additional data
+// queries.ts
+
+// Guides & Handbooks
+export const guidesQuery = `
+*["guides" in categories[]->slug.current]{
+  _id,
+  title,
+  "description": coalesce(excerpt, ""),
+  "image": coverImage.asset->url,
+  "type": type,
+  "downloadCount": downloadCount,
+  "category": categories[0]->title
+}
+`;
+
+// Educational Content
+export const educationQuery = `
+*[_type == "post" && "education" in categories[]->slug.current]{
+  _id,
+  title,
+  "description": coalesce(excerpt, ""),
+  "image": coverImage.asset->url,
+  "type": type,
+  "duration": duration,
+  "level": level
+}
+`;
+
+// Climate Stories
+export const climateStoriesQuery = `
+*[_type == "post" && "climate-stories" in categories[]->slug.current]{
+  _id,
+  title,
+  "description": coalesce(excerpt, ""),
+  "image": coverImage.asset->url,
+  organization,
+  impact,
+  readTime,
+  date
+}
+`;
+
+// Youth Voices
+export const youthVoicesQuery = `
+*[_type == "post" && "youth-voices" in categories[]->slug.current]{
+  _id,
+  title,
+  "description": coalesce(excerpt, ""),
+  "image": coverImage.asset->url,
+  "author": author->name,
+  readTime,
+  likes,
+  date,
+  location
+}
+`;
+
 const postFields = /* groq */ `
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),
