@@ -68,9 +68,12 @@ export default function ResourcesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-[#eae4d2] mb-6">Explore Our Collections</h2>
-            <p className="text-xl text-[#eae4d2]/70 max-w-3xl mx-auto leading-relaxed">
-              Choose your path to making a difference. Each collection is carefully curated to support your environmental journey.
+            
+              <p className="text-xl text-[#eae4d2]/70 max-w-3xl mx-auto leading-relaxed">
+             Dive into our curated collections of eco-resources, success stories, and innovative projects. From hands-on sustainability guides to inspiring community initiatives, each section is designed to spark ideas and empower action toward a greener future.
             </p>
+            
+            
           </div>
 
           <CategoryCarousel categories={categories} onCategoryClick={handleCategoryClick} />
