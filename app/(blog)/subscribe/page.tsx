@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Mail, Calendar, Clock, Zap, User } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function MysteriousCountdown() {
   const [name, setName] = useState("");
@@ -119,8 +121,8 @@ export default function MysteriousCountdown() {
       <div className="relative z-10 min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           {/* Countdown */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl animate-pulse"></div>
+          <div className="relative pt-16">
+            <div className="absolute  inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl animate-pulse"></div>
             <div className="relative bg-card/30 backdrop-blur-2xl border border-border/50 rounded-3xl p-8 md:p-12 overflow-hidden">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
                 {[
@@ -186,13 +188,13 @@ export default function MysteriousCountdown() {
                     />
                   </div>
                 </div>
-                <button
+                <Button
                   type="submit"
                   disabled={isSubmitting}
                   className="px-6 py-3 bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground rounded-xl font-medium hover:from-primary hover:to-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Subscribing..." : "Subscribe Now"}
-                </button>
+                </Button>
 
                 {statusMessage && (
                   <p className="text-sm text-muted-foreground text-center">
