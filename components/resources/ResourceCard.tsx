@@ -41,117 +41,120 @@ export const ResourceCard = ({
     (resource.description ? Math.ceil(resource.description.length / 250) : 5);
 
   return (
-    <Card
-      className={`group overflow-hidden hover:shadow-xl transition-all duration-500 bg-card border-border ${large ? "md:col-span-2 lg:col-span-2" : "w-full h-full"} ${className}`}
+   <Card
+  className={`group overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-card border-border rounded-lg ${large ? "md:col-span-2 lg:col-span-2" : "w-full h-full"} ${className}`}
+>
+  <Link href={`/resources/${resource.type}/${resource.slug}`} className="block">
+    <div
+        className={`relative overflow-hidden rounded-t-lg ${
+    large
+      ? "h-72 md:h-96" // Bigger large card image
+      : "h-48 sm:h-56" // Bigger normal card image
+  }`}
     >
-      <Link
-        href={`/resources/${resource.type}/${resource.slug}`}
-        className="block"
-      >
-        <div
-          className={`relative overflow-hidden ${large ? "h-64 md:h-80" : "h-24 sm:h-32"}`}
+      {resource.image ? (
+        <Image
+          src={resource.image}
+          alt={resource.title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          sizes={
+            large
+              ? "(max-width: 768px) 100vw, 66vw"
+              : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          }
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center rounded-t-lg">
+          <div className="text-center">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center">
+              <Leaf className="h-4 w-4 sm:h-6 text-primary" />
+            </div>
+            <span className="text-primary text-xs sm:text-sm font-medium">
+              Resource
+            </span>
+          </div>
+        </div>
+      )}
+
+      {resource.category?.title && (
+        <Badge
+          className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-card/90 backdrop-blur-sm border-primary/20 text-xs sm:text-sm"
+          style={{
+            backgroundColor: `${resource.category.color?.hex || "hsl(var(--primary))"}15`,
+            color: resource.category.color?.hex || "hsl(var(--primary))",
+            borderLeft: `3px solid ${resource.category.color?.hex || "hsl(var(--primary))"}`,
+          }}
         >
-          {resource.image ? (
-            <Image
-              src={resource.image}
-              alt={resource.title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-700"
-              sizes={
-                large
-                  ? "(max-width: 768px) 100vw, 66vw"
-                  : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              }
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center">
-                  <Leaf className="h-4 w-4 sm:h-6  text-primary" />
-                </div>
-                <span className="text-primary text-xs sm:text-sm font-medium">
-                  Resource
-                </span>
-              </div>
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          {resource.category?.title && (
-            <Badge
-              className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-card/95 backdrop-blur-sm border-primary/20"
-              style={{
-                backgroundColor: `${resource.category.color?.hex || "hsl(var(--primary))"}15`,
-                color: resource.category.color?.hex || "hsl(var(--primary))",
-                borderLeft: `3px solid ${resource.category.color?.hex || "hsl(var(--primary))"}`,
-              }}
-            >
-              {resource.category.title}
-            </Badge>
-          )}
-          {resource.isFeatured && (
-            <Badge className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-orange-500/90 text-white border-0 animate-pulse">
-              Featured
-            </Badge>
-          )}
+          {resource.category.title}
+        </Badge>
+      )}
+
+      {resource.isFeatured && (
+        <Badge className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-orange-500/90 text-white border-0 animate-pulse">
+          Featured
+        </Badge>
+      )}
+    </div>
+  </Link>
+
+  <CardContent className="p-4 sm:p-6 space-y-2 sm:space-y-3">
+    {/* Meta Info */}
+    <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground">
+      {resource.date && (
+        <div className="flex items-center gap-1 sm:gap-2">
+          <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span>{format(parseISO(resource.date), "MMM d, yyyy")}</span>
         </div>
-      </Link>
-      <CardContent className="p-3 sm:p-6 space-y-2 sm:space-y-3">
-        <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-          {resource.date && (
-            <div className="flex items-center gap-1 sm:gap-2">
-              <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>{format(parseISO(resource.date), "MMM d, yyyy")}</span>
-            </div>
-          )}
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span>{readingTime} min read</span>
+      )}
+      <div className="flex items-center gap-1 sm:gap-2">
+        <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+        <span>{readingTime} min read</span>
+      </div>
+    </div>
+
+    {/* Title */}
+    <Link href={`/posts/${resource.slug}`}>
+      <h3
+        className={`font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2 ${large ? "text-lg sm:text-xl" : "text-base sm:text-lg"}`}
+      >
+        {resource.title}
+      </h3>
+    </Link>
+
+    {/* Description */}
+    {resource.description && (
+      <p
+        className={`text-muted-foreground/90 line-clamp-2 sm:line-clamp-3 leading-relaxed ${large ? "text-sm sm:text-base" : "text-xs sm:text-sm"}`}
+      >
+        {resource.description}
+      </p>
+    )}
+
+    {/* Footer */}
+    <div className="flex items-center justify-between pt-3 border-t border-border/40">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {resource.author?.name ? (
+          <Avatar name={resource.author.name} picture={resource.author.picture} />
+        ) : (
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+            <User className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
           </div>
-        </div>
-        <Link href={`/posts/${resource.slug}`}>
-          <h3
-            className={`font-bold text-foreground mb-2 sm:mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-tight ${large ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg"}`}
-          >
-            {resource.title}
-          </h3>
-        </Link>
-        {resource.description && (
-          <p
-            className={`text-muted-foreground mb-2 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed ${large ? "text-sm sm:text-base" : "text-xs sm:text-sm"}`}
-          >
-            {resource.description}
-          </p>
         )}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            {resource.image ? (
-              // <Image
-              //   src={resource.author?.picture}
-              //   alt={resource.author?.name}
-              //   width={24}
-              //   height={24}
-              //   className="rounded-full ring-2 ring-border sm:w-8 sm:h-8"
-              // />
-              <Avatar name={resource.author?.name} picture={resource.author?.picture}/>
-            ) : (
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <User className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-              </div>
-            )}
-           
-          </div>
-          <Link href={`/posts/${resource.slug}`}>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-primary hover:text-primary hover:bg-primary/10"
-            >
-              Read more →
-            </Button>
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+      <Link href={`/posts/${resource.slug}`}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-primary hover:text-primary hover:bg-primary/10"
+        >
+          Read more →
+        </Button>
+      </Link>
+    </div>
+  </CardContent>
+</Card>
+
   );
 };
 
