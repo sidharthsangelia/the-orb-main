@@ -7,7 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ResourceCard, ResourceCardSkeleton } from "@/components/resources/ResourceCard";
+import {
+  ResourceCard,
+  ResourceCardSkeleton,
+} from "@/components/resources/ResourceCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -107,7 +110,7 @@ export default function ResourceSectionClient({
                         category: item.category,
                         image: item.image,
                         date: item.date,
-                        author: item.author,
+                        author: item.author!,
                         isFeatured: item.isFeatured,
                         status: item.status,
                         readTime: item.readTime,
