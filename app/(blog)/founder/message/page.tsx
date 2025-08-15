@@ -8,6 +8,12 @@ import { urlForImage } from "@/sanity/lib/image";
 import { founderMessageQuery, type FounderMessage } from "@/sanity/lib/queries";
 
 import { FounderMessageQueryResult } from "@/sanity.types";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Founder's Message",
+  description: "...",
+};
 
 const portableTextComponents = {
   block: {

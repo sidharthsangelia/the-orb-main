@@ -8,11 +8,7 @@ import {
   type PortableTextBlock,
 } from "next-sanity";
 import { Inter } from "next/font/google";
-import { draftMode } from "next/headers";
-
-import AlertBanner from "../../components/alert-banner";
-import PortableText from "../../components/portable-text";
-
+ 
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
@@ -71,7 +67,7 @@ export default async function RootLayout({
 
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

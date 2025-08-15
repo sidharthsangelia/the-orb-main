@@ -36,7 +36,7 @@ interface PostsSidebarProps {
 
 export function PostsSidebar({ categories, trendingPosts }: PostsSidebarProps) {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 ">
       <CategoriesSidebar 
         categories={categories}
         title="Browse by Category"

@@ -30,6 +30,7 @@ import { founderMessage } from "./sanity/schemas/documents/founder";
 import socialMediaPosts from "./sanity/schemas/documents/socialMediaPosts";
 import communityRoles from "./sanity/schemas/documents/communityRoles";
 import { communityPageSchema } from "./sanity/schemas/documents/communityPage";
+import subscriber from "./sanity/schemas/singletons/subscriber";
 
 const homeLocation = {
   title: "Home",
@@ -45,6 +46,7 @@ export default defineConfig({
       // Singletons
       settings,
       partner,
+      subscriber,
       // Documents
       post,
       author,

@@ -7,6 +7,13 @@ import { sanityFetch } from "@/sanity/lib/fetch";
  
 import { CommunityPageData } from "@/types/community";
 import { communityPageQuery } from "@/sanity/lib/queries";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Community",
+  description: "...",
+};
 
 const CommunityPage = async () => {
   // Fetch data from Sanity
