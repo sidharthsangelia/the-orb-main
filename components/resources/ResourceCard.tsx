@@ -1,3 +1,4 @@
+// components/resources/ResourceCard.tsx
 'use client';
 
 import Image from 'next/image';
@@ -6,11 +7,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, Clock, User, Leaf } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
 
 interface Resource {
   _id: string;
   title: string;
-  slug: string;
+  slug: string; // Updated to string
   description?: string;
   image?: string;
   date?: string;
@@ -19,6 +21,7 @@ interface Resource {
   isFeatured?: boolean;
   status?: 'draft' | 'published';
   readTime?: number;
+  type: string;
 }
 
 interface ResourceCardProps {
@@ -32,7 +35,7 @@ export const ResourceCard = ({ resource, large = false, className = '' }: Resour
 
   return (
     <Card className={`group overflow-hidden hover:shadow-xl transition-all duration-500 bg-card border-border ${large ? 'md:col-span-2 lg:col-span-2' : 'w-full h-full'} ${className}`}>
-      <Link href={`/resources/${resource.slug}`} className="block">
+      <Link href={`/resources/${resource.type}/${resource.slug}`} className="block">
         <div className={`relative overflow-hidden ${large ? 'h-64 md:h-80' : 'h-24 sm:h-32'}`}>
           {resource.image ? (
             <Image
@@ -67,38 +70,25 @@ export const ResourceCard = ({ resource, large = false, className = '' }: Resour
           )}
           {resource.isFeatured && (
             <Badge className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-orange-500/90 text-white border-0 animate-pulse">
-              🔥 Featured
-            </Badge>
-          )}
-          {resource.status === 'draft' && (
-            <Badge className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-destructive/90 backdrop-blur-sm text-destructive-foreground border-0">
-              Draft
+              Featured
             </Badge>
           )}
         </div>
       </Link>
       <CardContent className="p-3 sm:p-6 space-y-2 sm:space-y-3">
-        <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            {resource.date && (
-              <>
-                <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4" />
-                <time dateTime={resource.date}>
-                  {new Date(resource.date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
-                </time>
-              </>
-            )}
-          </div>
-          <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+          {resource.date && (
+            <div className="flex items-center gap-1 sm:gap-2">
+              <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span>{format(parseISO(resource.date), "MMM d, yyyy")}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-1 sm:gap-2">
             <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>{readingTime} min read</span>
           </div>
         </div>
-        <Link href={`/resources/${resource.slug}`}>
+        <Link href={`/resources/${resource.type}/${resource.slug}`}>
           <h3 className={`font-bold text-foreground mb-2 sm:mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-tight ${large ? 'text-lg sm:text-xl md:text-2xl' : 'text-base sm:text-lg'}`}>
             {resource.title}
           </h3>
@@ -127,7 +117,7 @@ export const ResourceCard = ({ resource, large = false, className = '' }: Resour
               {resource.author?.name || 'Anonymous'}
             </span>
           </div>
-          <Link href={`/resources/${resource.slug}`}>
+          <Link href={`/resources/${resource.type}/${resource.slug}`}>
             <Button variant="ghost" size="sm" className="text-primary hover:text-primary hover:bg-primary/10">
               Read more →
             </Button>

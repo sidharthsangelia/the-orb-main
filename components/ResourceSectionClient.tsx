@@ -1,3 +1,4 @@
+// components/ResourceSectionClient.tsx
 "use client";
 
 import { motion, useInView } from "framer-motion";
@@ -14,7 +15,7 @@ import "swiper/css/navigation";
 interface Resource {
   _id: string;
   title: string;
-  slug?: { current: string };
+  slug: string; // Updated to string, as queries return slug.current
   description?: string;
   type?: string;
   category?: { title: string; color?: { hex: string } };
@@ -92,26 +93,28 @@ export default function ResourceSectionClient({
               }}
               className="swiper-container"
             >
-              {items.map((item) => (
-                <SwiperSlide key={item._id}>
-                  <ResourceCard
-                    resource={{
-                      _id: item._id,
-                      title: item.title,
-                      slug: item.slug?.current || "",
-                      description: item.description,
-                      type: item.type,
-                      category: item.category,
-                      image: item.image,
-                      date: item.date,
-                      author: item.author,
-                      isFeatured: item.isFeatured,
-                      status: item.status,
-                      readTime: item.readTime,
-                    }}
-                  />
-                </SwiperSlide>
-              ))}
+              {items
+                .filter((item) => item.slug) // Skip items without a slug
+                .map((item) => (
+                  <SwiperSlide key={item._id}>
+                    <ResourceCard
+                      resource={{
+                        _id: item._id,
+                        title: item.title,
+                        slug: item.slug, // Use slug directly
+                        description: item.description,
+                        type: type,
+                        category: item.category,
+                        image: item.image,
+                        date: item.date,
+                        author: item.author,
+                        isFeatured: item.isFeatured,
+                        status: item.status,
+                        readTime: item.readTime,
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
             </Swiper>
             <Button
               variant="outline"

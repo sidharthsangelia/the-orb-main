@@ -61,7 +61,7 @@ export default async function RootLayout({
   // const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`}>
+    <html lang="en" className={`${inter.variable} bg-white text-black`} suppressHydrationWarning>
       <body>
           {/* {isDraftMode && <AlertBanner />} */}
 

@@ -5,10 +5,15 @@ import { defineQuery } from "next-sanity";
 // queries.ts
 
 // Guides & Handbooks
+// sanity/lib/queries.ts
+
+
+// Guides & Handbooks
 export const guidesQuery = `
-*["guides" in categories[]->slug.current]{
+*["guides" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   "type": type,
@@ -19,9 +24,10 @@ export const guidesQuery = `
 
 // Educational Content
 export const educationQuery = `
-*[_type == "post" && "education" in categories[]->slug.current]{
+*[_type == "post" && "education" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   "type": type,
@@ -32,9 +38,10 @@ export const educationQuery = `
 
 // Climate Stories
 export const climateStoriesQuery = `
-*[_type == "post" && "climate-stories" in categories[]->slug.current]{
+*[_type == "post" && "climate-stories" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   organization,
@@ -46,9 +53,10 @@ export const climateStoriesQuery = `
 
 // Youth Voices
 export const youthVoicesQuery = `
-*[_type == "post" && "youth-voices" in categories[]->slug.current]{
+*[_type == "post" && "youth-voices" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   "author": author->name,
@@ -58,6 +66,8 @@ export const youthVoicesQuery = `
   location
 }
 `;
+
+// ... rest of the file unchanged, including resourceDetailQuery ...
 
 const postFields = /* groq */ `
   _id,
@@ -682,3 +692,35 @@ export const communityPageQuery = defineQuery(
   }
 }`
 )
+// sanity/lib/queries.ts
+// ... existing imports and queries ...
+
+// Add at the end
+export const resourceDetailQuery = defineQuery(`
+  *[_type == "post" && categories[]->slug.current match $type && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    content,
+    excerpt,
+    coverImage {
+      asset-> {
+        url,
+        metadata {
+          lqip
+        }
+      },
+      alt
+    },
+    author-> {
+      name,
+      picture
+    },
+    date,
+    categories[]-> {
+      title,
+      slug
+    },
+    readingTime
+  }
+`);

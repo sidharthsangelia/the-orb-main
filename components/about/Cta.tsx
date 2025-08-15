@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sprout } from 'lucide-react';
+import Link from "next/link";
 
 export const CTA = () => {
   const ctaRef = useRef(null);
@@ -27,11 +28,17 @@ export const CTA = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          
           <Button 
             size="lg" 
+            onClick={() => window.open("https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true", "_blank")}
             className="bg-gradient-to-r from-[#487052] to-[#509e8e] hover:from-[#487052]/90 hover:to-[#509e8e]/90 text-white border-0 px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
           >
+            
+
             Let's Build Together
+            
+            
             <Sprout className="ml-2 h-5 w-5" />
           </Button>
         </div>
