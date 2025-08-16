@@ -1,8 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { Sprout, ArrowRight } from "lucide-react";
 
 interface Category {
   id: string;
@@ -18,118 +20,117 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ categories, onCategoryClick }: HeroSectionProps) {
+  const heroRef = useRef(null);
+  const heroInView = useInView(heroRef, { once: true, amount: 0.3 });
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-background/90 to-muted/90 backdrop-blur-md py-24">
-      {/* Subtle, blurry background effect */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-accent/20 to-primary/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-conic from-primary/10 via-secondary/10 to-accent/10 rounded-full blur-3xl animate-spin-slow opacity-30"></div>
-        </div>
-        <motion.svg
-          className="absolute opacity-10"
-          width="700"
-          height="700"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          animate={{
-            scale: [1, 1.02, 1],
-            transition: {
-              duration: 4,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            },
-          }}
-        >
-          <circle cx="350" cy="350" r="350" fill="hsl(var(--accent))" />
-        </motion.svg>
+    <section ref={heroRef} className="relative overflow-hidden bg-background pt-16">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-accent/20 to-primary/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-conic from-primary/10 via-secondary/10 to-accent/10 rounded-full blur-3xl animate-spin-slow opacity-30"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Glass-like container for content */}
-        <div className="bg-background/5 backdrop-blur-md rounded-xl p-6 lg:p-8 shadow-lg">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Left Column: Hashtag, Heading, Subheading */}
-            <div className="text-center lg:text-left">
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              >
-                <HoverBorderGradient
-                  containerClassName="rounded-full"
-                  as="button"
-                  className="dark:bg-accent/20 bg-card text-foreground dark:text-accent flex items-center space-x-2"
-                >
-                  #PlanetConsciousYouth
-                </HoverBorderGradient>
-              </motion.div>
-              <motion.p
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-0"
-              >
-                Resources
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-6"
-              >
-                Hub
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-                className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto lg:mx-0 leading-relaxed"
-              >
-                Explore The Órb Resources Hub — your go-to library for sustainable living guides, eco-friendly tips, climate action tools, and youth-focused environmental resources. Learn simple ways to reduce your footprint, make greener choices, and inspire change in your community.
-              </motion.p>
-            </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column: Badge, Heading, Subheading */}
+          <div className="text-center lg:text-left space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full border border-primary/30"
+            >
+              <Sprout className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">
+                Planet Conscious Youth
+              </span>
+            </motion.div>
 
-            {/* Right Column: 2x2 Category Grid */}
-            <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto lg:mx-0">
-              {categories.map((category, index) => (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{
-                    scale: 1.1,
-                    translateY: -10,
-                  }}
-                  transition={{ delay: 0.1 * index + 0.6, duration: 0.4, ease: "easeOut" }}
-                  className="flex flex-col items-center justify-center w-full h-48 sm:h-60 bg-card border border-border rounded-lg cursor-pointer hover:bg-primary/10 hover:border-primary/30 transition-all duration-300 p-6 aspect-square relative overflow-hidden"
-                  onClick={() => onCategoryClick(category.id)}
-                >
-                  <div className="mb-3 z-10">{category.icon}</div>
-                  <h3 className="text-base sm:text-lg font-semibold text-foreground text-center z-10">{category.title}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground text-center z-10">{category.count} items</p>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              className="text-5xl lg:text-7xl font-bold"
+            >
+              <span className="bg-gradient-to-r from-[#487052] to-[#509e8e] bg-clip-text text-transparent">
+                Resources 
+              </span>
+              <p className="bg-gradient-to-r from-[#ffffff] to-[#e9e9e9] bg-clip-text text-transparent">
+                Hub
+              </p>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="text-xl text-[#575846] dark:text-[#eae4d2]/80 max-w-lg mx-auto lg:mx-0 leading-relaxed"
+            >
+              The Órb Resources Hub brings you sustainable living guides, eco-friendly tips, climate tools, and resources to empower youth-driven change.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              className="flex justify-center lg:justify-start"
+            >
+              <Button
+                size="lg"
+                onClick={() => window.open("https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true", "_blank")}
+                className="group bg-gradient-to-r from-[#487052] to-[#509e8e] hover:from-[#487052]/90 hover:to-[#509e8e]/90 text-white border-0 px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Contribute Now
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Category Grid */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-xl"></div>
+            <div className="relative bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-8">
+              <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto lg:mx-0">
+                {categories.map((category, index) => (
                   <motion.div
-                    initial={{ opacity: 0, y: 20, height: 0 }}
-                    whileHover={{ opacity: 1, y: 0, height: "auto" }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute inset-0 bg-card/90 backdrop-blur-md flex items-center justify-center p-4 z-20 rounded-lg"
+                    key={category.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{
+                      scale: 1.05,
+                      translateY: -5,
+                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+                    }}
+                    transition={{ delay: 0.1 * index + 0.4, duration: 0.4, ease: "easeOut" }}
+                    className="flex flex-col items-center justify-center w-full h-48 sm:h-60 bg-card/50 border border-border/50 rounded-lg cursor-pointer hover:bg-[#487052]/10 hover:border-[#487052]/30 transition-all duration-300 p-6 aspect-square relative overflow-hidden"
+                    onClick={() => onCategoryClick(category.id)}
                   >
-                    <div className="text-center">
-                      <p className="text-xs sm:text-sm text-muted-foreground mb-4">{category.description}</p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-primary hover:text-primary hover:bg-primary/10"
-                        onClick={() => onCategoryClick(category.id)}
-                      >
-                        View →
-                      </Button>
-                    </div>
+                    <div className="mb-3 z-10">{category.icon}</div>
+                    <h3 className="text-base sm:text-lg font-semibold text-[#0c0d0d] dark:text-[#eae4d2] text-center z-10">{category.title}</h3>
+                    <p className="text-xs sm:text-sm text-[#575846] dark:text-[#eae4d2]/80 text-center z-10">{category.count} items</p>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20, height: 0 }}
+                      whileHover={{ opacity: 1, y: 0, height: "auto" }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      className="absolute inset-0 bg-card/90 backdrop-blur-md flex items-center justify-center p-4 z-20 rounded-lg"
+                    >
+                      <div className="text-center">
+                        <p className="text-xs sm:text-sm text-[#575846] dark:text-[#eae4d2]/80 mb-4">{category.description}</p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-[#487052] dark:text-[#509e8e] hover:text-[#487052] hover:bg-[#487052]/10 dark:hover:bg-[#509e8e]/10"
+                          onClick={() => onCategoryClick(category.id)}
+                        >
+                          View →
+                        </Button>
+                      </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
