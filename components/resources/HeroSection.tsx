@@ -19,7 +19,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ categories, onCategoryClick }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#0c0d0d]/90 to-[#1a1b1b]/90 backdrop-blur-md py-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-background/90 to-muted/90 backdrop-blur-md py-24">
       {/* Subtle, blurry background effect */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
@@ -43,13 +43,13 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
             },
           }}
         >
-          <circle cx="350" cy="350" r="350" fill="#509e8e" />
+          <circle cx="350" cy="350" r="350" fill="hsl(var(--accent))" />
         </motion.svg>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Glass-like container for content */}
-        <div className="bg-white/5 backdrop-blur-md rounded-xl p-6 lg:p-8 shadow-lg">
+        <div className="bg-background/5 backdrop-blur-md rounded-xl p-6 lg:p-8 shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             {/* Left Column: Hashtag, Heading, Subheading */}
             <div className="text-center lg:text-left">
@@ -61,7 +61,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
                 <HoverBorderGradient
                   containerClassName="rounded-full"
                   as="button"
-                  className="dark:bg-[#87a899]/20 bg-white text-black dark:text-[#87a899] flex items-center space-x-2"
+                  className="dark:bg-accent/20 bg-card text-foreground dark:text-accent flex items-center space-x-2"
                 >
                   #PlanetConsciousYouth
                 </HoverBorderGradient>
@@ -70,7 +70,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#ffffff] mb-0"
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-0"
               >
                 Resources
               </motion.p>
@@ -78,7 +78,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#ffffff] mb-6"
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-6"
               >
                 Hub
               </motion.p>
@@ -86,7 +86,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-                className="text-lg sm:text-xl text-[#eae4d2]/70 max-w-3xl mx-auto lg:mx-0 leading-relaxed"
+                className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto lg:mx-0 leading-relaxed"
               >
                 Explore The Órb Resources Hub — your go-to library for sustainable living guides, eco-friendly tips, climate action tools, and youth-focused environmental resources. Learn simple ways to reduce your footprint, make greener choices, and inspire change in your community.
               </motion.p>
@@ -137,16 +137,3 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
     </section>
   );
 }
-
-// Custom animation for slower pulse
-const animatePulseSlow = {
-  "0%": { transform: "scale(1)" },
-  "50%": { transform: "scale(1.02)" },
-  "100%": { transform: "scale(1)" },
-};
-
-// Custom animation for spin-slow
-const animateSpinSlow = {
-  "0%": { transform: "rotate(0deg)" },
-  "100%": { transform: "rotate(360deg)" },
-};

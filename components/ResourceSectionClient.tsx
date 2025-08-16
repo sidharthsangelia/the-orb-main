@@ -7,7 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ResourceCard, ResourceCardSkeleton } from "@/components/resources/ResourceCard";
+import {
+  ResourceCard,
+  ResourceCardSkeleton,
+} from "@/components/resources/ResourceCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -85,7 +88,7 @@ export default function ResourceSectionClient({
               slidesPerView={1}
               breakpoints={{
                 640: { slidesPerView: 2 },
-                1024: { slidesPerView: 4 },
+                1024: { slidesPerView: 3 },
               }}
               navigation={{
                 prevEl: `.swiper-prev-${id}`,
@@ -107,7 +110,7 @@ export default function ResourceSectionClient({
                         category: item.category,
                         image: item.image,
                         date: item.date,
-                        author: item.author,
+                        author: item.author!,
                         isFeatured: item.isFeatured,
                         status: item.status,
                         readTime: item.readTime,
@@ -116,21 +119,23 @@ export default function ResourceSectionClient({
                   </SwiperSlide>
                 ))}
             </Swiper>
+            {/* Navigation Buttons */}
             <Button
               variant="outline"
-              size="sm"
-              className={`swiper-prev-${id} absolute top-1/2 left-0 -translate-y-1/2 z-10 flex items-center gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed`}
-              disabled={items.length <= 4}
+              size="icon"
+              className={`swiper-prev-${id} absolute -left-10 top-1/2 -translate-y-1/2 z-20 rounded-full shadow-md bg-background/80 backdrop-blur hover:bg-primary/10 hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed`}
+              disabled={items.length <= 3}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-5 w-5" />
             </Button>
+
             <Button
               variant="outline"
-              size="sm"
-              className={`swiper-next-${id} absolute top-1/2 right-0 -translate-y-1/2 z-10 flex items-center gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed`}
-              disabled={items.length <= 4}
+              size="icon"
+              className={`swiper-next-${id} absolute -right-10 top-1/2 -translate-y-1/2 z-20 rounded-full shadow-md bg-background/80 backdrop-blur hover:bg-primary/10 hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed`}
+              disabled={items.length <= 3}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-5 w-5" />
             </Button>
           </div>
         )}

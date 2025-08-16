@@ -9,7 +9,8 @@ import { defineQuery } from "next-sanity";
 
 
 // Guides & Handbooks
-export const guidesQuery = `
+export const guidesQuery = defineQuery(
+  `
 *["guides" in categories[]->slug.current && status == "published"]{
   _id,
   title,
@@ -18,12 +19,19 @@ export const guidesQuery = `
   "image": coverImage.asset->url,
   "type": type,
   "downloadCount": downloadCount,
-  "category": categories[0]->title
+  "category": categories[0]->title,
+   author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+)
+;
 
 // Educational Content
-export const educationQuery = `
+export const educationQuery = defineQuery(
+  `
 *[_type == "post" && "education" in categories[]->slug.current && status == "published"]{
   _id,
   title,
@@ -32,12 +40,20 @@ export const educationQuery = `
   "image": coverImage.asset->url,
   "type": type,
   "duration": duration,
-  "level": level
+  "level": level,
+  author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+
+)
+;
 
 // Climate Stories
-export const climateStoriesQuery = `
+export const climateStoriesQuery = defineQuery(
+  `
 *[_type == "post" && "climate-stories" in categories[]->slug.current && status == "published"]{
   _id,
   title,
@@ -47,12 +63,19 @@ export const climateStoriesQuery = `
   organization,
   impact,
   readTime,
-  date
+  date,
+  author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+)
+;
 
 // Youth Voices
-export const youthVoicesQuery = `
+export const youthVoicesQuery = defineQuery(
+  `
 *[_type == "post" && "youth-voices" in categories[]->slug.current && status == "published"]{
   _id,
   title,
@@ -63,9 +86,15 @@ export const youthVoicesQuery = `
   readTime,
   likes,
   date,
-  location
+  location,
+  author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+)
+;
 
 // ... rest of the file unchanged, including resourceDetailQuery ...
 

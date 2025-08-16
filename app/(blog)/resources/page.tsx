@@ -60,7 +60,7 @@ export default function ResourcesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0c0d0d] text-[#eae4d2]">
+    <div className="min-h-screen bg-background text-foreground">
       <HeroSection categories={categories} onCategoryClick={handleCategoryClick} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -71,6 +71,7 @@ export default function ResourcesPage() {
           items={guides}
           type="guides"
           icon={<BookOpen className="h-6 w-6" />}
+          
         />
         <ResourceSectionClient
           id="education"

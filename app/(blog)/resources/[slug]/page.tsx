@@ -49,7 +49,7 @@ export default async function ResourceDetailPage({ params }: ResourceDetailPageP
   if (!resource) {
     notFound();
   }
-
+console.log(resource.content);
   return (
     <div className="min-h-screen bg-[#0c0d0d] text-[#eae4d2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
