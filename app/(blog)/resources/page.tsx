@@ -99,8 +99,12 @@ export default function ResourcesPage() {
         />
       </div>
 
-      <div className="py-20" />
+
+      
+      <div className="py-20 " />
       <CTA />
     </div>
+    
+
   );
 }
