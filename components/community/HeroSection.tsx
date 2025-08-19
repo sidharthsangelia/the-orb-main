@@ -30,7 +30,7 @@ const iconMap = {
 export const HeroSection = ({ data }: HeroSectionProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const impactStats = data.impactStats.map((stat, index) => ({
+  const impactStats = data.impactStats!.map((stat, index) => ({
     value: stat.value,
     label: stat.label,
     icon: iconMap[stat.icon],
@@ -70,7 +70,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href={data.joinMovementUrl}
+                href={data.joinMovementUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-full font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-500 hover:scale-105"
@@ -79,7 +79,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <Link
-                href={data.founderMessageUrl}
+                href={data.founderMessageUrl!}
                 className="flex items-center gap-2"
               >
                 <button className="group px-6 py-3 border-2 border-primary/30 bg-background/50 rounded-full backdrop-blur-sm  font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300">

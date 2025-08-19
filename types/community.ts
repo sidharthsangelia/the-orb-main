@@ -7,13 +7,13 @@ export interface ImpactStat {
 }
 
 export interface HeroSectionData {
-  badge: string;
-  mainHeading: string;
-  secondaryHeading: string;
-  description: string;
-  joinMovementUrl: string;
-  founderMessageUrl: string;
-  impactStats: ImpactStat[];
+  badge: string | null;
+  mainHeading: string  | null;
+  secondaryHeading: string | null;
+  description: string | null;
+  joinMovementUrl: string | null;
+  founderMessageUrl: string | null;
+  impactStats: ImpactStat[] | null;
 }
 
 export interface Testimonial {
