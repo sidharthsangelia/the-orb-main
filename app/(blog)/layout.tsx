@@ -61,6 +61,24 @@ export default async function RootLayout({
       ? urlForImage(data.logo)?.url?.() ?? undefined
       : undefined;
 
+
+const footerData = {
+  title: data?.title,
+  description: data?.description,
+  footerText: data?.footerText,
+  socialLinks: data?.socialLinks,
+  contactEmail: data?.contactEmail,
+  phoneNumber: data?.phoneNumber,
+  addressLine1: data?.addressLine1,
+  addressLine2: data?.addressLine2,
+  city: data?.city,
+  state: data?.state,
+  zipCode: data?.zipCode,
+  country: data?.country,
+  googleMapsLink: data?.googleMapsLink,
+};
+
+
   // Removed the problematic footer line since it's not used anywhere
   // const footer = data?.footer || [];
   // const { isEnabled: isDraftMode } = await draftMode();
@@ -85,7 +103,7 @@ export default async function RootLayout({
             {children}
           {/* </section> */}
             
-            {siteSettings && <Footer siteSettings={siteSettings} />}
+            {siteSettings && <Footer siteSettings={footerData} />}
           </ThemeProvider>
                   
           <SpeedInsights />

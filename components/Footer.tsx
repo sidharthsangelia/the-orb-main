@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import {
@@ -13,21 +13,17 @@ import {
   MessageCircle, // For Threads
   PenTool, // For Pinterest/Dribbble
 } from "lucide-react";
+import { Image } from "sanity";
 
 interface SocialLink {
   platform: string;
   url: string;
 }
 
-interface SiteSettings {
+export interface SiteSettings {
   title?: string;
   description?: string;
-  logo?: {
-    asset: {
-      url: string;
-    };
-    alt?: string;
-  };
+  footerText?: PortableTextBlock[];
   socialLinks?: SocialLink[];
   contactEmail?: string;
   phoneNumber?: string;
@@ -38,7 +34,6 @@ interface SiteSettings {
   zipCode?: string;
   country?: string;
   googleMapsLink?: string;
-  footerText?: PortableTextBlock[];
 }
 
 interface FooterProps {
@@ -90,7 +85,6 @@ export default function Footer({ siteSettings }: FooterProps) {
   const {
     title,
     description,
-    logo,
     socialLinks,
     contactEmail,
     phoneNumber,
@@ -125,17 +119,7 @@ export default function Footer({ siteSettings }: FooterProps) {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
-              {logo?.asset?.url && (
-                <div className="mr-4">
-                  <Image
-                    src={logo.asset.url}
-                    alt={logo.alt || `${title} logo`}
-                    width={48}
-                    height={48}
-                    className="w-12 h-12 object-contain"
-                  />
-                </div>
-              )}
+          
               {title && (
                 <h3 className="text-2xl font-bold text-[#eae4d2]">{title}</h3>
               )}
@@ -297,7 +281,10 @@ export default function Footer({ siteSettings }: FooterProps) {
             <div className="flex items-center space-x-4">
               {/* ADD THEME TOGGLE COMPONENT HERE */}
               <div className="text-[#eae4d2]/40 text-xs">
-                Built with care for the environment by <Link href="https://sidharth-sangelia.vercel.app/">Sidharth Sangelia</Link>
+                Built with care for the environment by{" "}
+                <Link href="https://sidharth-sangelia.vercel.app/">
+                  Sidharth Sangelia
+                </Link>
               </div>
             </div>
           </div>
