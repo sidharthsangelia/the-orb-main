@@ -55,6 +55,12 @@ export default async function RootLayout({
   const data = await sanityFetch({ query: settingsQuery });
   const siteSettings = data;
 
+  // Extract logo logic to avoid TypeScript issues
+  const logoUrl =
+    data?.logo?.asset && data.logo
+      ? urlForImage(data.logo)?.url?.() ?? undefined
+      : undefined;
+
   // Removed the problematic footer line since it's not used anywhere
   // const footer = data?.footer || [];
   // const { isEnabled: isDraftMode } = await draftMode();
@@ -73,9 +79,7 @@ export default async function RootLayout({
         <Header1
           title={data?.title}
           description={data?.description}
-          logo={
-            data?.logo?.asset && data.logo ? urlForImage(data.logo).url() : undefined
-          }
+          logo={logoUrl}
         />
           {/* <section className="min-h-screen"> */}
             {children}
