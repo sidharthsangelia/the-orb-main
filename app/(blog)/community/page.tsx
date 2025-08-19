@@ -91,6 +91,38 @@ const CommunityPage = async () => {
     }
   };
 
+  // Helper function to safely merge data with fallback
+  const createSafePageData = (sanityData: any): CommunityPageData => {
+    return {
+      heroSection: {
+        badge: sanityData?.heroSection?.badge || defaultData.heroSection.badge,
+        mainHeading: sanityData?.heroSection?.mainHeading || defaultData.heroSection.mainHeading,
+        secondaryHeading: sanityData?.heroSection?.secondaryHeading || defaultData.heroSection.secondaryHeading,
+        description: sanityData?.heroSection?.description || defaultData.heroSection.description,
+        joinMovementUrl: sanityData?.heroSection?.joinMovementUrl || defaultData.heroSection.joinMovementUrl,
+        founderMessageUrl: sanityData?.heroSection?.founderMessageUrl || defaultData.heroSection.founderMessageUrl,
+        impactStats: sanityData?.heroSection?.impactStats || defaultData.heroSection.impactStats,
+      },
+      testimonialsSection: {
+        title: sanityData?.testimonialsSection?.title || defaultData.testimonialsSection.title,
+        description: sanityData?.testimonialsSection?.description || defaultData.testimonialsSection.description,
+        testimonials: sanityData?.testimonialsSection?.testimonials || defaultData.testimonialsSection.testimonials,
+      },
+      achievementsSection: {
+        title: sanityData?.achievementsSection?.title || defaultData.achievementsSection.title,
+        description: sanityData?.achievementsSection?.description || defaultData.achievementsSection.description,
+        achievements: sanityData?.achievementsSection?.achievements || defaultData.achievementsSection.achievements,
+      },
+      ctaSection: {
+        title: sanityData?.ctaSection?.title || defaultData.ctaSection.title,
+        description: sanityData?.ctaSection?.description || defaultData.ctaSection.description,
+        primaryButtonText: sanityData?.ctaSection?.primaryButtonText || defaultData.ctaSection.primaryButtonText,
+        secondaryButtonText: sanityData?.ctaSection?.secondaryButtonText || defaultData.ctaSection.secondaryButtonText,
+        hashtags: sanityData?.ctaSection?.hashtags || defaultData.ctaSection.hashtags,
+      },
+    };
+  };
+
   try {
     // Fetch data from Sanity with proper type handling
     const communityDataResult = await sanityFetch({
@@ -98,8 +130,8 @@ const CommunityPage = async () => {
       // tags: ['communityPage'],
     });
 
-    // Use fetched data or fallback to default - this handles null case
-    const pageData: CommunityPageData = communityDataResult || defaultData;
+    // Create safe page data that handles all null cases
+    const pageData: CommunityPageData = createSafePageData(communityDataResult);
 
     return (
       <div className="min-h-screen bg-background overflow-hidden">
