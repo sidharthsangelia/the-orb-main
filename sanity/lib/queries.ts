@@ -120,9 +120,8 @@ const postFields = /* groq */ `
 // Query to fetch all posts with pagination
 export const allPostsQuery = defineQuery(`
   {
-    "posts": *[_type == "post" && defined(slug.current)] 
-      | order(date desc, _updatedAt desc) 
-      [$offset...$offset + $limit] {
+    "posts": *[_type == "post" && defined(slug.current)]
+       | order(date desc, _updatedAt desc)  {
         ${postFields}
       },
     "total": count(*[_type == "post" && defined(slug.current)])
@@ -146,31 +145,33 @@ export const recentPostsQuery = defineQuery(`
 `);
 
 // Enhanced posts by category query with proper error handling
-export const postsByCategoryQuery = defineQuery(`
-  {
-    "posts": *[_type == "post" && defined(slug.current) && category._ref == $categoryId] 
-      | order(date desc) [$offset...$offset + $limit] {
-        ${postFields}
-      },
-    "total": count(*[_type == "post" && defined(slug.current) && category._ref == $categoryId]),
-    "category": *[_type == "category" && _id == $categoryId][0] {
-      _id,
-      title,
-      "slug": slug.current,
-      description,
-      "color": coalesce(color.hex, "#3B82F6"),
-      image {
-        asset-> {
-          _id,
-          url
-        },
-        alt
-      },
-      featured,
-      "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])
-    }
-  }
-`);
+// export const postsByCategoryQuery = defineQuery(`
+//   {
+//     "posts": *[_type == "post" && defined(slug.current) && category._ref == $categoryId]
+//        | order(date desc) {
+//         ${postFields}
+//       },
+//     "total": count(*[_type == "post" && defined(slug.current) && category._ref == $categoryId]),
+//     "category": *[_type == "category" && _id == $categoryId][0] {
+//       _id,
+//       title,
+//       "slug": slug.current,
+//       description,
+//       "color": coalesce(color.hex, "#3B82F6"),
+//       image {
+//         asset-> {
+//           _id,
+//           url
+//         },
+//         alt
+//       },
+//       featured,
+//       "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])
+//     }
+//   }
+// `);
+
+
 // Query for posts by author
 export const postsByAuthorQuery = defineQuery(`
   *[_type == "post" && defined(slug.current) && author->slug.current == $authorSlug] 
@@ -357,16 +358,16 @@ export const featuredCategoriesQuery = defineQuery(`
 
 
 // Posts with enhanced filtering
-export const enhancedAllPostsQuery = defineQuery(`
-  {
-    "posts": *[_type == "post" && defined(slug.current) && status == "published"] 
-      | order(date desc, _updatedAt desc) 
-      [$offset...$offset + $limit] {
-        ${postFields}
-      },
-    "total": count(*[_type == "post" && defined(slug.current) && status == "published"])
-  }
-`);
+// export const enhancedAllPostsQuery = defineQuery(`
+//   {
+//     "posts": *[_type == "post" && defined(slug.current) && status == "published"] 
+//       | order(date desc, _updatedAt desc) 
+//       [$offset...$offset + $limit] {
+//         ${postFields}
+//       },
+//     "total": count(*[_type == "post" && defined(slug.current) && status == "published"])
+//   }
+// `);
 // Get all category slugs for static generation
 export const allCategorySlugsQuery = defineQuery(`
   *[_type == "category" && defined(slug.current)] {
