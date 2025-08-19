@@ -65,7 +65,7 @@ export default async function RootLayout({
 const footerData = {
   title: data?.title,
   description: data?.description,
-  footerText: data?.footerText,
+  // footerText: data?.footerText,
   socialLinks: data?.socialLinks,
   contactEmail: data?.contactEmail,
   phoneNumber: data?.phoneNumber,

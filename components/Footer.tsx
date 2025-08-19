@@ -16,14 +16,13 @@ import {
 import { Image } from "sanity";
 
 interface SocialLink {
-  platform: string;
-  url: string;
+  platform?: string;
+  url?: string;
 }
 
 export interface SiteSettings {
   title?: string;
   description?: string;
-  footerText?: PortableTextBlock[];
   socialLinks?: SocialLink[];
   contactEmail?: string;
   phoneNumber?: string;
@@ -95,7 +94,7 @@ export default function Footer({ siteSettings }: FooterProps) {
     zipCode,
     country,
     googleMapsLink,
-    footerText,
+    // footerText,
   } = siteSettings;
 
   // Format address
@@ -142,43 +141,7 @@ export default function Footer({ siteSettings }: FooterProps) {
               </p>
             )}
 
-            {/* Custom Footer Text */}
-            {footerText && footerText.length > 0 && (
-              <div className="mb-6">
-                <PortableText
-                  value={footerText}
-                  components={{
-                    block: {
-                      normal: ({ children }) => (
-                        <p className="text-[#eae4d2]/80 mb-4 leading-relaxed">
-                          {children}
-                        </p>
-                      ),
-                    },
-                    marks: {
-                      link: ({ children, value }) => (
-                        <Link
-                          href={value?.href || "#"}
-                          className="text-[#509e8e] hover:text-[#487052] underline transition-colors duration-200"
-                          target={
-                            value?.href?.startsWith("http")
-                              ? "_blank"
-                              : undefined
-                          }
-                          rel={
-                            value?.href?.startsWith("http")
-                              ? "noopener noreferrer"
-                              : undefined
-                          }
-                        >
-                          {children}
-                        </Link>
-                      ),
-                    },
-                  }}
-                />
-              </div>
-            )}
+             
           </div>
 
           {/* Contact Information */}
@@ -254,15 +217,15 @@ export default function Footer({ siteSettings }: FooterProps) {
                 {socialLinks.map((link, index) => (
                   <Link
                     key={index}
-                    href={link.url}
+                    href={link.url!}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center text-[#eae4d2]/80 hover:text-[#509e8e] transition-colors duration-200 group text-sm"
                   >
                     <span className="mr-3 text-[#509e8e] group-hover:text-[#487052]">
-                      {getSocialIcon(link.platform)}
+                      {getSocialIcon(link.platform!)}
                     </span>
-                    {getPlatformName(link.platform)}
+                    {getPlatformName(link.platform!)}
                   </Link>
                 ))}
               </div>

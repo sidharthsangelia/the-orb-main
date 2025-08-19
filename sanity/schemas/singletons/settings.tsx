@@ -26,7 +26,7 @@ export const settings = defineType({
         hotspot: true,
       },
 
-      validation: Rule => Rule.required().error('Site logo is required'),
+      // validation: Rule => Rule.required().error('Site logo is required'),
     }),
 
     // ✅ Social Media Links
@@ -171,34 +171,7 @@ export const settings = defineType({
       description: 'Base URL used for generating metadata (OG tags, etc.)',
     }),
 
-    // ✅ Footer Text (Rich)
-    defineField({
-      name: 'footerText',
-      title: 'Footer Text',
-      description: 'Rich text that will appear at the bottom of every page.',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-          marks: {
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  {
-                    name: 'href',
-                    type: 'url',
-                    title: 'URL',
-                  },
-                ],
-              },
-            ],
-          },
-        },
-      ],
-    }),
+ 
   ],
   preview: {
     select: {
