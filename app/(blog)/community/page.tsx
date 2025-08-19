@@ -16,12 +16,6 @@ export const metadata: Metadata = {
 };
 
 const CommunityPage = async () => {
-  // Fetch data from Sanity
-  const communityData: CommunityPageData = await sanityFetch({
-    query: communityPageQuery,
-    tags: ['communityPage'],
-  });
-
   // Fallback data in case Sanity returns null
   const defaultData: CommunityPageData = {
     heroSection: {
@@ -97,27 +91,57 @@ const CommunityPage = async () => {
     }
   };
 
-  // Use fetched data or fallback to default
-  const pageData = communityData || defaultData;
+  try {
+    // Fetch data from Sanity with proper type handling
+    const communityDataResult = await sanityFetch({
+      query: communityPageQuery,
+      tags: ['communityPage'],
+    });
 
-  return (
-    <div className="min-h-screen bg-background overflow-hidden">
-      {/* Hero Section - Asymmetric Design */}
-      <HeroSection data={pageData.heroSection} />
-       
-      {/* Community Roles - Tabbed Interface */}
-      <CommunityRoles />
-       
-      {/* Testimonials Section */}
-      <TestimonialsSection data={pageData.testimonialsSection} />
-       
-      {/* Achievements Showcase */}
-      <Achievements data={pageData.achievementsSection} />
-      
-      {/* Enhanced CTA Section */}
-      <EnhancedCTA data={pageData.ctaSection} />
-    </div>
-  );
+    // Use fetched data or fallback to default - this handles null case
+    const pageData: CommunityPageData = communityDataResult || defaultData;
+
+    return (
+      <div className="min-h-screen bg-background overflow-hidden">
+        {/* Hero Section - Asymmetric Design */}
+        <HeroSection data={pageData.heroSection} />
+         
+        {/* Community Roles - Tabbed Interface */}
+        <CommunityRoles />
+         
+        {/* Testimonials Section */}
+        <TestimonialsSection data={pageData.testimonialsSection} />
+         
+        {/* Achievements Showcase */}
+        <Achievements data={pageData.achievementsSection} />
+        
+        {/* Enhanced CTA Section */}
+        <EnhancedCTA data={pageData.ctaSection} />
+      </div>
+    );
+  } catch (error) {
+    // Fallback to default data in case of any fetch errors
+    console.error('Failed to fetch community data from Sanity:', error);
+    
+    return (
+      <div className="min-h-screen bg-background overflow-hidden">
+        {/* Hero Section - Asymmetric Design */}
+        <HeroSection data={defaultData.heroSection} />
+         
+        {/* Community Roles - Tabbed Interface */}
+        <CommunityRoles />
+         
+        {/* Testimonials Section */}
+        <TestimonialsSection data={defaultData.testimonialsSection} />
+         
+        {/* Achievements Showcase */}
+        <Achievements data={defaultData.achievementsSection} />
+        
+        {/* Enhanced CTA Section */}
+        <EnhancedCTA data={defaultData.ctaSection} />
+      </div>
+    );
+  }
 };
 
 export default CommunityPage;
