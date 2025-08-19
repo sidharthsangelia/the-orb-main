@@ -25,6 +25,8 @@ export const settings = defineType({
       options: {
         hotspot: true,
       },
+
+      validation: Rule => Rule.required().error('Site logo is required'),
     }),
 
     // ✅ Social Media Links
