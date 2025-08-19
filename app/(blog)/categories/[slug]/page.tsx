@@ -1,26 +1,34 @@
 // app/categories/[slug]/page.tsx
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
-import { client } from '@/sanity/lib/client';
-import { 
-  sidebarCategoriesQuery, 
-  trendingPostsMarqueeQuery 
-} from '@/sanity/lib/queries';
-import { urlForImage } from '@/sanity/lib/utils';
-import { CTA } from '@/components/about/Cta';
-import { PostsGrid } from '@/components/blog/PostsGrid';
-import { PostsSidebar } from '@/components/blog/PostsSidebar';
-import { Pagination } from '@/components/blog/Pagination';
-import { EmptyState } from '@/components/blog/EmptyState';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, Calendar, BookOpen, TrendingUp, Leaf, Search, X } from 'lucide-react';
-import type { Post, Category, TrendingPost } from '@/types/post';
+import { useState, useEffect } from "react";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { client } from "@/sanity/lib/client";
+import {
+  sidebarCategoriesQuery,
+  trendingPostsMarqueeQuery,
+} from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/utils";
+import { CTA } from "@/components/about/Cta";
+import { PostsGrid } from "@/components/blog/PostsGrid";
+import { PostsSidebar } from "@/components/blog/PostsSidebar";
+import { Pagination } from "@/components/blog/Pagination";
+import { EmptyState } from "@/components/blog/EmptyState";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  ArrowLeft,
+  Calendar,
+  BookOpen,
+  TrendingUp,
+  Leaf,
+  Search,
+  X,
+} from "lucide-react";
+import type { Post, Category, TrendingPost } from "@/types/post";
 
 const POSTS_PER_PAGE = 12;
 
@@ -29,9 +37,9 @@ interface CategoryWithPosts extends Category {
 }
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 // Fixed queries with proper GROQ syntax
@@ -85,6 +93,7 @@ const postsByCategoryQuery = `
 `;
 
 export default function CategoryPage({ params }: CategoryPageProps) {
+  const [slug, setSlug] = useState<string | null>(null);
   const [categoryData, setCategoryData] = useState<CategoryWithPosts | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -93,18 +102,38 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   const [sidebarLoading, setSidebarLoading] = useState(true);
   const [totalPosts, setTotalPosts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [paramsLoading, setParamsLoading] = useState(true);
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
+  // Handle async params in client component
+  useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        setSlug(resolvedParams.slug);
+      } catch (error) {
+        console.error('Error resolving params:', error);
+        notFound();
+      } finally {
+        setParamsLoading(false);
+      }
+    };
+    
+    resolveParams();
+  }, [params]);
+
   // Fetch category and posts data
   useEffect(() => {
+    if (!slug || paramsLoading) return;
+
     const fetchCategoryData = async () => {
       setLoading(true);
       try {
         // First get the category details
-        const category = await client.fetch(categoryWithPostsQuery, { slug: params.slug });
-        
+        const category = await client.fetch(categoryWithPostsQuery, { slug });
+
         if (!category) {
           notFound();
           return;
@@ -117,14 +146,13 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         const postsData = await client.fetch(postsByCategoryQuery, {
           categoryId: category._id,
           limit: POSTS_PER_PAGE,
-          offset
+          offset,
         });
 
         setPosts(postsData.posts || []);
         setTotalPosts(postsData.total || 0);
       } catch (error) {
-        console.error('Error fetching category data:', error);
-        console.log('Category data received:');
+        console.error("Error fetching category data:", error);
         setPosts([]);
         setTotalPosts(0);
       } finally {
@@ -132,10 +160,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
       }
     };
 
-    if (params.slug) {
-      fetchCategoryData();
-    }
-  }, [params.slug, currentPage]);
+    fetchCategoryData();
+  }, [slug, currentPage, paramsLoading]);
 
   // Fetch sidebar data
   useEffect(() => {
@@ -144,36 +170,37 @@ export default function CategoryPage({ params }: CategoryPageProps) {
       try {
         const [categoriesData, trendingData] = await Promise.all([
           client.fetch(sidebarCategoriesQuery),
-          client.fetch(trendingPostsMarqueeQuery)
+          client.fetch(trendingPostsMarqueeQuery),
         ]);
-        
+
         setCategories(
-          (categoriesData || []).map(cat => ({
+          (categoriesData || []).map((cat: any) => ({
             ...cat,
-            title: cat.title ?? '',
-            slug: cat.slug ?? '',
-            description: cat.description ?? '',
-            image: cat.image && typeof cat.image === 'object'
-              ? cat.image
-              : {
-                  asset: { _id: '', url: '' },
-                  alt: ''
-                },
-            featured: cat.featured ?? false
+            title: cat.title ?? "",
+            slug: cat.slug ?? "",
+            description: cat.description ?? "",
+            image:
+              cat.image && typeof cat.image === "object"
+                ? cat.image
+                : {
+                    asset: { _id: "", url: "" },
+                    alt: "",
+                  },
+            featured: cat.featured ?? false,
           }))
         );
         setTrendingPosts(
-          (trendingData || []).map(post => ({
+          (trendingData || []).map((post: any) => ({
             ...post,
-            title: post.title ?? '',
-            slug: post.slug ?? '',
-            author: post.author ?? '',
-            category: post.category ?? '',
-            date: post.date ?? ''
+            title: post.title ?? "",
+            slug: post.slug ?? "",
+            author: post.author ?? "",
+            category: post.category ?? "",
+            date: post.date ?? "",
           }))
         );
       } catch (error) {
-        console.error('Error fetching sidebar data:', error);
+        console.error("Error fetching sidebar data:", error);
       } finally {
         setSidebarLoading(false);
       }
@@ -184,7 +211,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSearchChange = (query: string) => {
@@ -192,18 +219,20 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   };
 
   const handleClearSearch = () => {
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   // Filter posts based on search query
-  const filteredPosts = posts.filter(post =>
-    searchQuery === '' || 
-    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.author.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPosts = posts.filter(
+    (post) =>
+      searchQuery === "" ||
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.author?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (loading && !categoryData) {
+  // Show loading while resolving params or initial loading
+  if (paramsLoading || (loading && !categoryData)) {
     return <CategoryPageSkeleton />;
   }
 
@@ -218,27 +247,29 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-            <Link 
-              href="/posts" 
+            <Link
+              href="/posts"
               className="hover:text-primary transition-colors flex items-center gap-1 group"
             >
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               All Posts
             </Link>
             <span className="text-muted-foreground/60">/</span>
-            <span className="text-foreground font-medium">{categoryData.title}</span>
+            <span className="text-foreground font-medium">
+              {categoryData.title}
+            </span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
             {/* Category Info */}
             <div className="lg:col-span-3 space-y-6">
               <div className="flex flex-wrap items-center gap-4">
-                <Badge 
+                <Badge
                   className="text-sm px-4 py-2 border-0 font-medium"
-                  style={{ 
-                    backgroundColor: `${categoryData.color || '#3B82F6'}15`,
-                    color: categoryData.color || '#3B82F6',
-                    borderLeft: `4px solid ${categoryData.color || '#3B82F6'}`
+                  style={{
+                    backgroundColor: `${categoryData.color || "#3B82F6"}15`,
+                    color: categoryData.color || "#3B82F6",
+                    borderLeft: `4px solid ${categoryData.color || "#3B82F6"}`,
                   }}
                 >
                   {categoryData.title}
@@ -254,7 +285,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                   {categoryData.title}
                 </h1>
-                
+
                 {categoryData.description && (
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
                     {categoryData.description}
@@ -266,15 +297,24 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               <div className="flex flex-wrap gap-4">
                 <Card className="bg-card/60 backdrop-blur-sm border-border hover:bg-card/80 transition-colors">
                   <CardContent className="p-4 flex items-center gap-3">
-                    <div 
+                    <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center"
-                      style={{ backgroundColor: `${categoryData.color || '#3B82F6'}15` }}
+                      style={{
+                        backgroundColor: `${categoryData.color || "#3B82F6"}15`,
+                      }}
                     >
-                      <BookOpen className="h-6 w-6" style={{ color: categoryData.color || '#3B82F6' }} />
+                      <BookOpen
+                        className="h-6 w-6"
+                        style={{ color: categoryData.color || "#3B82F6" }}
+                      />
                     </div>
                     <div>
-                      <p className="text-xl font-bold text-foreground">{categoryData.postCount}</p>
-                      <p className="text-sm text-muted-foreground">Total Stories</p>
+                      <p className="text-xl font-bold text-foreground">
+                        {categoryData.postCount}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Total Stories
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -285,7 +325,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                       <Leaf className="h-6 w-6 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-xl font-bold text-foreground">Climate</p>
+                      <p className="text-xl font-bold text-foreground">
+                        Climate
+                      </p>
                       <p className="text-sm text-muted-foreground">Focused</p>
                     </div>
                   </CardContent>
@@ -297,43 +339,48 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             <div className="lg:col-span-2">
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
                 {categoryData.image ? (
-                  <>
-                    <Image
-                      src={urlForImage(categoryData.image)?.width(600).height(450).url() || ''}
-                      alt={categoryData.image.alt || categoryData.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 40vw"
-                      priority
-                    />
-                    {/* Debug: Log image data */}
-                    {console.log('Category image data:', categoryData.image)}
-                    {console.log('Generated URL:', urlForImage(categoryData.image)?.width(600).height(450).url())}
-                  </>
+                  <Image
+                    src={
+                      urlForImage(categoryData.image)
+                        ?.width(600)
+                        .height(450)
+                        .url() || ""
+                    }
+                    alt={categoryData.image.alt || categoryData.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    priority
+                  />
                 ) : (
-                  <div 
+                  <div
                     className="w-full h-full flex items-center justify-center"
-                    style={{ 
-                      background: `linear-gradient(135deg, ${categoryData.color || '#3B82F6'}20, ${categoryData.color || '#3B82F6'}05)`
+                    style={{
+                      background: `linear-gradient(135deg, ${categoryData.color || "#3B82F6"}20, ${categoryData.color || "#3B82F6"}05)`,
                     }}
                   >
                     <div className="text-center">
-                      <div 
+                      <div
                         className="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center backdrop-blur-sm"
-                        style={{ backgroundColor: `${categoryData.color || '#3B82F6'}25` }}
+                        style={{
+                          backgroundColor: `${categoryData.color || "#3B82F6"}25`,
+                        }}
                       >
-                        <Leaf className="h-12 w-12" style={{ color: categoryData.color || '#3B82F6' }} />
+                        <Leaf
+                          className="h-12 w-12"
+                          style={{ color: categoryData.color || "#3B82F6" }}
+                        />
                       </div>
-                      <span 
+                      <span
                         className="text-xl font-semibold"
-                        style={{ color: categoryData.color || '#3B82F6' }}
+                        style={{ color: categoryData.color || "#3B82F6" }}
                       >
                         {categoryData.title}
                       </span>
                     </div>
                   </div>
                 )}
-                
+
                 {/* Subtle gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/10 via-transparent to-transparent" />
               </div>
@@ -352,17 +399,16 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-                    {searchQuery ? 'Search Results' : `Latest Stories`}
+                    {searchQuery ? "Search Results" : `Latest Stories`}
                   </h2>
                   <p className="text-muted-foreground">
-                    {searchQuery 
-                      ? `${filteredPosts.length} stories found${searchQuery ? ` for "${searchQuery}"` : ''}`
-                      : `${totalPosts} climate stories in ${categoryData.title}`
-                    }
+                    {searchQuery
+                      ? `${filteredPosts.length} stories found${searchQuery ? ` for "${searchQuery}"` : ""}`
+                      : `${totalPosts} climate stories in ${categoryData.title}`}
                   </p>
                 </div>
               </div>
-              
+
               {/* Search Bar */}
               <div className="relative w-full max-w-md">
                 <input
@@ -387,13 +433,10 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             {/* Posts Grid */}
             {filteredPosts.length > 0 || loading ? (
               <>
-                <PostsGrid 
-                  posts={filteredPosts} 
-                  loading={loading} 
-                />
-                
+                <PostsGrid posts={filteredPosts} loading={loading} />
+
                 {/* Pagination - only show when not searching and there are multiple pages */}
-                {totalPages > 1 && searchQuery === '' && !loading && (
+                {totalPages > 1 && searchQuery === "" && !loading && (
                   <div className="flex justify-center pt-8">
                     <Pagination
                       currentPage={currentPage}
@@ -406,10 +449,15 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             ) : (
               <div className="py-12">
                 <EmptyState
-                  title={searchQuery ? `No results for "${searchQuery}"` : `No stories in ${categoryData.title} yet`}
-                  description={searchQuery 
-                    ? "Try adjusting your search terms or explore other categories." 
-                    : "Check back soon for new climate stories and insights in this category."
+                  title={
+                    searchQuery
+                      ? `No results for "${searchQuery}"`
+                      : `No stories in ${categoryData.title} yet`
+                  }
+                  description={
+                    searchQuery
+                      ? "Try adjusting your search terms or explore other categories."
+                      : "Check back soon for new climate stories and insights in this category."
                   }
                   isSearchResult={!!searchQuery}
                   onClearSearch={searchQuery ? handleClearSearch : undefined}
@@ -424,7 +472,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               {sidebarLoading ? (
                 <SidebarSkeleton />
               ) : (
-                <PostsSidebar 
+                <PostsSidebar
                   categories={categories}
                   trendingPosts={trendingPosts}
                 />
@@ -433,7 +481,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
       </div>
-      
+
       {/* Bottom CTA Section */}
       {!loading && posts.length > 0 && (
         <div className="border-t border-border">
@@ -452,14 +500,14 @@ function CategoryPageSkeleton() {
       <div className="relative bg-gradient-to-br from-background via-background/95 to-primary/5 border-b border-border pt-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <div className="h-5 w-48 bg-muted animate-pulse rounded mb-8" />
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
             <div className="lg:col-span-3 space-y-6">
               <div className="flex items-center gap-4">
                 <div className="h-7 w-24 bg-muted animate-pulse rounded" />
                 <div className="h-6 w-20 bg-muted animate-pulse rounded" />
               </div>
-              
+
               <div className="space-y-4">
                 <div className="h-12 md:h-16 w-full max-w-lg bg-muted animate-pulse rounded" />
                 <div className="space-y-2">
@@ -467,13 +515,13 @@ function CategoryPageSkeleton() {
                   <div className="h-6 w-80 bg-muted animate-pulse rounded" />
                 </div>
               </div>
-              
+
               <div className="flex gap-4">
                 <div className="h-20 w-36 bg-muted animate-pulse rounded-lg" />
                 <div className="h-20 w-36 bg-muted animate-pulse rounded-lg" />
               </div>
             </div>
-            
+
             <div className="lg:col-span-2">
               <div className="aspect-[4/3] bg-muted animate-pulse rounded-2xl" />
             </div>
@@ -494,10 +542,13 @@ function CategoryPageSkeleton() {
               </div>
               <div className="h-12 w-80 bg-muted animate-pulse rounded-xl" />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-card border border-border rounded-lg overflow-hidden">
+                <div
+                  key={i}
+                  className="bg-card border border-border rounded-lg overflow-hidden"
+                >
                   <div className="h-48 bg-muted animate-pulse" />
                   <div className="p-6 space-y-3">
                     <div className="h-4 w-24 bg-muted animate-pulse rounded" />
@@ -516,7 +567,7 @@ function CategoryPageSkeleton() {
               ))}
             </div>
           </div>
-          
+
           <div className="lg:col-span-1">
             <SidebarSkeleton />
           </div>
@@ -544,7 +595,7 @@ function SidebarSkeleton() {
           ))}
         </div>
       </div>
-      
+
       <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6">
         <div className="h-6 w-32 bg-muted animate-pulse rounded mb-4" />
         <div className="space-y-3">

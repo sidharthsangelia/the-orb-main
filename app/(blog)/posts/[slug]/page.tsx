@@ -88,22 +88,8 @@ export default async function PostPage({ params }: Props) {
         )}
       </article>
 
-     <span className="mt-16 ">
-      <CTA/>
-     </span>
 
-      {/* More Stories
-      <aside className="mx-auto max-w-5xl mt-24 border-t border-border pt-16">
-        <h2 className="text-3xl sm:text-4xl font-semibold text-foreground mb-8">
-          Recent Stories
-        </h2>
-        <Suspense>
-          <MoreStories skip={post._id} limit={2} />
-        </Suspense>
-      </aside> */}
-
-      {/* Related Stories */}
-      <section className="py-16">
+    <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-12 text-center">
@@ -119,6 +105,23 @@ export default async function PostPage({ params }: Props) {
           </div>
         </div>
       </section>
+      
+     <span className="mt-16 ">
+      <CTA/>
+     </span>
+
+      {/* More Stories
+      <aside className="mx-auto max-w-5xl mt-24 border-t border-border pt-16">
+        <h2 className="text-3xl sm:text-4xl font-semibold text-foreground mb-8">
+          Recent Stories
+        </h2>
+        <Suspense>
+          <MoreStories skip={post._id} limit={2} />
+        </Suspense>
+      </aside> */}
+
+      {/* Related Stories */}
+  
     </div>
   );
 }
