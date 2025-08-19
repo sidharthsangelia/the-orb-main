@@ -2,53 +2,54 @@
 import React from 'react'
 import Image from "next/image";
 import { PortableText } from "@portabletext/react";
-import { Quote, Calendar } from "lucide-react";
+import { Quote } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { founderMessageQuery, type FounderMessage } from "@/sanity/lib/queries";
-
+import { founderMessageQuery } from "@/sanity/lib/queries";
 import { FounderMessageQueryResult } from "@/sanity.types";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Founder's Message",
-  description: "...",
+  description: "Read the inspiring message from our founder about our mission and vision.",
 };
 
 const portableTextComponents = {
   block: {
-    normal: ({ children }: any) => (
+    normal: ({ children }: { children?: React.ReactNode }) => (
       <p className="mb-6 text-base leading-relaxed text-foreground/90 font-light">
         {children}
       </p>
     ),
-    h2: ({ children }: any) => (
+    h2: ({ children }: { children?: React.ReactNode }) => (
       <h2 className="text-xl md:text-2xl font-bold mb-4 mt-8 text-foreground">
         {children}
       </h2>
     ),
-    h3: ({ children }: any) => (
+    h3: ({ children }: { children?: React.ReactNode }) => (
       <h3 className="text-lg md:text-xl font-semibold mb-3 mt-6 text-foreground">
         {children}
       </h3>
     ),
-    blockquote: ({ children }: any) => (
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
       <blockquote className="border-l-4 border-primary/50 pl-4 italic text-base my-6 text-muted-foreground bg-muted/10 py-3 rounded-r-lg">
         {children}
       </blockquote>
     ),
   },
   marks: {
-    strong: ({ children }: any) => (
+    strong: ({ children }: { children?: React.ReactNode }) => (
       <strong className="font-semibold text-foreground">{children}</strong>
     ),
-    em: ({ children }: any) => <em className="italic">{children}</em>,
-    underline: ({ children }: any) => (
+    em: ({ children }: { children?: React.ReactNode }) => (
+      <em className="italic">{children}</em>
+    ),
+    underline: ({ children }: { children?: React.ReactNode }) => (
       <span className="underline">{children}</span>
     ),
-    link: ({ children, value }: any) => (
+    link: ({ children, value }: { children?: React.ReactNode; value?: { href?: string } }) => (
       <a
-        href={value.href}
+        href={value?.href || '#'}
         className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
         target="_blank"
         rel="noopener noreferrer"
@@ -59,11 +60,7 @@ const portableTextComponents = {
   },
 };
 
-interface FounderMessagePageProps {
-  data?: FounderMessageQueryResult | null;
-}
-
-const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
+const FounderMessagePage = async (): Promise<JSX.Element> => {
   // Fetch data from Sanity
   let data: FounderMessageQueryResult | null = null;
 
@@ -74,7 +71,7 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
   }
 
   // Handle case where no data is found
-  if (!data) {
+  if (!data || !data.title) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -89,26 +86,31 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
     );
   }
 
-  // Generate image URL with proper sizing
+  // Generate image URL with proper sizing and error handling
   let imageUrl: string | null = null;
 
   if (data?.founderImage?.asset?.url) {
     imageUrl = data.founderImage.asset.url;
   } else if (data?.founderImage) {
     try {
-      imageUrl =
-        urlForImage(data.founderImage)
-          ?.width(300)
+      const urlBuilder = urlForImage(data.founderImage);
+      if (urlBuilder) {
+        imageUrl = urlBuilder
+          .width(300)
           .height(400)
           .fit("crop")
           .auto("format")
-          .url() || null;
+          .url();
+      }
     } catch (error) {
       console.error("Error building image URL:", error);
     }
   }
 
   const imageBlurUrl = data?.founderImage?.asset?.metadata?.lqip;
+  const founderName = data.founderName || "Founder";
+  const founderTitle = data.founderTitle || "";
+  const title = data.title || "Founder's Message";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/3">
@@ -117,7 +119,7 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-foreground mb-4">
-              {data.title}
+              {title}
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full"></div>
           </div>
@@ -145,17 +147,18 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
                           {imageUrl ? (
                             <Image
                               src={imageUrl}
-                              alt={data.founderImage?.alt || "Founder"}
+                              alt={data.founderImage?.alt || `${founderName} - Founder`}
                               fill
                               className="object-cover"
                               priority
-                              blurDataURL={imageBlurUrl ?? undefined}
+                              placeholder={imageBlurUrl ? "blur" : "empty"}
+                              blurDataURL={imageBlurUrl || undefined}
                               sizes="(max-width: 768px) 224px, 256px"
                             />
                           ) : (
                             <div className="flex items-center justify-center w-full h-full bg-muted text-muted-foreground">
                               <span className="text-4xl font-bold">
-                                {data.founderName?.charAt(0) || "?"}
+                                {founderName.charAt(0)}
                               </span>
                             </div>
                           )}
@@ -165,11 +168,13 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
                       {/* Founder Details */}
                       <div className="text-center space-y-3">
                         <h2 className="text-2xl md:text-2xl font-bold text-foreground leading-tight">
-                          {data.founderName}
+                          {founderName}
                         </h2>
-                        <p className="text-base md:text-lg text-muted-foreground font-medium leading-relaxed">
-                          {data.founderTitle}
-                        </p>
+                        {founderTitle && (
+                          <p className="text-base md:text-lg text-muted-foreground font-medium leading-relaxed">
+                            {founderTitle}
+                          </p>
+                        )}
                         <div className="w-20 h-0.5 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full"></div>
                       </div>
                     </div>
@@ -179,10 +184,16 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
                   <div className="text-foreground/95">
                     <article className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-p:leading-relaxed prose-p:mb-6">
                       <div className="space-y-6 text-justify md:text-left leading-relaxed">
-                        <PortableText
-                          value={data.message || []}
-                          components={portableTextComponents}
-                        />
+                        {data.message && Array.isArray(data.message) && data.message.length > 0 ? (
+                          <PortableText
+                            value={data.message}
+                            components={portableTextComponents}
+                          />
+                        ) : (
+                          <p className="mb-6 text-base leading-relaxed text-foreground/90 font-light">
+                            Message content will be available soon.
+                          </p>
+                        )}
                       </div>
                     </article>
                   </div>
@@ -218,7 +229,7 @@ const FounderMessagePage: React.FC<FounderMessagePageProps> = async () => {
                   </blockquote>
 
                   <cite className="text-lg md:text-xl text-muted-foreground font-semibold">
-                    — {data.founderName}
+                    — {founderName}
                   </cite>
                 </div>
               </div>
