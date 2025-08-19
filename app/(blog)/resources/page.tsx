@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { CTA } from "@/components/about/Cta";
-import CategoryCarousel from "@/components/resources/CategoryCarousel";
-import ResourceSectionClient from "@/components/ResourceSectionClient";
 import HeroSection from "@/components/resources/HeroSection";
+import ResourceSectionClient from "@/components/ResourceSectionClient";
 import {
   guidesQuery,
   educationQuery,
@@ -54,33 +53,17 @@ export default function ResourcesPage() {
   }, []);
 
   const categories = [
-    { id: "guides", title: "Guides", icon: <BookOpen className="h-6 w-6" />, count: guides.length },
-    { id: "education", title: "Education", icon: <Lightbulb className="h-6 w-6" />, count: education.length },
-    { id: "climate-stories", title: "Climate Stories", icon: <Leaf className="h-6 w-6" />, count: climateStories.length },
-    { id: "youth-voices", title: "Youth Voices", icon: <Users className="h-6 w-6" />, count: youthVoices.length },
+    { id: "guides", title: "Guides", icon: <BookOpen className="h-6 w-6" />, count: guides.length, description: "Practical guides for sustainable living and eco-friendly practices." },
+    { id: "education", title: "Education", icon: <Lightbulb className="h-6 w-6" />, count: education.length, description: "Interactive courses on climate science and environmental action." },
+    { id: "climate-stories", title: "Climate Stories", icon: <Leaf className="h-6 w-6" />, count: climateStories.length, description: "Inspiring tales of climate action from around the world." },
+    { id: "youth-voices", title: "Youth Voices", icon: <Users className="h-6 w-6" />, count: youthVoices.length, description: "Stories and insights from young environmental leaders." },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0c0d0d] text-[#eae4d2]">
-      <HeroSection />
+    <div className="min-h-screen bg-background text-foreground">
+      <HeroSection categories={categories} onCategoryClick={handleCategoryClick} />
 
-      <section className="py-20 bg-[#0c0d0d]/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-[#eae4d2] mb-6">Explore Our Collections</h2>
-            
-              <p className="text-xl text-[#eae4d2]/70 max-w-3xl mx-auto leading-relaxed">
-             Dive into our curated collections of eco-resources, success stories, and innovative projects. From hands-on sustainability guides to inspiring community initiatives, each section is designed to spark ideas and empower action toward a greener future.
-            </p>
-            
-            
-          </div>
-
-          <CategoryCarousel categories={categories} onCategoryClick={handleCategoryClick} />
-        </div>
-      </section>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <ResourceSectionClient
           id="guides"
           title="Guides & Handbooks"
@@ -88,8 +71,8 @@ export default function ResourcesPage() {
           items={guides}
           type="guides"
           icon={<BookOpen className="h-6 w-6" />}
+          
         />
-
         <ResourceSectionClient
           id="education"
           title="Educational Content"
@@ -98,7 +81,6 @@ export default function ResourcesPage() {
           type="education"
           icon={<Lightbulb className="h-6 w-6" />}
         />
-
         <ResourceSectionClient
           id="climate-stories"
           title="Climate Stories"
@@ -107,7 +89,6 @@ export default function ResourcesPage() {
           type="climate-stories"
           icon={<Leaf className="h-6 w-6" />}
         />
-
         <ResourceSectionClient
           id="youth-voices"
           title="Youth Voices"
@@ -118,8 +99,12 @@ export default function ResourcesPage() {
         />
       </div>
 
-      <div className="py-20" />
+
+      
+      <div className="py-20 " />
       <CTA />
     </div>
+    
+
   );
 }

@@ -5,59 +5,98 @@ import { defineQuery } from "next-sanity";
 // queries.ts
 
 // Guides & Handbooks
-export const guidesQuery = `
-*["guides" in categories[]->slug.current]{
+// sanity/lib/queries.ts
+
+
+// Guides & Handbooks
+export const guidesQuery = defineQuery(
+  `
+*["guides" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   "type": type,
   "downloadCount": downloadCount,
-  "category": categories[0]->title
+  "category": categories[0]->title,
+   author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+)
+;
 
 // Educational Content
-export const educationQuery = `
-*[_type == "post" && "education" in categories[]->slug.current]{
+export const educationQuery = defineQuery(
+  `
+*[_type == "post" && "education" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   "type": type,
   "duration": duration,
-  "level": level
+  "level": level,
+  author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+
+)
+;
 
 // Climate Stories
-export const climateStoriesQuery = `
-*[_type == "post" && "climate-stories" in categories[]->slug.current]{
+export const climateStoriesQuery = defineQuery(
+  `
+*[_type == "post" && "climate-stories" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   organization,
   impact,
   readTime,
-  date
+  date,
+  author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+)
+;
 
 // Youth Voices
-export const youthVoicesQuery = `
-*[_type == "post" && "youth-voices" in categories[]->slug.current]{
+export const youthVoicesQuery = defineQuery(
+  `
+*[_type == "post" && "youth-voices" in categories[]->slug.current && status == "published"]{
   _id,
   title,
+  "slug": slug.current,
   "description": coalesce(excerpt, ""),
   "image": coverImage.asset->url,
   "author": author->name,
   readTime,
   likes,
   date,
-  location
+  location,
+  author-> {
+      name,
+      picture
+    },
 }
-`;
+`
+)
+;
+
+// ... rest of the file unchanged, including resourceDetailQuery ...
 
 const postFields = /* groq */ `
   _id,
@@ -682,3 +721,35 @@ export const communityPageQuery = defineQuery(
   }
 }`
 )
+// sanity/lib/queries.ts
+// ... existing imports and queries ...
+
+// Add at the end
+export const resourceDetailQuery = defineQuery(`
+  *[_type == "post" && categories[]->slug.current match $type && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    content,
+    excerpt,
+    coverImage {
+      asset-> {
+        url,
+        metadata {
+          lqip
+        }
+      },
+      alt
+    },
+    author-> {
+      name,
+      picture
+    },
+    date,
+    categories[]-> {
+      title,
+      slug
+    },
+    readingTime
+  }
+`);

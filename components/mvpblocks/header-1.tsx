@@ -29,33 +29,8 @@ const navItems: NavItem[] = [
   {
     name: "Resources",
   href: "/resources",
-  hasDropdown: true,
-  dropdownItems: [
-    {
-      name: "Guides & Handbooks",
-      href: "/resources/guides",
-      description: "DIY sustainability guides",
-      icon: <BookOpen className="h-4 w-4" />,
-    },
-    {
-      name: "Educational Content",
-      href: "/resources/education",
-      description: "Learn about climate action",
-      icon: <Leaf className="h-4 w-4" />,
-    },
-    {
-      name: "Climate Stories",
-      href: "/resources/climate-stories",
-      description: "NGO impact and case studies",
-      icon: <Camera className="h-4 w-4" />, // Suggested icon for climate content
-    },
-    {
-      name: "Youth Voices",
-      href: "/resources/youth-voices",
-      description: "Blogs by connected youth",
-      icon: <Users className="h-4 w-4" />, // Suggested icon for youth blogs
-    },
-  ],
+  hasDropdown: false,
+ 
   },
   { name: "Community", href: "/community" },
   { name: "About", href: "/about" },
@@ -234,15 +209,10 @@ export default function Header(props: {
           {/* CTA Buttons */}
           <div className="hidden items-center space-x-4 lg:flex">
                 <ThemeToggleButton/>
-            <Link
-              href="/login"
-              className="text-[#575846] dark:text-[#eae4d2]/80 font-medium transition-colors duration-200 hover:text-[#487052] dark:hover:text-[#509e8e]"
-            >
-              Sign In
-            </Link>
+            
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
-                href="/join"
+                href="https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true"
                 className="inline-flex items-center space-x-2 rounded-full bg-gradient-to-r from-[#487052] to-[#509e8e] px-6 py-2.5 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-[#487052]/25 relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#509e8e] to-[#487052] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -315,15 +285,9 @@ export default function Header(props: {
                 {/* Mobile CTA Buttons */}
                 <div className="space-y-3 px-6 py-4 border-t border-[#575846]/10">
                  <ThemeToggleButton/>
+                 
                   <Link
-                    href="/login"
-                    className="text-[#575846] dark:text-[#eae4d2]/80 hover:bg-[#575846]/10 dark:hover:bg-[#eae4d2]/10 block w-full rounded-xl py-3 text-center font-medium transition-colors duration-200"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/join"
+                    href="https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true"
                     className="flex items-center justify-center space-x-2 w-full rounded-xl bg-gradient-to-r from-[#487052] to-[#509e8e] py-3 text-center font-semibold text-white transition-all duration-200 hover:shadow-lg"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

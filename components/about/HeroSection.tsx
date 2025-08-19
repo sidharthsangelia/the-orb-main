@@ -91,6 +91,7 @@ export const HeroSection = ({ title, tagline, introText }: HeroSectionProps) => 
       >
         <Button 
           size="lg"
+          onClick={() => window.open("https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true", "_blank")}
           className="bg-gradient-to-r from-[#487052] to-[#509e8e] hover:from-[#487052]/90 hover:to-[#509e8e]/90 text-white border-0 px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
         >
           Join Our Movement
