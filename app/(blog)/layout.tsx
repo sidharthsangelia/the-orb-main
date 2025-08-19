@@ -1,5 +1,4 @@
 import "../globals.css";
-
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import {
@@ -8,7 +7,7 @@ import {
   type PortableTextBlock,
 } from "next-sanity";
 import { Inter } from "next/font/google";
- 
+
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
@@ -16,7 +15,6 @@ import { resolveOpenGraphImage, urlForImage } from "@/sanity/lib/utils";
 import Header1 from "@/components/mvpblocks/header-1";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
-
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch({
@@ -65,7 +63,7 @@ export default async function RootLayout({
     <html lang="en" className={`${inter.variable} bg-white text-black`} suppressHydrationWarning>
       <body>
           {/* {isDraftMode && <AlertBanner />} */}
-
+           
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -76,18 +74,19 @@ export default async function RootLayout({
           title={data?.title}
           description={data?.description}
           logo={
-            data?.logo?.asset ? urlForImage(data.logo).url() : undefined
+            data?.logo?.asset && data.logo ? urlForImage(data.logo).url() : undefined
           }
         />
           {/* <section className="min-h-screen"> */}
             {children}
           {/* </section> */}
+            
             {siteSettings && <Footer siteSettings={siteSettings} />}
           </ThemeProvider>
-         
-        <SpeedInsights />
-     
-      </body>
+                  
+          <SpeedInsights />
+            
+        </body>
     </html>
   );
 }
