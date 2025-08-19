@@ -95,7 +95,7 @@ const CommunityPage = async () => {
     // Fetch data from Sanity with proper type handling
     const communityDataResult = await sanityFetch({
       query: communityPageQuery,
-      tags: ['communityPage'],
+      // tags: ['communityPage'],
     });
 
     // Use fetched data or fallback to default - this handles null case
