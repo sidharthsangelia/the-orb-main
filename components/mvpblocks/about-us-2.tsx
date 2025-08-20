@@ -1,4 +1,3 @@
- 
 import { AboutPageData } from '@/types/about'; // Adjust import path as needed
 import { BackgroundPattern } from "../about/BackgroundPattern";
 import { CoreValuesSection } from "../about/CoreValues";
@@ -12,10 +11,39 @@ import { sanityFetch } from '@/sanity/lib/fetch';
 import { aboutPageQuery } from '@/sanity/lib/queries';
 
 export default async function AboutUs() {
-  const aboutData: AboutPageData = await sanityFetch({ 
-    query: aboutPageQuery,
-    tags: ['aboutPage']
+  const aboutPageResult = await sanityFetch({ 
+    query: aboutPageQuery
   });
+
+  // Map possibly-null properties to non-null values
+  const aboutData: AboutPageData | null = aboutPageResult
+    ? {
+        title: aboutPageResult.title ?? "Building Bridges Between Awareness & Action",
+        tagline: aboutPageResult.tagline ?? "Building Bridges Between Awareness & Action",
+        introText: aboutPageResult.introText ?? "We are The Órb - a dynamic media organization driven by youth, dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.",
+        stats: (aboutPageResult.stats ?? []).map(stat => ({
+          value: stat.value ?? "",
+          label: stat.label ?? ""
+        })),
+        mission: aboutPageResult.mission ?? "",
+        vision: aboutPageResult.vision ?? "",
+        coreValues: (aboutPageResult.coreValues ?? []).map(value => ({
+          title: value.title ?? "",
+          description: value.description ?? "",
+          icon: value.icon ?? ""
+        })),
+        whatWeDo: (aboutPageResult.whatWeDo ?? []).map(activity => ({
+          title: activity.title ?? "",
+          description: activity.description ?? "",
+          icon: activity.icon ?? ""
+        })),
+        journey: (aboutPageResult.journey ?? []).map(journeyItem => ({
+          year: journeyItem.year ?? "",
+          title: journeyItem.title ?? "",
+          description: journeyItem.description ?? ""
+        }))
+      }
+    : null;
 
   // Fallback data in case Sanity data is not available
   const defaultData: AboutPageData = {
