@@ -1,4 +1,4 @@
-// app/posts/page.tsx - Enhanced with sidebar layout
+// app/posts/page.tsx - Enhanced with mobile responsive sidebar layout
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -95,6 +95,8 @@ export default function AllPostsPage() {
   const [totalPosts, setTotalPosts] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
@@ -167,20 +169,39 @@ export default function AllPostsPage() {
     setCurrentPage(1);
   };
 
-  // Filter posts based on search query with safe property access
+  const handleCategorySelect = (categorySlug: string) => {
+    setSelectedCategory(categorySlug);
+    setCurrentPage(1);
+    setSidebarOpen(false); // Close mobile sidebar
+  };
+
+  const handleClearCategory = () => {
+    setSelectedCategory('');
+    setCurrentPage(1);
+  };
+
+  // Filter posts based on search query and selected category
   const filteredPosts = posts.filter(post => {
-    if (searchQuery === '') return true;
+    // Category filter
+    if (selectedCategory && post.category?.title !== selectedCategory) {
+      return false;
+    }
     
-    const query = searchQuery.toLowerCase();
-    const title = post.title?.toLowerCase() || '';
-    const excerpt = post.excerpt?.toLowerCase() || '';
-    const authorName = post.author?.name?.toLowerCase() || '';
-    const categoryTitle = post.category?.title?.toLowerCase() || '';
+    // Search filter
+    if (searchQuery !== '') {
+      const query = searchQuery.toLowerCase();
+      const title = post.title?.toLowerCase() || '';
+      const excerpt = post.excerpt?.toLowerCase() || '';
+      const authorName = post.author?.name?.toLowerCase() || '';
+      const categoryTitle = post.category?.title?.toLowerCase() || '';
+      
+      return title.includes(query) ||
+             excerpt.includes(query) ||
+             authorName.includes(query) ||
+             categoryTitle.includes(query);
+    }
     
-    return title.includes(query) ||
-           excerpt.includes(query) ||
-           authorName.includes(query) ||
-           categoryTitle.includes(query);
+    return true;
   });
 
   return (
@@ -193,11 +214,122 @@ export default function AllPostsPage() {
         loading={loading}
       />
 
-      {/* Main Content */}
+      {/* Mobile-only Categories Filter Bar */}
+      <div className="lg:hidden border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="py-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-foreground">Browse by Category</h3>
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v18m9-9H3" />
+                </svg>
+                More
+              </button>
+            </div>
+            
+            {/* Horizontal scrollable categories */}
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+             
+              {!sidebarLoading && categories.slice(0, 8).map((category) => (
+                <a
+                  key={category._id}
+                  // onClick={() => handleCategorySelect(category.title)}
+                  href={`/categories/${category.slug}`}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                    selectedCategory === category.title
+                      ? 'text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  style={{ 
+                    backgroundColor: selectedCategory === category.title 
+                      ? category.color 
+                      : `${category.color}15`,
+                    color: selectedCategory === category.title 
+                      ? '#ffffff' 
+                      : category.color 
+                  }}
+                >
+                  {category.title}
+                  {category.postCount > 0 && (
+                    <span className="ml-1 text-xs opacity-70">({category.postCount})</span>
+                  )}
+                </a>
+              ))}
+              {sidebarLoading && [...Array(6)].map((_, i) => (
+                <div key={i} className="flex-shrink-0 w-20 h-8 bg-muted animate-pulse rounded-full" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile-only Trending Posts Banner */}
+      {!sidebarLoading && trendingPosts.length > 0 && (
+        <div className="lg:hidden bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M12.395 2.553a1 1 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
+                </svg>
+                <h3 className="text-lg font-semibold text-foreground">Trending Now</h3>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-4">
+              {trendingPosts.slice(0, 3).map((post, index) => (
+                <a 
+                  key={post._id} 
+                  href={`/blog/${post.slug}`}
+                  className="group cursor-pointer"
+                >
+                  <div className="flex items-start gap-3 p-4 bg-background/60 backdrop-blur-sm rounded-lg border border-border/50 hover:border-primary/30 hover:bg-background/80 transition-all duration-200">
+                    <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-bold text-primary">#{index + 1}</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
+                        {post.title}
+                      </h4>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{post.author}</span>
+                        <span>•</span>
+                        <span>{post.category}</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content - ORIGINAL DESKTOP LAYOUT */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Posts Content - 3/4 width */}
           <div className="lg:col-span-3 space-y-8">
+            {/* Active category indicator */}
+            {selectedCategory && (
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-sm text-muted-foreground">Showing posts in:</span>
+                <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                  {selectedCategory}
+                </span>
+                <button
+                  onClick={handleClearCategory}
+                  className="text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+
             {filteredPosts.length > 0 || loading ? (
               <>
                 <PostsGrid 
@@ -206,7 +338,7 @@ export default function AllPostsPage() {
                 />
                 
                 {/* Pagination */}
-                {totalPages > 1 && searchQuery === '' && !loading && (
+                {totalPages > 1 && searchQuery === '' && !selectedCategory && !loading && (
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
@@ -224,16 +356,28 @@ export default function AllPostsPage() {
               </>
             ) : (
               <EmptyState
-                title={searchQuery ? `No results for "${searchQuery}"` : "No stories found"}
-                description={searchQuery ? "Try adjusting your search terms or explore all climate stories." : "Check back for new climate insights and youth-driven initiatives."}
-                isSearchResult={!!searchQuery}
-                onClearSearch={searchQuery ? handleClearSearch : undefined}
+                title={
+                  selectedCategory 
+                    ? `No posts found in "${selectedCategory}"` 
+                    : searchQuery 
+                      ? `No results for "${searchQuery}"` 
+                      : "No stories found"
+                }
+                description={
+                  selectedCategory 
+                    ? "Try browsing other categories or explore all posts." 
+                    : searchQuery 
+                      ? "Try adjusting your search terms or explore all climate stories." 
+                      : "Check back for new climate insights and youth-driven initiatives."
+                }
+                isSearchResult={!!searchQuery || !!selectedCategory}
+                onClearSearch={searchQuery ? handleClearSearch : selectedCategory ? handleClearCategory : undefined}
               />
             )}
           </div>
 
-          {/* Sidebar - 1/4 width */}
-          <div className="lg:col-span-1">
+          {/* Sidebar - 1/4 width - ORIGINAL LAYOUT */}
+          <div className="lg:col-span-1 hidden lg:block">
             <div className="sticky top-8">
               {sidebarLoading ? (
                 <div className="space-y-8">
@@ -277,6 +421,30 @@ export default function AllPostsPage() {
         </div>
       </div>
       
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40">
+          <div className="fixed inset-x-4 top-1/2 -translate-y-1/2 bg-background rounded-xl shadow-2xl p-6 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold">All Categories & Trending</h3>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="p-2 hover:bg-muted rounded-full transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <PostsSidebar 
+              categories={categories}
+              trendingPosts={trendingPosts}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Bottom CTA Section */}
       {!loading && posts.length > 0 && <CTA />}
     </div>
