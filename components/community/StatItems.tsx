@@ -91,19 +91,24 @@ type StatItemsProps = {
 
 export const StatItems = ({ value, label, icon: Icon, delay = 0 }: StatItemsProps) => {
   return (
-    <div className="relative group">
+    <div className="relative group text-center">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-      <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 hover:scale-105">
-        <div className="flex items-center justify-between mb-4">
-          <div className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors duration-300">
-            <Icon className="w-6 h-6 text-primary" />
-          </div>
-          <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+      <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-5 flex flex-col items-center justify-center hover:shadow-xl transition-all duration-500 hover:scale-105">
+        
+        {/* Icon */}
+        <div className="p-3 bg-primary/10 rounded-xl mb-3 group-hover:bg-primary/20 transition-colors duration-300">
+          <Icon className="w-6 h-6 text-primary" />
         </div>
-        <div className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">
+
+        {/* Number */}
+        <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">
           <NumberTicker value={value} delay={delay} />+
         </div>
-        <div className="text-sm text-muted-foreground font-medium">{label}</div>
+
+        {/* Label */}
+        <div className="text-xs sm:text-sm text-muted-foreground font-medium">
+          {label}
+        </div>
       </div>
     </div>
   );

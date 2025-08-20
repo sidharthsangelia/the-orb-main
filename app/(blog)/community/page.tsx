@@ -8,6 +8,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { CommunityPageData } from "@/types/community";
 import { communityPageQuery } from "@/sanity/lib/queries";
 import { Metadata } from "next";
+import { CTA } from "@/components/about/Cta";
 
 
 export const metadata: Metadata = {
@@ -148,7 +149,8 @@ const CommunityPage = async () => {
         <Achievements data={pageData.achievementsSection} />
         
         {/* Enhanced CTA Section */}
-        <EnhancedCTA data={pageData.ctaSection} />
+        {/* <EnhancedCTA data={pageData.ctaSection} /> */}
+        <CTA />
       </div>
     );
   } catch (error) {
@@ -170,7 +172,8 @@ const CommunityPage = async () => {
         <Achievements data={defaultData.achievementsSection} />
         
         {/* Enhanced CTA Section */}
-        <EnhancedCTA data={defaultData.ctaSection} />
+        {/* <EnhancedCTA data={defaultData.ctaSection} /> */}
+        <CTA/>
       </div>
     );
   }

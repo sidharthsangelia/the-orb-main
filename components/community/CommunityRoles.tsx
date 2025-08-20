@@ -108,31 +108,47 @@ export const CommunityRoles = async () => {
           </p>
         </div>
 
-        <Tabs defaultValue={Object.keys(roleData)[0]} className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <TabsList className="bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-border/50">
-              {Object.entries(roleData).map(([key, role]: [string, Role]) => (
-                <TabsTrigger
-                  key={key}
-                  value={key}
-                  className="px-6 py-3 rounded-lg font-medium transition-all duration-300 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 data-[state=active]:scale-105"
-                >
-                  {role.title || 'Untitled'}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
+<Tabs defaultValue={Object.keys(roleData)[0]} className="max-w-6xl mx-auto">
+  <div className="text-center mb-8">
+    <TabsList
+      className="
+        grid grid-cols-2 gap-2
+        sm:flex sm:flex-wrap sm:justify-center
+        bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-border/50
+      "
+    >
+      {Object.entries(roleData).map(([key, role]: [string, Role]) => (
+        <TabsTrigger
+          key={key}
+          value={key}
+          className="
+            w-full px-3 py-2 sm:px-6 sm:py-3 rounded-lg font-medium
+            transition-all duration-300
+            data-[state=active]:bg-background
+            data-[state=active]:text-foreground
+            data-[state=active]:shadow-lg
+            data-[state=active]:shadow-primary/20
+            data-[state=active]:scale-105
+          "
+        >
+          {role.title || "Untitled"}
+        </TabsTrigger>
+      ))}
+    </TabsList>
+  </div>
 
-          {Object.entries(roleData).map(([key, role]: [string, Role]) => (
-            <TabsContent
-              key={key}
-              value={key}
-              className="mt-8 animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
-            >
-              <RoleContent role={role} />
-            </TabsContent>
-          ))}
-        </Tabs>
+  {Object.entries(roleData).map(([key, role]: [string, Role]) => (
+    <TabsContent
+      key={key}
+      value={key}
+      className="mt-8 animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
+    >
+      <RoleContent role={role} />
+    </TabsContent>
+  ))}
+</Tabs>
+
+
       </div>
     </section>
   );
