@@ -53,7 +53,7 @@ export const communityPageSchema = defineType({
           title: 'Impact Statistics',
           type: 'array',
           of: [
-            defineField({
+            {
               type: 'object',
               fields: [
                 defineField({
@@ -80,7 +80,7 @@ export const communityPageSchema = defineType({
                   }
                 })
               ]
-            })
+            }
           ],
           initialValue: [
             { value: 12847, label: "Trees Planted", icon: "TreePine" },
@@ -115,7 +115,7 @@ export const communityPageSchema = defineType({
           title: 'Testimonials',
           type: 'array',
           of: [
-            defineField({
+            {
               type: 'object',
               fields: [
                 defineField({
@@ -140,7 +140,7 @@ export const communityPageSchema = defineType({
                   validation: Rule => Rule.max(2).required()
                 })
               ]
-            })
+            }
           ],
           initialValue: [
             {
@@ -189,7 +189,7 @@ export const communityPageSchema = defineType({
           title: 'Achievements',
           type: 'array',
           of: [
-            defineField({
+            {
               type: 'object',
               fields: [
                 defineField({
@@ -216,7 +216,7 @@ export const communityPageSchema = defineType({
                   }
                 })
               ]
-            })
+            }
           ],
           initialValue: [
             {
