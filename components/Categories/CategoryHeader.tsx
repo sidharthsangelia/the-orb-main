@@ -4,8 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
  
-import { Post } from "@/types/post";
+ 
 import { urlForImage } from "@/sanity/lib/image";
+import { Post } from "@/types/post";
 
 interface CategoryHeaderProps {
   posts: Post[];
@@ -16,8 +17,9 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({ posts, categoryName }) 
   const firstPost = posts?.[0];
   if (!firstPost) return null;
 
-  const { mainImage, categories, title, author, publishedAt } = firstPost;
-  const imageUrl = mainImage ? urlForImage(mainImage).url() : null;
+  // Updated to match your Post interface
+  const { coverImage, category, title, author, date } = firstPost;
+  const imageUrl = coverImage ? urlForImage(coverImage).url() : null;
 
   return (
     <div className="space-y-4">
@@ -40,13 +42,15 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({ posts, categoryName }) 
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {categories?.map((cat) => (
-          <Badge key={cat._id}>{cat.title}</Badge>
-        ))}
+        {category && (
+          <Badge key={category.title} style={{ backgroundColor: category.color }}>
+            {category.title}
+          </Badge>
+        )}
       </div>
 
       <div className="text-sm text-muted-foreground">
-        By {author?.name || "Unknown"} • {new Date(publishedAt).toLocaleDateString()}
+        By {author?.name || "Unknown"} • {new Date(date).toLocaleDateString()}
       </div>
     </div>
   );
