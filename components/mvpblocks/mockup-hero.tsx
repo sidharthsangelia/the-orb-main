@@ -143,7 +143,7 @@ export default function LucyHero() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                className="flex flex-col gap-4 w-full max-w-sm mx-auto"
+                className="flex  gap-4 w-full max-w-sm mx-auto"
               >
                 <motion.div
                   whileHover={{ scale: 1.05 }}

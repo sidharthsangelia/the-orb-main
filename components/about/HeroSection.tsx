@@ -40,7 +40,7 @@ export const HeroSection = ({ title, tagline, introText }: HeroSectionProps) => 
       >
         <Badge
           variant="outline"
-          className="border-[#487052]/30 bg-[#487052]/10 text-[#487052] dark:text-[#eae4d2] dark:border-[#509e8e]/30 dark:bg-[#509e8e]/10 rounded-full px-6 py-2 text-sm font-medium"
+          className="border-[#487052]/30 bg-[#487052]/10 text-[#487052] dark:text-[#eae4d2] dark:border-[#509e8e]/30 dark:bg-[#509e8e]/10 rounded-full px-6 py-2 text-sm font-medium mt-5"
         >
           <Sprout className="mr-2 h-4 w-4" />
           Planet Conscious Youth
@@ -51,7 +51,7 @@ export const HeroSection = ({ title, tagline, introText }: HeroSectionProps) => 
         initial={{ opacity: 0, y: 20 }}
         animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-        className="bg-gradient-to-b from-[#0c0d0d] via-[#575846] to-[#487052] dark:from-[#eae4d2] dark:via-[#eae4d2]/90 dark:to-[#509e8e] bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl lg:text-7xl"
+        className="bg-gradient-to-b from-[#0c0d0d] via-[#575846] to-[#487052] dark:from-[#eae4d2] dark:via-[#eae4d2]/90 dark:to-[#509e8e] bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl lg:text-7xl"
       >
         {titleParts.length > 1 ? (
           <>
