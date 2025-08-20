@@ -15,6 +15,77 @@ import { SearchResults } from '@/components/blog/SearchResult';
 
 const POSTS_PER_PAGE = 12;
 
+// Helper function to safely transform posts data to match Post interface
+const transformPostsData = (rawData: any[]): Post[] => {
+  if (!rawData || !Array.isArray(rawData)) {
+    return [];
+  }
+
+  return rawData
+    .filter((post: any) => post && post.slug && typeof post.slug === 'string')
+    .map((post: any) => ({
+      _id: post._id || '',
+      title: post.title || 'Untitled',
+      slug: post.slug as string,
+      excerpt: post.excerpt || undefined,
+      coverImage: post.coverImage || undefined,
+      date: post.date || '',
+      author: {
+        name: post.author?.name || 'Anonymous',
+        picture: post.author?.picture || undefined
+      },
+      category: post.category ? {
+        title: post.category.title || 'Uncategorized',
+        color: post.category.color || '#000000'
+      } : undefined,
+      readingTime: post.readingTime || post.readTime || undefined,
+      status: post.status || undefined
+    }));
+};
+
+// Helper function to safely transform categories data
+const transformCategoriesData = (rawData: any[]): Category[] => {
+  if (!rawData || !Array.isArray(rawData)) {
+    return [];
+  }
+
+  return rawData.map((cat: any) => ({
+    _id: cat._id || '',
+    title: cat.title || '',
+    slug: cat.slug || '',
+    description: cat.description || undefined,
+    color: cat.color || '#000000',
+    image: cat.image && typeof cat.image === 'object' ? {
+      asset: {
+        _id: cat.image.asset?._id || '',
+        url: cat.image.asset?.url || ''
+      },
+      alt: cat.image.alt || undefined
+    } : undefined,
+    postCount: cat.postCount || 0,
+    featured: cat.featured || false,
+    order: cat.order || undefined
+  }));
+};
+
+// Helper function to safely transform trending posts data
+const transformTrendingPostsData = (rawData: any[]): TrendingPost[] => {
+  if (!rawData || !Array.isArray(rawData)) {
+    return [];
+  }
+
+  return rawData
+    .filter((post: any) => post && post.slug && typeof post.slug === 'string')
+    .map((post: any) => ({
+      _id: post._id || '',
+      title: post.title || '',
+      slug: post.slug as string,
+      author: post.author || '',
+      category: post.category || '',
+      date: post.date || ''
+    }));
+};
+
 export default function AllPostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -37,33 +108,12 @@ export default function AllPostsPage() {
           client.fetch(trendingPostsMarqueeQuery)
         ]);
         
-        setCategories(
-          (categoriesData || []).map(cat => ({
-            ...cat,
-            title: cat.title ?? '',
-            slug: cat.slug ?? '',
-            description: cat.description ?? '',
-            image: cat.image && typeof cat.image === 'object'
-              ? cat.image
-              : {
-                  asset: { _id: '', url: '' },
-                  alt: ''
-                },
-            featured: cat.featured ?? false
-          }))
-        );
-        setTrendingPosts(
-          (trendingData || []).map(post => ({
-            ...post,
-            title: post.title ?? '',
-            slug: post.slug ?? '',
-            author: post.author ?? '',
-            category: post.category ?? '',
-            date: post.date ?? ''
-          }))
-        );
+        setCategories(transformCategoriesData(categoriesData || []));
+        setTrendingPosts(transformTrendingPostsData(trendingData || []));
       } catch (error) {
         console.error('Error fetching sidebar data:', error);
+        setCategories([]);
+        setTrendingPosts([]);
       } finally {
         setSidebarLoading(false);
       }
@@ -78,13 +128,18 @@ export default function AllPostsPage() {
       setLoading(true);
       try {
         const offset = (currentPage - 1) * POSTS_PER_PAGE;
-        const data: PostsData = await client.fetch(allPostsQuery, { 
+        const rawData: any = await client.fetch(allPostsQuery, { 
           limit: POSTS_PER_PAGE, 
           offset 
         });
         
-        setPosts(data.posts || []);
-        setTotalPosts(data.total || 0);
+        // Transform the raw data to match our PostsData type
+        const transformedPosts = transformPostsData(rawData.posts || []);
+        const total = rawData.total || 0;
+        
+        setPosts(transformedPosts);
+        setTotalPosts(total);
+        
       } catch (error) {
         console.error('Error fetching posts:', error);
         setPosts([]);
@@ -112,14 +167,21 @@ export default function AllPostsPage() {
     setCurrentPage(1);
   };
 
-  // Filter posts based on search query
-  const filteredPosts = posts.filter(post =>
-    searchQuery === '' || 
-    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.author.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.category?.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter posts based on search query with safe property access
+  const filteredPosts = posts.filter(post => {
+    if (searchQuery === '') return true;
+    
+    const query = searchQuery.toLowerCase();
+    const title = post.title?.toLowerCase() || '';
+    const excerpt = post.excerpt?.toLowerCase() || '';
+    const authorName = post.author?.name?.toLowerCase() || '';
+    const categoryTitle = post.category?.title?.toLowerCase() || '';
+    
+    return title.includes(query) ||
+           excerpt.includes(query) ||
+           authorName.includes(query) ||
+           categoryTitle.includes(query);
+  });
 
   return (
     <div className="min-h-screen bg-background">

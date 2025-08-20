@@ -22,10 +22,10 @@ export function PostsHeader({
     <div className="bg-card/50 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
+          {/* <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
             <Target className="h-8 w-8 text-primary" />
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+          </div> */}
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mt-12 mb-6">
             Climate Stories & Insights
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
