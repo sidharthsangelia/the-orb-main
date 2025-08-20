@@ -135,7 +135,7 @@ export const ResourceCard = ({
     <div className="flex items-center justify-between pt-3 border-t border-border/40">
       <div className="flex items-center gap-2 sm:gap-3">
         {resource.author?.name ? (
-          <Avatar name={resource.author.name} picture={resource.author.picture} />
+          <Avatar name={resource.author.name} picture={typeof resource.author.picture === "object" && resource.author.picture !== null ? resource.author.picture : null} />
         ) : (
           <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
             <User className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
