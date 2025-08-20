@@ -109,10 +109,10 @@ export default async function Page() {
   const safeCoreValues = data.coreValues || defaultData.coreValues;
 
   return (
-    <div className="    ">
+    <div className="  min-h-screen w-full   ">
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
  
-      <div className="   container mx-auto ">
+      <div className=" w-full max-w-full   ">
         <LucyHero />
         <OurPartners partners={partners} />
 
@@ -124,31 +124,48 @@ export default async function Page() {
           }))}
         />
 
-        {heroPost ? (
-          // <HeroPostsGrid posts={heroPostGrid}/>
+              {heroPost ? (
+          <>
+            {/* Blog Section Heading + CTA */}
+            <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-20 text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Voices for a Sustainable Future
+              </h2>
+              <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Explore stories from young changemakers driving climate action across India.
+              </p>
+              {/* <div className="mt-6">
+                <Link href="/posts">
+                  <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:shadow-lg hover:scale-105 transition-all duration-300">
+                    Read All Posts
+                  </button>
+                </Link>
+              </div> */}
+            </section>
 
-          <HeroPost
-            title={heroPost.title}
-            slug={heroPost.slug}
-            coverImage={heroPost.coverImage}
-            excerpt={heroPost.excerpt}
-            date={heroPost.date}
-            author={heroPost.author}
-          />
+            {/* Featured + 3 more posts */}
+            <HeroPost
+              title={heroPost.title}
+              slug={heroPost.slug}
+              coverImage={heroPost.coverImage}
+              excerpt={heroPost.excerpt}
+              date={heroPost.date}
+              author={heroPost.author}
+            />
+
+            <PostRowGrid
+              posts={tripleCardPosts
+                .filter((post: any) => typeof post.slug === "string")
+                .map((post: any) => ({
+                  ...post,
+                  slug: post.slug as string,
+                }))}
+            />
+          </>
         ) : (
           <Onboarding />
         )}
 
-        {tripleCardPosts && (
-          <PostRowGrid
-            posts={tripleCardPosts
-              .filter((post: any) => typeof post.slug === "string")
-              .map((post: any) => ({
-                ...post,
-                slug: post.slug as string,
-              }))}
-          />
-        )}
 
         <CoreValuesSection
           coreValues={safeCoreValues.map((cv: any) => ({

@@ -55,7 +55,6 @@ export default defineConfig({
       carouselPost,
       about,
       founderMessage,
- 
       communityRoles,
       communityPageSchema,
 

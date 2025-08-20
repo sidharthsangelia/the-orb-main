@@ -16,6 +16,7 @@ interface EarthProps {
   markerColor?: [number, number, number];
   glowColor?: [number, number, number];
 }
+
 const Earth: React.FC<EarthProps> = ({
   className,
   theta = 0.25,
@@ -71,24 +72,27 @@ const Earth: React.FC<EarthProps> = ({
     };
   }, []);
 
-  return (
-    <div
-      className={cn(
-        'flex items-center justify-center z-[10] w-full max-w-[500px] mx-auto',
-        className
-      )}
-    >
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          maxWidth: '100%',
-          aspectRatio: '1',
-        }}
-      />
-    </div>
-  );
+ return (
+  <div
+    className={cn(
+      'flex items-center justify-center z-[10] w-full mx-auto',
+      // Mobile: smaller size and centered, Desktop: larger and positioned
+      'max-w-[280px] h-[280px] sm:max-w-[320px] sm:h-[320px] md:max-w-[380px] md:h-[380px] lg:max-w-[470px] lg:h-[470px]',
+      className
+    )}
+  >
+    <canvas
+      ref={canvasRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        maxWidth: '100%',
+        aspectRatio: '1',
+      }}
+    />
+  </div>
+);
+
 };
 
 export default Earth;

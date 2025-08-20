@@ -18,17 +18,22 @@ const getIconForStat = (label: string, index: number) => {
   const lowerLabel = label.toLowerCase();
   
   if (lowerLabel.includes('youth') || lowerLabel.includes('aware')) {
-    return <Users className="h-5 w-5" />;
+    return <Users className="h-4 w-4 sm:h-5 sm:w-5" />;
   } else if (lowerLabel.includes('engaged') || lowerLabel.includes('global')) {
-    return <Globe className="h-5 w-5" />;
+    return <Globe className="h-4 w-4 sm:h-5 sm:w-5" />;
   } else if (lowerLabel.includes('stories') || lowerLabel.includes('published') || lowerLabel.includes('content')) {
-    return <FileText className="h-5 w-5" />;
+    return <FileText className="h-4 w-4 sm:h-5 sm:w-5" />;
   } else if (lowerLabel.includes('cities') || lowerLabel.includes('locations') || lowerLabel.includes('reached')) {
-    return <TreePine className="h-5 w-5" />;
+    return <TreePine className="h-4 w-4 sm:h-5 sm:w-5" />;
   }
   
   // Default icons based on index if no match found
-  const defaultIcons = [<Users className="h-5 w-5" />, <Globe className="h-5 w-5" />, <FileText className="h-5 w-5" />, <TreePine className="h-5 w-5" />];
+  const defaultIcons = [
+    <Users className="h-4 w-4 sm:h-5 sm:w-5" />, 
+    <Globe className="h-4 w-4 sm:h-5 sm:w-5" />, 
+    <FileText className="h-4 w-4 sm:h-5 sm:w-5" />, 
+    <TreePine className="h-4 w-4 sm:h-5 sm:w-5" />
+  ];
   return defaultIcons[index % defaultIcons.length];
 };
 
@@ -60,24 +65,47 @@ export const StatsSection = ({ stats }: StatsSectionProps) => {
   }
 
   return (
-    <div ref={statsRef} className="mb-24">
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => {
-          const { numericValue, suffix } = parseStatValue(stat.value);
-          
-          return (
-            <StatItem
-              key={index}
-              value={numericValue}
-              label={stat.label}
-              icon={getIconForStat(stat.label, index)}
-              delay={index * 0.1}
-              decimalPlaces={0}
-              color={getColorForStat(index)}
-              suffix={suffix}
-            />
-          );
-        })}
+    <div ref={statsRef} className="w-full max-w-full overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16 sm:mb-20 lg:mb-24">
+        {/* Mobile 2x2 Grid Layout */}
+        <div className="grid gap-3 grid-cols-2 sm:hidden">
+          {stats.map((stat, index) => {
+            const { numericValue, suffix } = parseStatValue(stat.value);
+            
+            return (
+              <StatItem
+                key={index}
+                value={numericValue}
+                label={stat.label}
+                icon={getIconForStat(stat.label, index)}
+                delay={index * 0.1}
+                decimalPlaces={0}
+                color={getColorForStat(index)}
+                suffix={suffix}
+              />
+            );
+          })}
+        </div>
+
+        {/* Desktop Layout - Original */}
+        <div className="hidden sm:grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, index) => {
+            const { numericValue, suffix } = parseStatValue(stat.value);
+            
+            return (
+              <StatItem
+                key={index}
+                value={numericValue}
+                label={stat.label}
+                icon={getIconForStat(stat.label, index)}
+                delay={index * 0.1}
+                decimalPlaces={0}
+                color={getColorForStat(index)}
+                suffix={suffix}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

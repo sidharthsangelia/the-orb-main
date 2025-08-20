@@ -79,37 +79,6 @@ export type CommunityRole = {
   actions?: Array<string>;
 };
 
-export type SocialMediaPosts = {
-  _id: string;
-  _type: "socialMediaPosts";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  showInstagram?: boolean;
-  showLinkedin?: boolean;
-  showTwitter?: boolean;
-  instagramPosts?: Array<{
-    embedHtml?: string;
-    fallbackDescription?: string;
-    isActive?: boolean;
-    _key: string;
-  }>;
-  linkedinPosts?: Array<{
-    embedHtml?: string;
-    fallbackDescription?: string;
-    isActive?: boolean;
-    _key: string;
-  }>;
-  twitterPosts?: Array<{
-    embedHtml?: string;
-    fallbackDescription?: string;
-    isActive?: boolean;
-    _key: string;
-  }>;
-  lastUpdated?: string;
-};
-
 export type FounderMessage = {
   _id: string;
   _type: "founderMessage";
@@ -806,7 +775,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = CommunityPage | CommunityRole | SocialMediaPosts | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Subscriber | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = CommunityPage | CommunityRole | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Subscriber | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(blog)/posts/[slug]/page.tsx
 // Variable: postSlugs
@@ -1883,31 +1852,7 @@ export type FounderMessageBySlugQueryResult = {
 } | null;
 // Variable: socialMediaPostsQuery
 // Query: *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {    _id,    title,    showInstagram,    showLinkedin,    showTwitter,    "instagramPosts": instagramPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "linkedinPosts": linkedinPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "twitterPosts": twitterPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    lastUpdated,    _createdAt,    _updatedAt  }
-export type SocialMediaPostsQueryResult = {
-  _id: string;
-  title: string | null;
-  showInstagram: boolean | null;
-  showLinkedin: boolean | null;
-  showTwitter: boolean | null;
-  instagramPosts: Array<{
-    embedHtml: string | null;
-    fallbackDescription: string | null;
-    isActive: boolean | null;
-  }> | null;
-  linkedinPosts: Array<{
-    embedHtml: string | null;
-    fallbackDescription: string | null;
-    isActive: boolean | null;
-  }> | null;
-  twitterPosts: Array<{
-    embedHtml: string | null;
-    fallbackDescription: string | null;
-    isActive: boolean | null;
-  }> | null;
-  lastUpdated: string | null;
-  _createdAt: string;
-  _updatedAt: string;
-} | null;
+export type SocialMediaPostsQueryResult = null;
 // Variable: COMMUNITY_ROLES_QUERY
 // Query: *[_type == "communityRole"]{  key,  title,  impact,  description,  skills,  color,  icon,  actions} | order(title asc)
 export type COMMUNITY_ROLES_QUERYResult = Array<{
