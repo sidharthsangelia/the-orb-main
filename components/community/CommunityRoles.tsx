@@ -1,42 +1,63 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, ChevronRight } from "lucide-react";
+import { CheckCircle, ChevronRight, LucideIcon } from "lucide-react";
 import * as Icons from "lucide-react";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { COMMUNITY_ROLES_QUERY } from "@/sanity/lib/queries";
- 
+
+// Type definitions
+interface Role {
+  key: string | null;
+  title: string | null;
+  impact: string | null;
+  description: string | null;
+  icon: string | null;
+  color: string | null;
+  skills?: string[] | null;
+  actions?: string[] | null;
+}
+
+interface RoleData {
+  [key: string]: Role;
+}
+
+interface RoleContentProps {
+  role: Role;
+}
 
 export const CommunityRoles = async () => {
-  const roles = await sanityFetch({ query: COMMUNITY_ROLES_QUERY });
+  const roles: Role[] = await sanityFetch({ query: COMMUNITY_ROLES_QUERY });
 
   // Convert array into object keyed by `role.key`
-  const roleData = roles.reduce((acc, role) => {
-    acc[role.key] = role;
+  const roleData: RoleData = roles.reduce((acc: RoleData, role: Role) => {
+    if (role.key) {
+      acc[role.key] = role;
+    }
     return acc;
   }, {});
 
-  const RoleContent = ({ role }) => {
-    const IconComponent = Icons[role.icon] || Icons.Camera;
+  const RoleContent: React.FC<RoleContentProps> = ({ role }) => {
+    const IconComponent: LucideIcon = (Icons as any)[role.icon || 'Camera'] || Icons.Camera;
 
     return (
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <div className={`p-4 bg-gradient-to-br ${role.color} rounded-2xl`}>
+            <div className={`p-4 bg-gradient-to-br ${role.color || 'from-primary to-secondary'} rounded-2xl`}>
               <IconComponent className="w-8 h-8 text-primary" />
             </div>
             <div>
-              <h3 className="text-2xl font-bold">{role.title}</h3>
-              <p className="text-primary font-medium">{role.impact}</p>
+              <h3 className="text-2xl font-bold">{role.title || 'Untitled'}</h3>
+              <p className="text-primary font-medium">{role.impact || ''}</p>
             </div>
           </div>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            {role.description}
+            {role.description || ''}
           </p>
           <div className="space-y-4">
             <h4 className="font-semibold">Key Skills You'll Develop:</h4>
             <div className="flex flex-wrap gap-2">
-              {role.skills?.map((skill, idx) => (
+              {role.skills?.map((skill: string, idx: number) => (
                 <span
                   key={idx}
                   className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
@@ -49,7 +70,7 @@ export const CommunityRoles = async () => {
         </div>
         <div className="relative">
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${role.color} rounded-3xl blur-xl opacity-50`}
+            className={`absolute inset-0 bg-gradient-to-br ${role.color || 'from-primary to-secondary'} rounded-3xl blur-xl opacity-50`}
           ></div>
           <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-8">
             <div className="space-y-6">
@@ -58,7 +79,7 @@ export const CommunityRoles = async () => {
                 <ChevronRight className="w-5 h-5 text-primary" />
               </div>
               <div className="space-y-4">
-                {role.actions?.map((action, idx) => (
+                {role.actions?.map((action: string, idx: number) => (
                   <div key={idx} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
                     <span className="text-sm">{action}</span>
@@ -90,19 +111,19 @@ export const CommunityRoles = async () => {
         <Tabs defaultValue={Object.keys(roleData)[0]} className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <TabsList className="bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-border/50">
-              {Object.entries(roleData).map(([key, role]) => (
+              {Object.entries(roleData).map(([key, role]: [string, Role]) => (
                 <TabsTrigger
                   key={key}
                   value={key}
                   className="px-6 py-3 rounded-lg font-medium transition-all duration-300 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 data-[state=active]:scale-105"
                 >
-                  {role.title}
+                  {role.title || 'Untitled'}
                 </TabsTrigger>
               ))}
             </TabsList>
           </div>
 
-          {Object.entries(roleData).map(([key, role]) => (
+          {Object.entries(roleData).map(([key, role]: [string, Role]) => (
             <TabsContent
               key={key}
               value={key}
