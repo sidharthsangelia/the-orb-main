@@ -27,7 +27,7 @@ import { colorInput } from "@sanity/color-input";
 import { partner } from "./sanity/schemas/singletons/partners";
 import about from "./sanity/schemas/documents/about";
 import { founderMessage } from "./sanity/schemas/documents/founder";
-import socialMediaPosts from "./sanity/schemas/documents/socialMediaPosts";
+ 
 import communityRoles from "./sanity/schemas/documents/communityRoles";
 import { communityPageSchema } from "./sanity/schemas/documents/communityPage";
 import subscriber from "./sanity/schemas/singletons/subscriber";
@@ -55,7 +55,7 @@ export default defineConfig({
       carouselPost,
       about,
       founderMessage,
-      socialMediaPosts,
+ 
       communityRoles,
       communityPageSchema,
 
