@@ -21,7 +21,7 @@ type Props = {
 };
 
 const postSlugs = defineQuery(
-  `*[_type == "post" && defined(slug.current)]{"slug": slug.current}`,
+  `*[_type == "post" && defined(slug.current)]{"slug": slug.current}`
 );
 
 export async function generateStaticParams() {
@@ -34,7 +34,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata,
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const post = await sanityFetch({ query: postQuery, params, stega: false });
   const previousImages = (await parent).openGraph?.images || [];
@@ -59,69 +59,69 @@ export default async function PostPage({ params }: Props) {
   if (!post?._id) return notFound();
 
   return (
-    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
-      <article className="mx-auto mt-12 mb-16 max-w-4xl">
+    <div className="container pt-10 mx-auto px-4 sm:px-6 lg:px-8">
+      <article className="mx-auto pt-10 mb-16 max-w-3xl lg:max-w-4xl space-y-8">
         {/* Title */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-6 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-tight">
           {post.title}
         </h1>
 
         {/* Author + Date */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 text-muted-foreground">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-muted-foreground text-sm">
           {post.author && (
-            <Avatar name={post.author.name} picture={post.author.picture} />
+            <div className="flex items-center gap-3">
+              <Avatar name={post.author.name} picture={post.author.picture} />
+             
+            </div>
+          )}
+          {post.author && (
+            <span className="hidden sm:inline text-muted-foreground/50">•</span>
           )}
           <DateComponent dateString={post.date} />
         </div>
 
         {/* Cover Image */}
-        <div className="mb-12">
-          <CoverImage image={post.coverImage} priority />
+        <div className="mb-6">
+          <CoverImage
+            image={post.coverImage}
+            priority
+        
+          />
         </div>
 
         {/* Blog Body */}
         {post.content?.length && (
           <CustomPortableText
-            className="prose dark:prose-invert prose-lg max-w-none text-foreground"
+            className="prose dark:prose-invert prose-base sm:prose-lg max-w-none text-foreground leading-relaxed"
             value={post.content as PortableTextBlock[]}
           />
         )}
       </article>
 
-
-    <section className="py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-12 text-center">
-              Continue Reading
-            </h2>
-            <Suspense fallback={
+      {/* Continue Reading */}
+      <section className="py-12 sm:py-16">
+        <div className="max-w-6xl mx-auto text-center px-2 sm:px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-10">
+            Continue Reading
+          </h2>
+          <Suspense
+            fallback={
               <div className="flex justify-center items-center py-12">
-                <div className="text-muted-foreground">Loading related stories...</div>
+                <div className="text-muted-foreground">
+                  Loading related stories...
+                </div>
               </div>
-            }>
-              <MoreStories skip={post._id} limit={3} />
-            </Suspense>
-          </div>
+            }
+          >
+            <MoreStories skip={post._id} limit={3} />
+          </Suspense>
         </div>
       </section>
-      
-     <span className="mt-16 ">
-      <CTA/>
-     </span>
 
-      {/* More Stories
-      <aside className="mx-auto max-w-5xl mt-24 border-t border-border pt-16">
-        <h2 className="text-3xl sm:text-4xl font-semibold text-foreground mb-8">
-          Recent Stories
-        </h2>
-        <Suspense>
-          <MoreStories skip={post._id} limit={2} />
-        </Suspense>
-      </aside> */}
-
-      {/* Related Stories */}
-  
+      {/* CTA */}
+      <div className="mt-12 sm:mt-16 flex justify-center">
+        <CTA />
+      </div>
     </div>
   );
 }
