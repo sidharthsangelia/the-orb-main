@@ -1,19 +1,20 @@
 import React from "react";
 import Link from "next/link";
-// import Image from "next/image";
-import { PortableText, PortableTextBlock } from "@portabletext/react";
-import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+import { PortableText } from "@portabletext/react";
 import {
+  Mail,
+  Phone,
+  MapPin,
+  ExternalLink,
   Instagram,
   Linkedin,
   Github,
   Twitter,
   Facebook,
   Youtube,
-  MessageCircle, // For Threads
-  PenTool, // For Pinterest/Dribbble
+  MessageCircle, // Threads
+  PenTool, // Pinterest/Dribbble
 } from "lucide-react";
-import { Image } from "sanity";
 
 interface SocialLink {
   platform?: string;
@@ -94,10 +95,8 @@ export default function Footer({ siteSettings }: FooterProps) {
     zipCode,
     country,
     googleMapsLink,
-    // footerText,
   } = siteSettings;
 
-  // Format address
   const formatAddress = () => {
     const parts = [
       addressLine1,
@@ -112,18 +111,13 @@ export default function Footer({ siteSettings }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0c0d0d] text-[#eae4d2] border-t border-[#575846]/20 dark:bg-[#0c0d0d] dark:text-[#eae4d2]">
+    <footer className="bg-[#0c0d0d] text-[#eae4d2] border-t border-[#575846]/20">
       <div className="container mx-auto px-4 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           {/* Brand Section */}
           <div className="lg:col-span-2">
-            <div className="flex items-center mb-4">
-          
-              {title && (
-                <h3 className="text-2xl font-bold text-[#eae4d2]">{title}</h3>
-              )}
-            </div>
-
+            {title && <h3 className="text-2xl font-bold mb-4">{title}</h3>}
             {description && Array.isArray(description) ? (
               <div className="text-[#eae4d2]/80 mb-6 max-w-md leading-relaxed">
                 <PortableText
@@ -140,66 +134,49 @@ export default function Footer({ siteSettings }: FooterProps) {
                 {description}
               </p>
             )}
-
-             
           </div>
 
           {/* Contact Information */}
           <div>
-            <h4 className="text-lg font-semibold text-[#eae4d2] mb-4">
-              Contact
-            </h4>
-            <div className="space-y-3">
+            <h4 className="text-lg font-semibold mb-4">Contact</h4>
+            <div className="space-y-3 text-sm">
               {contactEmail && (
                 <div className="flex items-start">
-                  <Mail
-                    size={16}
-                    className="mr-3 mt-1 text-[#509e8e] flex-shrink-0"
-                  />
+                  <Mail className="mr-3 mt-1 text-[#509e8e]" size={16} />
                   <Link
                     href={`mailto:${contactEmail}`}
-                    className="text-[#eae4d2]/80 hover:text-[#509e8e] transition-colors duration-200 text-sm"
+                    className="hover:text-[#509e8e] transition-colors"
                   >
                     {contactEmail}
                   </Link>
                 </div>
               )}
-
               {phoneNumber && (
                 <div className="flex items-start">
-                  <Phone
-                    size={16}
-                    className="mr-3 mt-1 text-[#509e8e] flex-shrink-0"
-                  />
+                  <Phone className="mr-3 mt-1 text-[#509e8e]" size={16} />
                   <Link
                     href={`tel:${phoneNumber}`}
-                    className="text-[#eae4d2]/80 hover:text-[#509e8e] transition-colors duration-200 text-sm"
+                    className="hover:text-[#509e8e] transition-colors"
                   >
                     {phoneNumber}
                   </Link>
                 </div>
               )}
-
               {(addressLine1 || city) && (
                 <div className="flex items-start">
-                  <MapPin
-                    size={16}
-                    className="mr-3 mt-1 text-[#509e8e] flex-shrink-0"
-                  />
-                  <div className="text-sm">
+                  <MapPin className="mr-3 mt-1 text-[#509e8e]" size={16} />
+                  <div>
                     {googleMapsLink ? (
                       <Link
                         href={googleMapsLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[#eae4d2]/80 hover:text-[#509e8e] transition-colors duration-200"
+                        className="hover:text-[#509e8e] transition-colors"
                       >
                         {formatAddress()}
                       </Link>
                     ) : (
-                      <span className="text-[#eae4d2]/80">
-                        {formatAddress()}
-                      </span>
+                      <span>{formatAddress()}</span>
                     )}
                   </div>
                 </div>
@@ -209,18 +186,16 @@ export default function Footer({ siteSettings }: FooterProps) {
 
           {/* Social Links */}
           <div>
-            <h4 className="text-lg font-semibold text-[#eae4d2] mb-4">
-              Follow Us
-            </h4>
+            <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
             {socialLinks && socialLinks.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-3 text-sm">
                 {socialLinks.map((link, index) => (
                   <Link
                     key={index}
                     href={link.url!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-[#eae4d2]/80 hover:text-[#509e8e] transition-colors duration-200 group text-sm"
+                    className="flex items-center group"
                   >
                     <span className="mr-3 text-[#509e8e] group-hover:text-[#487052]">
                       {getSocialIcon(link.platform!)}
@@ -234,22 +209,27 @@ export default function Footer({ siteSettings }: FooterProps) {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-[#575846]/20 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-[#eae4d2]/60 text-sm mb-4 md:mb-0">
-              © {currentYear} {title ? `${title}. ` : ""}All rights reserved.
-            </div>
-
-            {/* Theme Toggle Placeholder */}
-            <div className="flex items-center space-x-4">
-              {/* ADD THEME TOGGLE COMPONENT HERE */}
-              <div className="text-[#eae4d2]/40 text-xs">
-                Built with care for the environment by{" "}
-                <Link href="https://sidharth-sangelia.vercel.app/">
-                  Sidharth Sangelia
-                </Link>
-              </div>
-            </div>
+        <div className="border-t border-[#575846]/20 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-[#eae4d2]/60">
+          <div className="mb-4 md:mb-0">
+            © {currentYear} {title ? `${title}. ` : ""}All rights reserved.
+          </div>
+          <div className="flex items-center text-xs space-x-1">
+            <span>Built with care for the environment by</span>
+            <Link
+              href="https://sidharth-sangelia.vercel.app/"
+              target="_blank"
+              className="  hover:underline"
+            >
+              Sidharth
+            </Link>
+            <span>&</span>
+            <Link
+              href="https://www.linkedin.com/in/ashmit-tripathi/"
+              target="_blank"
+              className="  hover:underline"
+            >
+              Ashmit
+            </Link>
           </div>
         </div>
       </div>
