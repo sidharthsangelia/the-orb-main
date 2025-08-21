@@ -214,11 +214,11 @@ export default function Footer({ siteSettings }: FooterProps) {
             © {currentYear} {title ? `${title}. ` : ""}All rights reserved.
           </div>
           <div className="flex items-center text-xs space-x-1">
-            <span>Built with care for the environment by</span>
+            <span>Site built with care for the environment by</span>
             <Link
               href="https://sidharth-sangelia.vercel.app/"
               target="_blank"
-              className="  hover:underline"
+              className=" hover:underline"
             >
               Sidharth
             </Link>
