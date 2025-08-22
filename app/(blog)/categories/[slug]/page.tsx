@@ -29,6 +29,7 @@ import {
   X,
 } from "lucide-react";
 import type { Post, Category, TrendingPost } from "@/types/post";
+import { TrendingPostsMarquee } from "@/components/blog/TrendingPostMarquee";
 
 const POSTS_PER_PAGE = 12;
 
@@ -243,29 +244,30 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Category Header */}
-      <div className="relative bg-gradient-to-br from-background via-background/95 to-primary/5 border-b border-border pt-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="relative bg-gradient-to-br from-background via-background/95 to-primary/5 border-b border-border pt-6 sm:pt-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 mb-6 sm:mb-8">
             <Link
               href="/posts"
               className="hover:text-primary transition-colors flex items-center gap-1 group"
             >
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-              All Posts
+              <span className="hidden xs:inline">All Posts</span>
+              <span className="xs:hidden">Posts</span>
             </Link>
             <span className="text-muted-foreground/60">/</span>
-            <span className="text-foreground font-medium">
+            <span className="text-foreground font-medium truncate">
               {categoryData.title}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 items-start">
             {/* Category Info */}
-            <div className="lg:col-span-3 space-y-6">
-              <div className="flex flex-wrap items-center gap-4">
+            <div className="lg:col-span-3 space-y-4 sm:space-y-6">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                 <Badge
-                  className="text-sm px-4 py-2 border-0 font-medium"
+                  className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 border-0 font-medium"
                   style={{
                     backgroundColor: `${categoryData.color || "#3B82F6"}15`,
                     color: categoryData.color || "#3B82F6",
@@ -275,44 +277,44 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                   {categoryData.title}
                 </Badge>
                 {categoryData.featured && (
-                  <Badge className="bg-primary/10 text-primary border-0 px-3 py-1">
+                  <Badge className="bg-primary/10 text-primary border-0 px-2 sm:px-3 py-1 text-xs sm:text-sm">
                     ⭐ Featured
                   </Badge>
                 )}
               </div>
 
-              <div className="space-y-4">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+              <div className="space-y-3 sm:space-y-4">
+                <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                   {categoryData.title}
                 </h1>
 
                 {categoryData.description && (
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
+                  <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
                     {categoryData.description}
                   </p>
                 )}
               </div>
 
               {/* Stats Cards */}
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3 sm:gap-4">
                 <Card className="bg-card/60 backdrop-blur-sm border-border hover:bg-card/80 transition-colors">
-                  <CardContent className="p-4 flex items-center gap-3">
+                  <CardContent className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
                       style={{
                         backgroundColor: `${categoryData.color || "#3B82F6"}15`,
                       }}
                     >
                       <BookOpen
-                        className="h-6 w-6"
+                        className="h-5 w-5 sm:h-6 sm:w-6"
                         style={{ color: categoryData.color || "#3B82F6" }}
                       />
                     </div>
                     <div>
-                      <p className="text-xl font-bold text-foreground">
+                      <p className="text-lg sm:text-xl font-bold text-foreground">
                         {categoryData.postCount}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         Total Stories
                       </p>
                     </div>
@@ -320,15 +322,15 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                 </Card>
 
                 <Card className="bg-card/60 backdrop-blur-sm border-border hover:bg-card/80 transition-colors">
-                  <CardContent className="p-4 flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                      <Leaf className="h-6 w-6 text-green-600" />
+                  <CardContent className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-green-500/10 flex items-center justify-center">
+                      <Leaf className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-xl font-bold text-foreground">
+                      <p className="text-lg sm:text-xl font-bold text-foreground">
                         Climate
                       </p>
-                      <p className="text-sm text-muted-foreground">Focused</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">Focused</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -336,8 +338,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             </div>
 
             {/* Category Image */}
-            <div className="lg:col-span-2">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="lg:col-span-2 order-first lg:order-last">
+              <div className="relative aspect-[16/10] sm:aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-2xl">
                 {categoryData.image ? (
                   <Image
                     src={
@@ -349,7 +351,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                     alt={categoryData.image.alt || categoryData.title}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 40vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                     priority
                   />
                 ) : (
@@ -361,18 +363,18 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                   >
                     <div className="text-center">
                       <div
-                        className="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center backdrop-blur-sm"
+                        className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto mb-3 sm:mb-4 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm"
                         style={{
                           backgroundColor: `${categoryData.color || "#3B82F6"}25`,
                         }}
                       >
                         <Leaf
-                          className="h-12 w-12"
+                          className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12"
                           style={{ color: categoryData.color || "#3B82F6" }}
                         />
                       </div>
                       <span
-                        className="text-xl font-semibold"
+                        className="text-lg sm:text-xl font-semibold"
                         style={{ color: categoryData.color || "#3B82F6" }}
                       >
                         {categoryData.title}
@@ -389,19 +391,98 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         </div>
       </div>
 
+      {/* Mobile-only Categories Filter Bar */}
+      <div className="lg:hidden border-b border-border bg-background/95 backdrop-blur-sm sticky  top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="py-3 sm:py-4">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-sm font-semibold text-foreground">
+                Browse Categories
+              </h3>
+              {/* <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 3v18m9-9H3"
+                  />
+                </svg>
+                More
+              </button> */}
+            </div>
+
+            {/* Horizontal scrollable categories */}
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide mt-10 pb-2">
+              {!sidebarLoading &&
+                categories.slice(0, 8).map((category) => (
+                  <a
+                    key={category._id}
+                    href={`/categories/${category.slug}`}
+                    className={`flex-shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
+                      categoryData.slug === category.slug
+                        ? "text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    style={{
+                      backgroundColor:
+                        categoryData.slug === category.slug
+                          ? category.color
+                          : `${category.color}15`,
+                      color:
+                        categoryData.slug === category.slug
+                          ? "#ffffff"
+                          : category.color,
+                    }}
+                  >
+                    {category.title}
+                    {category.postCount > 0 && (
+                      <span className="ml-1 text-xs opacity-70">
+                        ({category.postCount})
+                      </span>
+                    )}
+                  </a>
+                ))}
+              {sidebarLoading &&
+                [...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex-shrink-0 w-16 sm:w-20 h-6 sm:h-8 bg-muted animate-pulse rounded-full"
+                  />
+                ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile-only Trending Posts Banner */}
+      {/* {!sidebarLoading && trendingPosts.length > 0 && (
+        <div className="lg:hidden">
+          <TrendingPostsMarquee posts={trendingPosts} title="Trending Now" />
+        </div>
+      )} */}
+
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           {/* Posts Content - 3/4 width */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-3 space-y-6 sm:space-y-8">
             {/* Search Bar and Content Header */}
-            <div className="space-y-6">
-              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-                <div className="space-y-1">
-                  <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="flex flex-col gap-4 items-start justify-between">
+                <div className="space-y-1 w-full">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
                     {searchQuery ? "Search Results" : `Latest Stories`}
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     {searchQuery
                       ? `${filteredPosts.length} stories found${searchQuery ? ` for "${searchQuery}"` : ""}`
                       : `${totalPosts} climate stories in ${categoryData.title}`}
@@ -410,15 +491,15 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               </div>
 
               {/* Search Bar */}
-              <div className="relative w-full max-w-md">
+              <div className="relative w-full sm:max-w-md">
                 <input
                   type="text"
                   placeholder={`Search in ${categoryData.title}...`}
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
-                  className="w-full px-4 py-3 pl-12 pr-10 bg-card border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 shadow-sm"
+                  className="w-full px-4 py-3 pl-11 sm:pl-12 pr-10 bg-card border border-border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 shadow-sm text-sm sm:text-base"
                 />
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                 {searchQuery && (
                   <button
                     onClick={handleClearSearch}
@@ -437,7 +518,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
                 {/* Pagination - only show when not searching and there are multiple pages */}
                 {totalPages > 1 && searchQuery === "" && !loading && (
-                  <div className="flex justify-center pt-8">
+                  <div className="flex justify-center pt-6 sm:pt-8">
                     <Pagination
                       currentPage={currentPage}
                       totalPages={totalPages}
@@ -447,7 +528,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                 )}
               </>
             ) : (
-              <div className="py-12">
+              <div className="py-8 sm:py-12">
                 <EmptyState
                   title={
                     searchQuery
@@ -467,8 +548,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           </div>
 
           {/* Sidebar - 1/4 width */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8">
+          <div className="lg:col-span-1 order-first lg:order-last hidden lg:block">
+            <div className="lg:sticky lg:top-8">
               {sidebarLoading ? (
                 <SidebarSkeleton />
               ) : (
@@ -497,70 +578,70 @@ function CategoryPageSkeleton() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header Skeleton */}
-      <div className="relative bg-gradient-to-br from-background via-background/95 to-primary/5 border-b border-border pt-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-          <div className="h-5 w-48 bg-muted animate-pulse rounded mb-8" />
+      <div className="relative bg-gradient-to-br from-background via-background/95 to-primary/5 border-b border-border pt-6 sm:pt-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+          <div className="h-4 sm:h-5 w-32 sm:w-48 bg-muted animate-pulse rounded mb-6 sm:mb-8" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            <div className="lg:col-span-3 space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="h-7 w-24 bg-muted animate-pulse rounded" />
-                <div className="h-6 w-20 bg-muted animate-pulse rounded" />
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 items-start">
+            <div className="lg:col-span-3 space-y-4 sm:space-y-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="h-6 sm:h-7 w-20 sm:w-24 bg-muted animate-pulse rounded" />
+                <div className="h-5 sm:h-6 w-16 sm:w-20 bg-muted animate-pulse rounded" />
               </div>
 
-              <div className="space-y-4">
-                <div className="h-12 md:h-16 w-full max-w-lg bg-muted animate-pulse rounded" />
+              <div className="space-y-3 sm:space-y-4">
+                <div className="h-8 sm:h-10 md:h-12 lg:h-16 w-full max-w-md sm:max-w-lg bg-muted animate-pulse rounded" />
                 <div className="space-y-2">
-                  <div className="h-6 w-full max-w-3xl bg-muted animate-pulse rounded" />
-                  <div className="h-6 w-80 bg-muted animate-pulse rounded" />
+                  <div className="h-5 sm:h-6 w-full max-w-2xl sm:max-w-3xl bg-muted animate-pulse rounded" />
+                  <div className="h-5 sm:h-6 w-64 sm:w-80 bg-muted animate-pulse rounded" />
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className="h-20 w-36 bg-muted animate-pulse rounded-lg" />
-                <div className="h-20 w-36 bg-muted animate-pulse rounded-lg" />
+              <div className="flex gap-3 sm:gap-4">
+                <div className="h-16 sm:h-20 w-28 sm:w-36 bg-muted animate-pulse rounded-lg" />
+                <div className="h-16 sm:h-20 w-28 sm:w-36 bg-muted animate-pulse rounded-lg" />
               </div>
             </div>
 
-            <div className="lg:col-span-2">
-              <div className="aspect-[4/3] bg-muted animate-pulse rounded-2xl" />
+            <div className="lg:col-span-2 order-first lg:order-last">
+              <div className="aspect-[16/10] sm:aspect-[4/3] bg-muted animate-pulse rounded-xl sm:rounded-2xl" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Content Skeleton */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
-          <div className="lg:col-span-3 space-y-8">
-            <div className="space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
+          <div className="lg:col-span-3 space-y-6 sm:space-y-8">
+            <div className="space-y-4 sm:space-y-6">
               <div className="flex justify-between items-start">
                 <div className="space-y-2">
-                  <div className="h-8 w-64 bg-muted animate-pulse rounded" />
-                  <div className="h-5 w-48 bg-muted animate-pulse rounded" />
+                  <div className="h-6 sm:h-8 w-48 sm:w-64 bg-muted animate-pulse rounded" />
+                  <div className="h-4 sm:h-5 w-32 sm:w-48 bg-muted animate-pulse rounded" />
                 </div>
               </div>
-              <div className="h-12 w-80 bg-muted animate-pulse rounded-xl" />
+              <div className="h-10 sm:h-12 w-full sm:w-80 bg-muted animate-pulse rounded-lg sm:rounded-xl" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
                   className="bg-card border border-border rounded-lg overflow-hidden"
                 >
-                  <div className="h-48 bg-muted animate-pulse" />
-                  <div className="p-6 space-y-3">
-                    <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-                    <div className="h-6 w-full bg-muted animate-pulse rounded" />
-                    <div className="h-4 w-full bg-muted animate-pulse rounded" />
-                    <div className="h-4 w-3/4 bg-muted animate-pulse rounded" />
+                  <div className="h-40 sm:h-48 bg-muted animate-pulse" />
+                  <div className="p-4 sm:p-6 space-y-3">
+                    <div className="h-3 sm:h-4 w-20 sm:w-24 bg-muted animate-pulse rounded" />
+                    <div className="h-5 sm:h-6 w-full bg-muted animate-pulse rounded" />
+                    <div className="h-3 sm:h-4 w-full bg-muted animate-pulse rounded" />
+                    <div className="h-3 sm:h-4 w-3/4 bg-muted animate-pulse rounded" />
                     <div className="flex justify-between items-center pt-2">
                       <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 bg-muted animate-pulse rounded-full" />
-                        <div className="h-4 w-20 bg-muted animate-pulse rounded" />
+                        <div className="h-6 sm:h-8 w-6 sm:w-8 bg-muted animate-pulse rounded-full" />
+                        <div className="h-3 sm:h-4 w-16 sm:w-20 bg-muted animate-pulse rounded" />
                       </div>
-                      <div className="h-8 w-24 bg-muted animate-pulse rounded" />
+                      <div className="h-6 sm:h-8 w-20 sm:w-24 bg-muted animate-pulse rounded" />
                     </div>
                   </div>
                 </div>
@@ -568,7 +649,7 @@ function CategoryPageSkeleton() {
             </div>
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 order-first lg:order-last">
             <SidebarSkeleton />
           </div>
         </div>
@@ -580,29 +661,29 @@ function CategoryPageSkeleton() {
 // Sidebar loading skeleton
 function SidebarSkeleton() {
   return (
-    <div className="space-y-6">
-      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6">
-        <div className="h-6 w-32 bg-muted animate-pulse rounded mb-4" />
-        <div className="space-y-3">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6">
+        <div className="h-5 sm:h-6 w-24 sm:w-32 bg-muted animate-pulse rounded mb-3 sm:mb-4" />
+        <div className="space-y-2 sm:space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center gap-3 p-3">
-              <div className="w-12 h-12 bg-muted animate-pulse rounded-lg" />
+            <div key={i} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-muted animate-pulse rounded-lg" />
               <div className="flex-1">
-                <div className="h-4 w-20 bg-muted animate-pulse rounded mb-2" />
-                <div className="h-3 w-16 bg-muted animate-pulse rounded" />
+                <div className="h-3 sm:h-4 w-16 sm:w-20 bg-muted animate-pulse rounded mb-1 sm:mb-2" />
+                <div className="h-2 sm:h-3 w-12 sm:w-16 bg-muted animate-pulse rounded" />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6">
-        <div className="h-6 w-32 bg-muted animate-pulse rounded mb-4" />
-        <div className="space-y-3">
+      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6">
+        <div className="h-5 sm:h-6 w-24 sm:w-32 bg-muted animate-pulse rounded mb-3 sm:mb-4" />
+        <div className="space-y-2 sm:space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="p-3">
-              <div className="h-4 w-full bg-muted animate-pulse rounded mb-2" />
-              <div className="h-3 w-24 bg-muted animate-pulse rounded" />
+            <div key={i} className="p-2 sm:p-3">
+              <div className="h-3 sm:h-4 w-full bg-muted animate-pulse rounded mb-1 sm:mb-2" />
+              <div className="h-2 sm:h-3 w-20 sm:w-24 bg-muted animate-pulse rounded" />
             </div>
           ))}
         </div>

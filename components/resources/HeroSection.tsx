@@ -18,7 +18,10 @@ interface HeroSectionProps {
   onCategoryClick: (id: string) => void;
 }
 
-export default function HeroSection({ categories, onCategoryClick }: HeroSectionProps) {
+export default function HeroSection({
+  categories,
+  onCategoryClick,
+}: HeroSectionProps) {
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true, amount: 0.3 });
 
@@ -54,7 +57,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
               initial={{ opacity: 0, y: 20 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-              className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight flex gap-4 justify-center tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight flex gap-4 justify-center lg:justify-start tracking-tight"
             >
               <span className="block bg-gradient-to-r from-[#487052] to-[#509e8e] bg-clip-text text-transparent">
                 Resources
@@ -70,14 +73,16 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
               className="text-base sm:text-lg lg:text-xl text-[#575846] dark:text-[#eae4d2]/80 max-w-xl mx-auto lg:mx-0 leading-relaxed"
             >
-              The Órb Resources Hub brings you sustainable living guides, eco-friendly tips, climate tools, and resources to empower youth-driven change.
+              The Órb Resources Hub brings you sustainable living guides,
+              eco-friendly tips, climate tools, and resources to empower
+              youth-driven change.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              className="flex justify-center lg:justify-start"
+              className="flex w-full justify-center lg:justify-start"
             >
               <Button
                 size="lg"
@@ -99,7 +104,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl sm:rounded-3xl blur-xl"></div>
             <div className="relative bg-card/40 backdrop-blur-xl border border-border/50 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-md sm:max-w-2xl mx-auto lg:mx-0">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 mx-auto lg:mx-0">
                 {categories.map((category, index) => (
                   <motion.div
                     key={category.id}
@@ -115,7 +120,7 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
                       duration: 0.4,
                       ease: "easeOut",
                     }}
-                    className="flex flex-col items-center justify-center h-40 sm:h-48 lg:h-56 bg-card/50 border border-border/50 rounded-lg cursor-pointer hover:bg-[#487052]/10 hover:border-[#487052]/30 transition-all duration-300 p-4 sm:p-6 aspect-square relative overflow-hidden"
+                    className="flex flex-col items-center justify-center h-40 sm:h-48 lg:h-56 bg-card/50 border border-border/50 rounded-lg cursor-pointer hover:bg-[#487052]/10 hover:border-[#487052]/30 transition-all duration-300 p-4 sm:p-6 relative overflow-hidden"
                     onClick={() => onCategoryClick(category.id)}
                   >
                     <div className="mb-2 sm:mb-3 z-10">{category.icon}</div>
@@ -131,9 +136,9 @@ export default function HeroSection({ categories, onCategoryClick }: HeroSection
                       initial={{ opacity: 0, y: 20, height: 0 }}
                       whileHover={{ opacity: 1, y: 0, height: "auto" }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
-                      className="absolute inset-0 bg-card/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 z-20 rounded-lg"
+                      className="absolute inset-0 bg-card/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 z-20 rounded-lg pointer-events-none"
                     >
-                      <div className="text-center">
+                      <div className="text-center pointer-events-auto">
                         <p className="text-xs sm:text-sm text-[#575846] dark:text-[#eae4d2]/80 mb-3 sm:mb-4">
                           {category.description}
                         </p>

@@ -153,7 +153,7 @@ export default function LucyHero() {
                   <Link href="/posts" className="block w-full">
                     <Button className="w-full relative group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-full font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-500">
                       <span className="flex items-center gap-2">
-                        Explore
+                        Explore Posts
                         <Sparkles className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </Button>

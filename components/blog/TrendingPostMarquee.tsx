@@ -29,7 +29,7 @@ export function TrendingPostsMarquee({
     return (
       <Card className="bg-card/50 backdrop-blur-sm border-border">
         <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-lg">
+          <CardTitle className="flex items-center mt-4 gap-2 text-lg">
             <TrendingUp className="h-5 w-5 text-primary" />
             {title}
           </CardTitle>
@@ -46,7 +46,7 @@ export function TrendingPostsMarquee({
   return (
     <Card className="bg-card/50 backdrop-blur-sm border border-border hover:shadow-md transition-shadow duration-300">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
+        <CardTitle className="flex mt-4 items-center gap-2 text-lg">
           <TrendingUp className="h-5 w-5 text-primary" />
           {title}
         </CardTitle>
