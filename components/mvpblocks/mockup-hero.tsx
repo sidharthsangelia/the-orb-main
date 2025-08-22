@@ -115,11 +115,9 @@ export default function LucyHero() {
               >
                 <h2 className="text-foreground mb-6 text-4xl sm:text-3xl leading-tight font-bold tracking-tight">
                   <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                   Youth-Led
+                    Youth-Led
                   </span>{" "}
-                  <span className="block">
-                    Action for a
-                  </span>{" "}
+                  <span className="block">Action for a</span>{" "}
                   <span className="block">Sustainable India</span>
                 </h2>
               </motion.div>
@@ -171,7 +169,7 @@ export default function LucyHero() {
                       className="w-full group px-6 py-3 border-2 border-primary/30 bg-background/50 rounded-full text-primary hover:text-primary backdrop-blur-sm font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
                     >
                       <span className="flex items-center gap-2 justify-center">
-                        Learn More{" "}
+                        Learn More Now{" "}
                         <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </Button>
@@ -231,11 +229,9 @@ export default function LucyHero() {
               >
                 <h2 className="text-foreground mb-6 text-4xl xl:text-6xl leading-tight font-bold tracking-tight">
                   <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Youth-Led 
+                    Youth-Led
                   </span>{" "}
-                  <span className="block sm:inline">
-                    Movement for a
-                  </span>{" "}
+                  <span className="block sm:inline">Movement for a</span>{" "}
                   <span className="block sm:inline">Sustainable India</span>
                 </h2>
               </motion.div>
@@ -269,7 +265,7 @@ export default function LucyHero() {
                   <Link href="/posts">
                     <Button className="relative group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-full font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-500 hover:scale-105">
                       <span className="flex items-center gap-2">
-                        Explore
+                        Explore Posts
                         <Sparkles className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </Button>
@@ -287,7 +283,7 @@ export default function LucyHero() {
                       className="group px-8 py-4 border-2 border-primary/30 bg-background/50 rounded-full text-primary hover:text-primary backdrop-blur-sm font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
                     >
                       <span className="flex items-center gap-2 justify-center">
-                        Learn More{" "}
+                        Learn More Now{" "}
                         <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </Button>
