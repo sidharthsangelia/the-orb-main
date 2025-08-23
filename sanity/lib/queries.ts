@@ -212,7 +212,30 @@ export const searchPostsQuery = defineQuery(`
 `);
 
 // Your existing queries (keeping them as reference)
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]`);
+// export const settingsQuery = defineQuery(`*[_type == "settings"][0]`);
+
+export const settingsQuery = defineQuery(`
+  *[_type == "settings"][0]{
+    title,
+    description,
+    logo,
+    ogImage{
+      asset,
+      alt
+    },
+    socialLinks,
+    contactEmail,
+    phoneNumber,
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    zipCode,
+    country,
+    googleMapsLink,
+    metadataBase
+  }
+`);
 
 export const heroQuery = defineQuery(`
   *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {

@@ -108,8 +108,8 @@ const footerData = {
                   
           <SpeedInsights />
             
-        </body>
           <GoogleAnalytics gaId="G-QWJWTC258D" />
+        </body>
     </html>
   );
 }
