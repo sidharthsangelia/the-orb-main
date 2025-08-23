@@ -15,7 +15,7 @@ import { resolveOpenGraphImage, urlForImage } from "@/sanity/lib/utils";
 import Header1 from "@/components/mvpblocks/header-1";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
-
+import { GoogleAnalytics } from '@next/third-parties/google'
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch({
     query: settingsQuery,
@@ -109,6 +109,7 @@ const footerData = {
           <SpeedInsights />
             
         </body>
+          <GoogleAnalytics gaId="G-QWJWTC258D" />
     </html>
   );
 }

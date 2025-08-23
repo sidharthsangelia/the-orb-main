@@ -169,7 +169,7 @@ export default function LucyHero() {
                       className="w-full group px-6 py-3 border-2 border-primary/30 bg-background/50 rounded-full text-primary hover:text-primary backdrop-blur-sm font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
                     >
                       <span className="flex items-center gap-2 justify-center">
-                        Learn More Now{" "}
+                        Learn More{" "}
                         <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </Button>
@@ -283,7 +283,7 @@ export default function LucyHero() {
                       className="group px-8 py-4 border-2 border-primary/30 bg-background/50 rounded-full text-primary hover:text-primary backdrop-blur-sm font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300"
                     >
                       <span className="flex items-center gap-2 justify-center">
-                        Learn More Now{" "}
+                        Learn More{" "}
                         <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </Button>
