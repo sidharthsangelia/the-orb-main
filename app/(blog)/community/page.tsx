@@ -13,7 +13,7 @@ import { CTA } from "@/components/about/Cta";
 
 export const metadata: Metadata = {
   title: "Community",
-  description: "...",
+  description: "Join India's most vibrant community of planet-conscious youth transforming climate awareness into actionable change.",
 };
 
 const CommunityPage = async () => {

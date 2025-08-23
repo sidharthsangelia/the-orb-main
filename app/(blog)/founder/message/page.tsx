@@ -12,6 +12,33 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: "Founder's Message",
   description: "Read the inspiring message from our founder about our mission and vision.",
+   openGraph: {
+    url: 'https://the-orb-main.vercel.app/founder/message',
+    type: 'website',
+    title: "Founder's Message | The Órb",
+    description: "Read the inspiring message from our founder about our mission and vision.",
+    images: [
+      {
+        url: 'https://opengraph.b-cdn.net/production/images/6cf0a9a7-79cc-47ad-a56e-7cef2d83cd52.png?token=vgZ_ngIDrBQ1gd7C_aYrdbAaDjBzXGRCsHbPrhpkKHo&height=559&width=1200&expires=33291939294',
+        width: 1200,
+        height: 559,
+        alt: "Founder's Message - The Órb"
+      }
+    ],
+    siteName: 'The Órb',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@theorb', // Add your Twitter handle if you have one
+    title: "Founder's Message | The Órb",
+    description: "Read the inspiring message from our founder about our mission and vision.",
+    images: [
+      {
+        url: 'https://opengraph.b-cdn.net/production/images/6cf0a9a7-79cc-47ad-a56e-7cef2d83cd52.png?token=vgZ_ngIDrBQ1gd7C_aYrdbAaDjBzXGRCsHbPrhpkKHo&height=559&width=1200&expires=33291939294',
+        alt: "Founder's Message - The Órb"
+      }
+    ]
+  },
 };
 
 const portableTextComponents = {
