@@ -145,12 +145,14 @@ export default async function AboutUs() {
       <BackgroundPattern />
       
       <div className="relative z-10 container mx-auto max-w-7xl px-4 md:px-6">
-        {/* Hero Section */}
-        <HeroSection 
-          title={data.title}
-          tagline={data.tagline}
-          introText={data.introText}
-        />
+        {/* Hero Section with higher z-index */}
+        
+          <HeroSection 
+            title={data.title}
+            tagline={data.tagline}
+            introText={data.introText}
+          />
+        
         
         {/* Stats Section */}
         <StatsSection stats={data.stats} />
@@ -171,7 +173,9 @@ export default async function AboutUs() {
         <JourneyTimeline journey={data.journey} />
                 
         {/* Call to Action */}
-        <CTA />
+        <div className="relative z-20">
+          <CTA />
+        </div>
       </div>
     </section>
   );

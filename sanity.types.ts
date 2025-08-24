@@ -784,6 +784,23 @@ export type PostSlugsResult = Array<{
   slug: string | null;
 }>;
 
+// Source: ./app/sitemap.ts
+// Variable: sitemapPostsQuery
+// Query: *[_type == "post" && defined(slug.current)] {    "slug": slug.current,    _updatedAt,    date,    _id  } | order(date desc, _updatedAt desc)
+export type SitemapPostsQueryResult = Array<{
+  slug: string | null;
+  _updatedAt: string;
+  date: string | null;
+  _id: string;
+}>;
+// Variable: allCategoriesQuery
+// Query: *[_type == "category" && defined(slug.current)] {    "slug": slug.current,    _updatedAt,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])  }
+export type AllCategoriesQueryResult = Array<{
+  slug: string | null;
+  _updatedAt: string;
+  postCount: number;
+}>;
+
 // Source: ./sanity/lib/queries.ts
 // Variable: guidesQuery
 // Query: *["guides" in categories[]->slug.current && status == "published"]{  _id,  title,  "slug": slug.current,  "description": coalesce(excerpt, ""),  "image": coverImage.asset->url,  "type": type,  "downloadCount": downloadCount,  "category": categories[0]->title,   author-> {      name,      picture    },}
@@ -2015,6 +2032,8 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"post\" && defined(slug.current)]{\"slug\": slug.current}": PostSlugsResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] {\n    \"slug\": slug.current,\n    _updatedAt,\n    date,\n    _id\n  } | order(date desc, _updatedAt desc)\n": SitemapPostsQueryResult;
+    "\n  *[_type == \"category\" && defined(slug.current)] {\n    \"slug\": slug.current,\n    _updatedAt,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  }\n": AllCategoriesQueryResult;
     "\n*[\"guides\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"type\": type,\n  \"downloadCount\": downloadCount,\n  \"category\": categories[0]->title,\n   author-> {\n      name,\n      picture\n    },\n}\n": GuidesQueryResult;
     "\n*[_type == \"post\" && \"education\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"type\": type,\n  \"duration\": duration,\n  \"level\": level,\n  author-> {\n      name,\n      picture\n    },\n}\n": EducationQueryResult;
     "\n*[_type == \"post\" && \"climate-stories\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  organization,\n  impact,\n  readTime,\n  date,\n  author-> {\n      name,\n      picture\n    },\n}\n": ClimateStoriesQueryResult;
