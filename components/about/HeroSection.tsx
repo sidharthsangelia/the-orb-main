@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sprout, ArrowRight } from 'lucide-react';
+import Link from "next/link";
 
 interface HeroSectionProps {
   title?: string;
@@ -20,14 +21,13 @@ export const HeroSection = ({ title, tagline, introText }: HeroSectionProps) => 
   const displayTagline = tagline || "Building Bridges Between Awareness & Action";
   const displayIntroText = introText || "We are The Órb - a dynamic media organization driven by youth, dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.";
 
-  // Split the title for styling - if it contains "Awareness & Action", split on that
   const titleParts = displayTitle.includes('Awareness & Action') 
     ? displayTitle.split('Awareness & Action')
     : [displayTitle];
 
   return (
-    <div ref={heroRef} className="mx-auto mb-20 max-w-5xl text-center">
-      <div className="absolute inset-0 overflow-hidden">
+    <div ref={heroRef} className="mx-auto mb-20 max-w-5xl text-center relative">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-accent/20 to-primary/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-conic from-primary/10 via-secondary/10 to-accent/10 rounded-full blur-3xl animate-spin-slow opacity-30"></div>
@@ -89,14 +89,14 @@ export const HeroSection = ({ title, tagline, introText }: HeroSectionProps) => 
         transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
         className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center"
       >
-        <Button 
-          size="lg"
-          onClick={() => window.open("https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true", "_blank")}
-          className="bg-gradient-to-r from-[#487052] to-[#509e8e] hover:from-[#487052]/90 hover:to-[#509e8e]/90 text-white border-0 px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+        <Link
+          
+          href="https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true"
+          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#487052] to-[#509e8e] hover:from-[#487052]/90 hover:to-[#509e8e]/90 text-white border-0 px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
         >
           Join Our Movement
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
+          <ArrowRight className="h-5 w-5 sm:h-5 sm:w-5" />
+        </Link>
       </motion.div>
     </div>
   );
