@@ -143,7 +143,7 @@ const CommunityPage = async () => {
         <CommunityRoles />
          
         {/* Testimonials Section */}
-        <TestimonialsSection data={pageData.testimonialsSection} />
+        {/* <TestimonialsSection data={pageData.testimonialsSection} /> */}
          
         {/* Achievements Showcase */}
         <Achievements data={pageData.achievementsSection} />
@@ -166,7 +166,7 @@ const CommunityPage = async () => {
         <CommunityRoles />
          
         {/* Testimonials Section */}
-        <TestimonialsSection data={defaultData.testimonialsSection} />
+        {/* <TestimonialsSection data={defaultData.testimonialsSection} /> */}
          
         {/* Achievements Showcase */}
         <Achievements data={defaultData.achievementsSection} />
