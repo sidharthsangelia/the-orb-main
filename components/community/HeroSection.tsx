@@ -48,7 +48,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
-          <div className="space-y-8 text-center lg:text-left">
+          <div className="space-y-8  text-center lg:text-left">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 mt-10 px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full border border-primary/30 mx-auto lg:mx-0">
                 <Leaf className="w-4 h-4 text-primary" />

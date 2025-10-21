@@ -1,5 +1,5 @@
 import WelcomeEmail from "@/email/WelcomeEmail";
-import { writeClient } from "@/sanity/lib/client";
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -13,18 +13,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // 1. Store subscriber in Sanity
-    await writeClient.create({
-      _type: "subscriber",
-      name,
-      email,
+
+    await prisma.subscriber.create({
+      data: {
+        email: email,
+        name: name,
+      },
     });
 
     // 2. Send Welcome Email
     await resend.emails.send({
-      from: "The Orb <onboarding@resend.dev>",
+      from: "Sameer from The Orb <sameer@theorbearth.in>",
       to: email,
-      subject: "Welcome to The Orb",
+      subject: "Welcome to The Orb | NewsLetter",
       react: WelcomeEmail({ name: name }),
     });
 

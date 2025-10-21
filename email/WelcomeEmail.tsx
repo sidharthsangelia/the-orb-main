@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  Html,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Heading,
-  Text,
-  Hr,
-  Section
-} from "@react-email/components";
+import { Html, Head, Preview, Body, Container, Text } from "@react-email/components";
 
 interface WelcomeEmailProps {
   name?: string;
@@ -18,26 +8,27 @@ interface WelcomeEmailProps {
 export const WelcomeEmail = ({ name }: WelcomeEmailProps) => (
   <Html>
     <Head />
-    <Preview>Welcome aboard — the countdown has begun! 🚀</Preview>
-    <Body style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f9f9f9", padding: "20px" }}>
-      <Container style={{ backgroundColor: "#ffffff", padding: "32px", borderRadius: "8px", maxWidth: "600px" }}>
-        <Heading style={{ color: "#111", fontSize: "24px" }}>
-          Hey {name || "there"} 🎉
-        </Heading>
+    <Preview>Welcome to The Orb 🌍</Preview>
+    <Body style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#ffffff", padding: "16px" }}>
+      <Container style={{ maxWidth: "600px", margin: "0 auto" }}>
         <Text style={{ fontSize: "16px", lineHeight: "24px", color: "#333" }}>
-          We’re absolutely thrilled you’ve joined our waitlist!  
-          Consider yourself part of an exclusive club — you’re in the front row for the big reveal on <strong>March 24th, 2026</strong>.
+          Hey {name || "there"},
         </Text>
+
         <Text style={{ fontSize: "16px", lineHeight: "24px", color: "#333" }}>
-          Until then, keep your eyes peeled, your curiosity ready,  
-          and maybe set a reminder (because what’s coming will be unforgettable).
+          Thanks for subscribing to <strong>The Orb</strong>!  
+          We’re excited to have you here.
         </Text>
+
         <Text style={{ fontSize: "16px", lineHeight: "24px", color: "#333" }}>
-          We promise it’ll be worth the wait. And if it’s not, we’ll… well, we’ll still think it’s amazing.
+          You’ll start getting our latest thoughts, updates, and stories soon.
+          In the meantime, feel free to reply and say hi — we actually read every message.
         </Text>
-        <Hr />
-        <Text style={{ fontSize: "14px", color: "#777" }}>
-          See you on launch day — The Orb 🌱
+
+        <Text style={{ fontSize: "14px", color: "#555", marginTop: "24px" }}>
+          Cheers,  
+          <br />
+          Sameer from The Orb 🌱
         </Text>
       </Container>
     </Body>
