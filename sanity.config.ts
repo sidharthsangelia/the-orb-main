@@ -31,6 +31,8 @@ import { founderMessage } from "./sanity/schemas/documents/founder";
 import communityRoles from "./sanity/schemas/documents/communityRoles";
 import { communityPageSchema } from "./sanity/schemas/documents/communityPage";
 import subscriber from "./sanity/schemas/singletons/subscriber";
+import { newsletter } from "./sanity/schemas/singletons/newsletter";
+ 
 
 const homeLocation = {
   title: "Home",
@@ -47,6 +49,7 @@ export default defineConfig({
       settings,
       partner,
       subscriber,
+      newsletter,
       // Documents
       post,
       author,
