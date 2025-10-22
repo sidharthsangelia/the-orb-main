@@ -34,7 +34,10 @@ export async function POST(req: NextRequest) {
     const isValid = await isValidSignature(body, signature, secret);
     if (!isValid) {
       console.warn("⚠️ Invalid webhook signature");
-      return NextResponse.json({ success: false, message: "Invalid signature" }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: "Invalid signature" },
+        { status: 401 }
+      );
     }
 
     // Parse the verified JSON payload
@@ -45,7 +48,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    console.log(`📨 Received verified newsletter "${title}" (${_id}) from Sanity`);
+    console.log(
+      `📨 Received verified newsletter "${title}" (${_id}) from Sanity`
+    );
 
     // Fetch all subscribers
     const subscribers = await prisma.subscriber.findMany();
@@ -58,30 +63,50 @@ export async function POST(req: NextRequest) {
     const htmlBody = renderEmailHTML(content);
 
     // Send emails
-    for (const sub of subscribers) {
-      await resend.emails.send({
-        from: "The Orb Weekly <sameer@theorbearth.in>",
-        to: sub.email,
-        subject,
-        html: htmlBody,
-      });
-    }
+    // for (const sub of subscribers) {
+    //   await resend.emails.send({
+    //     from: "The Orb Weekly <sameer@theorbearth.in>",
+    //     to: sub.email,
+    //     subject,
+    //     html: htmlBody,
+    //   });
+    // }
 
-    console.log(`✅ Newsletter "${title}" sent to ${subscribers.length} subscribers.`);
+
+    // this works for a list of 50-60 subs after it we need batching and other api limitng mehods
+    await Promise.all(
+      subscribers.map(async (sub) => {
+        try {
+          await resend.emails.send({
+            from: "The Orb Weekly <sameer@theorbearth.in>",
+            to: sub.email,
+            subject,
+            html: htmlBody,
+          });
+        } catch (err) {
+          console.error(`Failed to send to ${sub.email}`, err);
+        }
+      })
+    );
+
+    console.log(
+      `✅ Newsletter "${title}" sent to ${subscribers.length} subscribers.`
+    );
 
     return NextResponse.json({ success: true, sent: subscribers.length });
   } catch (error) {
     console.error("❌ Newsletter webhook error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
 /** Convert Sanity Portable Text blocks into minimal HTML */
 function renderEmailHTML(content: any[]): string {
   const textBlocks = content
-    .map((block) =>
-      block?.children?.map((child: any) => child.text).join(" ")
-    )
+    .map((block) => block?.children?.map((child: any) => child.text).join(" "))
     .join("<br/><br/>");
 
   return `
