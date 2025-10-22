@@ -1,6 +1,5 @@
 import WelcomeEmail from "@/email/WelcomeEmail";
 import prisma from "@/lib/prisma";
-
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -9,7 +8,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: Request) {
   try {
     const { name, email } = await req.json();
-
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
@@ -24,7 +22,7 @@ export async function POST(req: Request) {
     // Saving the subscriber in resend audience for brodcasting emails
 
     const { data, error } = await resend.contacts.create({
-      email: "steve.wozniak@gmail.com",
+      email: email,
       firstName: name,
       unsubscribed: false,
       audienceId: process.env.RESEND_AUDIENCE_ID as string,
