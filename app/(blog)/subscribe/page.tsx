@@ -53,25 +53,25 @@ export default function NewsletterSubscribe() {
     {
       icon: Newspaper,
       title: "Curated Reads",
-     
+
       color: "primary",
     },
     {
       icon: Globe,
       title: "Global Perspectives",
-     
+
       color: "secondary",
     },
     {
       icon: Heart,
       title: "Human Stories",
-     
+
       color: "primary",
     },
     {
       icon: Sparkles,
       title: "Exclusive Drops",
-      
+
       color: "secondary",
     },
   ];
@@ -99,35 +99,39 @@ export default function NewsletterSubscribe() {
 
           {/* 2x2 Grid Features */}
           {/* 2x2 Grid Features */}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 max-w-lg mx-auto md:mx-0">
-  {features.map((feature, idx) => (
-    <div
-      key={idx}
-      className="flex items-center justify-center sm:justify-start flex-col sm:flex-row text-center sm:text-left bg-card/30 border border-border/30 rounded-2xl p-4 backdrop-blur-sm hover:scale-[1.02] transition-transform duration-300"
-    >
-      <div
-        className={`flex items-center justify-center w-10 h-10 rounded-xl bg-${feature.color}/10 mb-3 sm:mb-0 sm:mr-3`}
-      >
-        <feature.icon
-          className={`w-5 h-5 text-${feature.color} flex-shrink-0`}
-        />
-      </div>
-      <div>
-        <h3 className="font-medium text-foreground">{feature.title}</h3>
-      </div>
-    </div>
-  ))}
-</div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 max-w-lg mx-auto md:mx-0">
+            {features.map((feature, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-center sm:justify-start flex-col sm:flex-row text-center sm:text-left bg-card/30 border border-border/30 rounded-2xl p-4 backdrop-blur-sm hover:scale-[1.02] transition-transform duration-300"
+              >
+                <div
+                  className={`flex items-center justify-center w-10 h-10 rounded-xl bg-${feature.color}/10 mb-3 sm:mb-0 sm:mr-3`}
+                >
+                  <feature.icon
+                    className={`w-5 h-5 text-${feature.color} flex-shrink-0`}
+                  />
+                </div>
+                <div>
+                  <h3 className="font-medium text-foreground">
+                    {feature.title}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Right side — Subscribe card */}
         <div className="flex-1 w-full max-w-md bg-card/40 backdrop-blur-xl border border-border/30 rounded-3xl shadow-xl p-8 md:p-10 space-y-6 text-center">
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <h2 className="text-xl font-medium">Subscribe to the Newsletter</h2>
+              <h2 className="text-xl font-medium">
+                Subscribe to the Newsletter
+              </h2>
               <p className="text-sm text-muted-foreground">
-                Join thousands of readers who receive our latest updates every month.
+                Join thousands of readers who receive our latest updates every
+                month.
               </p>
 
               <div className="flex flex-col gap-3 mt-4">

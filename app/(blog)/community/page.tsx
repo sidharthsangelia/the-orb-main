@@ -9,6 +9,7 @@ import { CommunityPageData } from "@/types/community";
 import { communityPageQuery } from "@/sanity/lib/queries";
 import { Metadata } from "next";
 import { CTA } from "@/components/about/Cta";
+import NewsletterHorizontalCard from "@/components/NewsletterCard";
 
 
 export const metadata: Metadata = {
@@ -150,6 +151,7 @@ const CommunityPage = async () => {
         
         {/* Enhanced CTA Section */}
         {/* <EnhancedCTA data={pageData.ctaSection} /> */}
+        <NewsletterHorizontalCard/>
         <CTA />
       </div>
     );

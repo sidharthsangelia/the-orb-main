@@ -11,18 +11,19 @@ import {
   tripleCardGridQuery,
 } from "@/sanity/lib/queries";
 import Onboarding from "@/components/onboarding";
- 
+
 import HeroPost from "@/components/landing/HeroPost";
- 
+
 import LucyHero from "@/components/mvpblocks/mockup-hero";
- 
+
 import { OurPartners } from "@/components/about/OurPartners";
 import { MissionVisionSection } from "@/components/about/MissionVision";
 import { StatsSection } from "@/components/about/Stats";
 import { CoreValuesSection } from "@/components/about/CoreValues";
 import { CTA } from "@/components/about/Cta";
- 
+
 import PostRowGrid from "@/components/TriplePostGrid";
+import NewsletterCard from "@/components/NewsletterCard";
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
@@ -52,52 +53,65 @@ function Intro(props: {
 }
 
 export default async function Page() {
-  const [settings, heroPost, heroPostGrid, tripleCardPosts, partners, aboutData] =
-    await Promise.all([
-      sanityFetch({
-        query: settingsQuery,
-      }),
-      sanityFetch({ query: heroQuery }),
-      sanityFetch({ query: heroPostsGridQuery }),
-      sanityFetch({ query: tripleCardGridQuery }),
-      sanityFetch({ query: partnersQuery }),
-      sanityFetch({ query: aboutPageQuery }),
-    ]);
+  const [
+    settings,
+    heroPost,
+    heroPostGrid,
+    tripleCardPosts,
+    partners,
+    aboutData,
+  ] = await Promise.all([
+    sanityFetch({
+      query: settingsQuery,
+    }),
+    sanityFetch({ query: heroQuery }),
+    sanityFetch({ query: heroPostsGridQuery }),
+    sanityFetch({ query: tripleCardGridQuery }),
+    sanityFetch({ query: partnersQuery }),
+    sanityFetch({ query: aboutPageQuery }),
+  ]);
 
   // Fallback data in case Sanity data is not available
   const defaultData = {
     title: "Building Bridges Between Awareness & Action",
     tagline: "Building Bridges Between Awareness & Action",
-    introText: "We are The Órb - a dynamic media organization driven by youth, dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.",
+    introText:
+      "We are The Órb - a dynamic media organization driven by youth, dedicated to promoting sustainability in India. We transform climate discussions into actionable solutions.",
     stats: [
       { value: "94%", label: "Youth Aware of Climate Change" },
       { value: "50,000+", label: "Youth Engaged" },
       { value: "200+", label: "Stories Published" },
-      { value: "25+", label: "Cities Reached" }
+      { value: "25+", label: "Cities Reached" },
     ],
-    mission: "To empower businesses and communities with innovative digital solutions that drive sustainable growth, enhance user experiences, and create lasting environmental value in India's evolving green economy. We connect climate awareness with tangible action through youth-driven initiatives.",
-    vision: "India is at a pivotal moment regarding its climate future. We envision a generation of empowered youth leading India's green transformation, where sustainable living is essential, not a privilege. We are the bridge between climate awareness and scalable action.",
+    mission:
+      "To empower businesses and communities with innovative digital solutions that drive sustainable growth, enhance user experiences, and create lasting environmental value in India's evolving green economy. We connect climate awareness with tangible action through youth-driven initiatives.",
+    vision:
+      "India is at a pivotal moment regarding its climate future. We envision a generation of empowered youth leading India's green transformation, where sustainable living is essential, not a privilege. We are the bridge between climate awareness and scalable action.",
     coreValues: [
       {
         title: "Planet First",
-        description: "Every decision we make prioritizes environmental impact and sustainability for future generations.",
-        icon: "Leaf"
+        description:
+          "Every decision we make prioritizes environmental impact and sustainability for future generations.",
+        icon: "Leaf",
       },
       {
         title: "Youth Empowerment",
-        description: "We believe young voices are the catalyst for meaningful climate action and systemic change.",
-        icon: "Users"
+        description:
+          "We believe young voices are the catalyst for meaningful climate action and systemic change.",
+        icon: "Users",
       },
       {
         title: "Authentic Storytelling",
-        description: "We share real stories from the ground to humanize climate issues and inspire genuine action.",
-        icon: "Heart"
+        description:
+          "We share real stories from the ground to humanize climate issues and inspire genuine action.",
+        icon: "Heart",
       },
       {
         title: "Knowledge for Action",
-        description: "We transform complex climate science into accessible, actionable knowledge for everyday implementation.",
-        icon: "Lightbulb"
-      }
+        description:
+          "We transform complex climate science into accessible, actionable knowledge for everyday implementation.",
+        icon: "Lightbulb",
+      },
     ],
   };
 
@@ -111,7 +125,7 @@ export default async function Page() {
   return (
     <div className="  min-h-screen w-full   ">
       {/* <Intro title={settings?.title} description={settings?.description} /> */}
- 
+
       <div className=" w-full max-w-full   ">
         <LucyHero />
         <OurPartners partners={partners} />
@@ -124,7 +138,7 @@ export default async function Page() {
           }))}
         />
 
-              {heroPost ? (
+        {heroPost ? (
           <>
             {/* Blog Section Heading + CTA */}
             <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-20 text-center">
@@ -132,7 +146,8 @@ export default async function Page() {
                 Voices for a Sustainable Future
               </h2>
               <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                Explore stories from young changemakers driving climate action across India.
+                Explore stories from young changemakers driving climate action
+                across India.
               </p>
               {/* <div className="mt-6">
                 <Link href="/posts">
@@ -166,7 +181,7 @@ export default async function Page() {
           <Onboarding />
         )}
 
-
+        <NewsletterCard />
         <CoreValuesSection
           coreValues={safeCoreValues.map((cv: any) => ({
             title: cv.title ?? "",
