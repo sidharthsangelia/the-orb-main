@@ -432,7 +432,6 @@ export type Newsletter = {
     _key: string;
   }>;
   status?: "draft" | "scheduled" | "sent";
-  sendAt?: string;
 };
 
 export type Subscriber = {

@@ -1,5 +1,6 @@
 import WelcomeEmail from "@/email/WelcomeEmail";
 import prisma from "@/lib/prisma";
+
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -22,12 +23,13 @@ export async function POST(req: Request) {
 
     // Saving the subscriber in resend audience for brodcasting emails
 
-    await resend.contacts.create({
-      email: email,
+    const { data, error } = await resend.contacts.create({
+      email: "steve.wozniak@gmail.com",
       firstName: name,
       unsubscribed: false,
-      audienceId: "1d4daa2f-f627-42a8-9985-d6956ea81edc",
+      audienceId: process.env.RESEND_AUDIENCE_ID as string,
     });
+    console.log(data, error);
 
     // 2. Send Welcome Email
     await resend.emails.send({
