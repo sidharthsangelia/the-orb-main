@@ -13,12 +13,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-
     await prisma.subscriber.create({
       data: {
         email: email,
         name: name,
       },
+    });
+
+    // Saving the subscriber in resend audience for brodcasting emails
+
+    await resend.contacts.create({
+      email: email,
+      firstName: name,
+      unsubscribed: false,
+      audienceId: "1d4daa2f-f627-42a8-9985-d6956ea81edc",
     });
 
     // 2. Send Welcome Email
