@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, ArrowRight, Leaf, Globe, BookOpen, Camera, Users } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight, Leaf, Globe, BookOpen, Camera, Users, ReceiptText } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import * as demo from "@/sanity/lib/demo";
 import Image from "next/image";
 import ThemeToggleButton from "../ui/theme-toggle-button";
+import { usePathname } from "next/navigation";
 import { ThemeToggler } from "../ThemeToggler";
 
 interface NavItem {
@@ -92,6 +93,9 @@ export default function Header(props: {
       backdropFilter: "none",
     };
   };
+
+  const pathname = usePathname();
+  const issubscribePage = pathname === "/subscribe";
 
   return (
     <motion.header
@@ -211,14 +215,17 @@ export default function Header(props: {
                 <ThemeToggleButton/>
             
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                href="https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true"
+              { !issubscribePage && (
+                <Link
+                href="/subscribe"
                 className="inline-flex items-center space-x-2 rounded-full bg-gradient-to-r from-[#487052] to-[#509e8e] px-6 py-2.5 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-[#487052]/25 relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#509e8e] to-[#487052] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="relative">Join Movement</span>
-                <Leaf className="h-4 w-4 relative" />
+                <span className="relative">Join Our Newsletter</span>
+                <ReceiptText className="h-4 w-4 relative" />
               </Link>
+              )}
+              
             </motion.div>
           </div>
 
