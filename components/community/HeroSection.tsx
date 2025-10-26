@@ -37,7 +37,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
   }));
 
   return (
-    <section className="relative flex items-center pt-12 sm:pt-16 md:pt-20 lg:pt-24">
+    <section className="relative flex items-center pt-12 sm:pt-12 md:pt-16 lg:pt-20">
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 left-10 w-40 h-40 sm:w-64 sm:h-64 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse"></div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, User, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Mail, User, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
@@ -52,7 +52,7 @@ export default function NewsletterHorizontalCard() {
   return (
     <div className="relative w-[90%] my-16 max-w-6xl mx-auto bg-card/50 backdrop-blur-xl border border-border/30 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row items-stretch">
       
-      {/* Left section: Text & background image */}
+      {/* Left section — Text & background */}
       <div
         className="flex-1 relative px-6 py-8 md:px-10 md:py-14 flex flex-col justify-center rounded-3xl space-y-5 text-white"
         style={{
@@ -61,25 +61,23 @@ export default function NewsletterHorizontalCard() {
           backgroundPosition: "center",
         }}
       >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/90 md:bg-black/80 rounded-3xl"></div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/85 md:bg-black/80 rounded-3xl"></div>
 
-        {/* Content */}
         <div className="relative z-10 max-w-full md:max-w-md">
-          <span className="flex items-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Stay in the Loop
-            </h2>
-            <span className="text-2xl sm:text-3xl ml-2">🌱</span>
-          </span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Go beyond surface-level climate stories.
+          </h2>
           <p className="text-sm sm:text-base md:text-base leading-relaxed mt-2 max-w-full">
-            Subscribe to our newsletter for curated stories, insights, and creative updates.
-            Or connect with us on social media to never miss the latest.
+            Subscribe to <span className="font-semibold text-primary">The Órb</span> for stories on climate justice, sustainability, and changemakers shaping the Global South.
+          </p>
+          <p className="text-xs text-muted-foreground mt-2 italic">
+            Don’t just read about change — be part of it.
           </p>
         </div>
       </div>
 
-      {/* Right section: Form + socials */}
+      {/* Right section — Form + socials */}
       <div className="flex-1 px-6 py-8 md:px-10 md:py-14 flex flex-col justify-center space-y-5 bg-card/60">
         {!submitted ? (
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -137,7 +135,7 @@ export default function NewsletterHorizontalCard() {
 
         {/* Social Icons */}
         <div className="flex items-center justify-center gap-4">
-          {[ 
+          {[
             { Icon: Instagram, href: "https://www.instagram.com/theorb.official?theme=dark", label: "Instagram" },
             { Icon: Linkedin, href: "https://www.linkedin.com/company/the-orb-cloud", label: "LinkedIn" },
           ].map(({ Icon, href, label }) => (

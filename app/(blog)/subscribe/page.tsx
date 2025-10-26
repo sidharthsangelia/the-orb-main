@@ -52,26 +52,22 @@ export default function NewsletterSubscribe() {
   const features = [
     {
       icon: Newspaper,
-      title: "Curated Reads",
-
+      title: "Stories on climate justice, sustainability, and changemakers",
       color: "primary",
     },
     {
       icon: Globe,
-      title: "Global Perspectives",
-
+      title: "Grassroots and Indigenous voices from the Global South",
       color: "secondary",
     },
     {
       icon: Heart,
-      title: "Human Stories",
-
+      title: "Campaign updates, workshops, and real impact opportunities",
       color: "primary",
     },
     {
       icon: Sparkles,
-      title: "Exclusive Drops",
-
+      title: "A youth-led community turning awareness into action",
       color: "secondary",
     },
   ];
@@ -88,18 +84,16 @@ export default function NewsletterSubscribe() {
       <div className="relative z-10 flex flex-col-reverse md:flex-row items-center justify-between w-full max-w-6xl px-6 md:px-10 py-24 md:py-28 gap-12 md:gap-20">
         {/* Left content */}
         <div className="flex-1 space-y-8 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Stay in the Loop
+          <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Tired of surface-level climate content? We go deeper.
           </h1>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-md mx-auto md:mx-0">
-            Subscribe to our newsletter and get insights, updates, and stories
-            from the creative world. Expect thoughtfully crafted content — never
-            spam.
+            The future isn't waiting, and neither should you. Subscribe to The
+            Órb and get:
           </p>
 
           {/* 2x2 Grid Features */}
-          {/* 2x2 Grid Features */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 max-w-lg mx-auto md:mx-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 max-w-lg mx-auto md:mx-0">
             {features.map((feature, idx) => (
               <div
                 key={idx}
@@ -113,25 +107,26 @@ export default function NewsletterSubscribe() {
                   />
                 </div>
                 <div>
-                  <h3 className="font-medium text-foreground">
+                  <h3 className="font-medium text-foreground text-sm">
                     {feature.title}
                   </h3>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* <p className="text-sm md:text-base text-muted-foreground pt-2 max-w-md mx-auto md:mx-0 italic">
+            Don't just read about change. Be part of it. Subscribe now.
+          </p> */}
         </div>
 
         {/* Right side — Subscribe card */}
         <div className="flex-1 w-full max-w-md bg-card/40 backdrop-blur-xl border border-border/30 rounded-3xl shadow-xl p-8 md:p-10 space-y-6 text-center">
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <h2 className="text-xl font-medium">
-                Subscribe to the Newsletter
-              </h2>
+              <h2 className="text-xl font-medium">Subscribe to The Órb</h2>
               <p className="text-sm text-muted-foreground">
-                Join thousands of readers who receive our latest updates every
-                month.
+                Join a youth-led climate community and don't just read about change. Be part of it. Subscribe now!
               </p>
 
               <div className="flex flex-col gap-3 mt-4">
