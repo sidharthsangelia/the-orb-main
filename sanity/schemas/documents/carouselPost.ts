@@ -1,4 +1,3 @@
-// schemas/documents/carouselPost.ts
 import { ImagesIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
@@ -7,23 +6,17 @@ export default defineType({
   title: "Carousel Post",
   icon: ImagesIcon,
   type: "document",
+
   fields: [
+    // Title - for internal management
     defineField({
-      name: "title",  
+      name: "title",
       title: "Title",
       type: "string",
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "title",
-        maxLength: 96,
-      },
-      validation: (rule) => rule.required(),
-    }),
+
+    // Carousel slides
     defineField({
       name: "slides",
       title: "Carousel Slides",
@@ -38,31 +31,20 @@ export default defineType({
               name: "image",
               title: "Slide Image",
               type: "image",
-              options: {
-                hotspot: true,
-                accept: 'image/*'
-              },
-              fields: [
-                {
-                  name: "alt",
-                  type: "string",
-                  title: "Alternative text",
-                  validation: (rule) => rule.required(),
-                },
-              ],
+              options: { hotspot: true },
               validation: (rule) => rule.required(),
             }),
             defineField({
               name: "caption",
-              title: "Caption",
+              title: "Caption (optional, for internal purpose only)",
               type: "text",
-              rows: 3,
+              rows: 2,
             }),
             defineField({
               name: "order",
               title: "Order",
               type: "number",
-              description: "Order of this slide in the carousel",
+              description: "Set display order of this slide",
             }),
           ],
           preview: {
@@ -73,124 +55,41 @@ export default defineType({
             },
             prepare({ title, media, order }) {
               return {
-                title: title || "Untitled Slide",
-                subtitle: `Slide ${order || "No order"}`,
+                title: title || "Slide",
+                subtitle: order ? `Order: ${order}` : "No order",
                 media,
               };
             },
           },
         },
       ],
-      validation: (rule) => rule.required().min(1).max(10),
-    }),
-    defineField({
-      name: "description",
-      title: "Description",
-      type: "text",
-      rows: 4,
-      description: "Overall description of the carousel content",
-    }),
-    defineField({
-      name: "categories",
-      title: "Categories",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "category" }] }],
-    }),
-    defineField({
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [{ type: "string" }],
       options: {
-        layout: "tags",
+        sortable: true, // allows manual drag reordering in studio
       },
+      validation: (rule) => rule.required().min(1),
     }),
+
+    // Category reference
     defineField({
-      name: "author",
-      title: "Author",
+      name: "category",
+      title: "Category",
       type: "reference",
-      to: [{ type: "author" }],
+      to: [{ type: "category" }],
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "publishedAt",
-      title: "Published At",
-      type: "datetime",
-      initialValue: () => new Date().toISOString(),
-    }),
-    defineField({
-      name: "platforms",
-      title: "Posted On Platforms",
-      type: "array",
-      of: [
-        {
-          type: "string",
-        },
-      ],
-      options: {
-        list: [
-          { title: "Instagram", value: "instagram" },
-          { title: "LinkedIn", value: "linkedin" },
-          { title: "Twitter", value: "twitter" },
-          { title: "Facebook", value: "facebook" },
-        ],
-      },
-      description: "Which social platforms was this posted on?",
-    }),
-    defineField({
-      name: "engagement",
-      title: "Engagement Stats",
-      type: "object",
-      fields: [
-        defineField({
-          name: "likes",
-          title: "Likes",
-          type: "number",
-        }),
-        defineField({
-          name: "comments",
-          title: "Comments",
-          type: "number",
-        }),
-        defineField({
-          name: "shares",
-          title: "Shares",
-          type: "number",
-        }),
-      ],
-      description: "Track engagement from social platforms",
-    }),
-    defineField({
-      name: "featured",
-      title: "Featured Carousel",
-      type: "boolean",
-      initialValue: false,
-    }),
-    defineField({
-      name: "seo",
-      title: "SEO Settings",
-      type: "seo",
-    }),
   ],
-  orderings: [
-    {
-      title: "Published Date, New",
-      name: "publishedAtDesc",
-      by: [{ field: "publishedAt", direction: "desc" }],
-    },
-  ],
+
   preview: {
     select: {
       title: "title",
-      subtitle: "description",
       media: "slides.0.image",
       slideCount: "slides",
     },
-    prepare({ title, subtitle, media, slideCount }) {
+    prepare({ title, media, slideCount }) {
       const count = slideCount?.length || 0;
       return {
         title,
-        subtitle: `${count} slides - ${subtitle || ""}`,
+        subtitle: `${count} slides`,
         media,
       };
     },

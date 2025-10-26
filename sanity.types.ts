@@ -193,7 +193,6 @@ export type CarouselPost = {
   _updatedAt: string;
   _rev: string;
   title?: string;
-  slug?: Slug;
   slides?: Array<{
     image?: {
       asset?: {
@@ -205,7 +204,6 @@ export type CarouselPost = {
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
-      alt?: string;
       _type: "image";
     };
     caption?: string;
@@ -213,30 +211,12 @@ export type CarouselPost = {
     _type: "slide";
     _key: string;
   }>;
-  description?: string;
-  categories?: Array<{
+  category?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
-    _key: string;
     [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  tags?: Array<string>;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
   };
-  publishedAt?: string;
-  platforms?: Array<string>;
-  engagement?: {
-    likes?: number;
-    comments?: number;
-    shares?: number;
-  };
-  featured?: boolean;
-  seo?: Seo;
 };
 
 export type Category = {
@@ -1627,22 +1607,20 @@ export type CategoryQueryResult = {
 export type CarouselPostsQueryResult = Array<{
   _id: string;
   title: string | null;
-  slug: Slug | null;
+  slug: null;
   slides: Array<{
     image: {
       asset: {
         url: string | null;
       } | null;
-      alt: string | null;
+      alt: null;
     } | null;
     caption: string | null;
     order: number | null;
   }> | null;
-  description: string | null;
-  author: {
-    name: string | null;
-  } | null;
-  publishedAt: string | null;
+  description: null;
+  author: null;
+  publishedAt: null;
 }>;
 // Variable: sidebarCategoriesQuery
 // Query: *[_type == "category" && defined(slug.current)]   | order(order asc, title asc) [0...8] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    featured,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"])  }

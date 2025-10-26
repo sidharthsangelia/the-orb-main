@@ -24,6 +24,7 @@ import { CTA } from "@/components/about/Cta";
 
 import PostRowGrid from "@/components/TriplePostGrid";
 import NewsletterCard from "@/components/NewsletterCard";
+import CarouselPosts from "@/components/CarouselPosts";
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
@@ -131,6 +132,7 @@ export default async function Page() {
         <OurPartners partners={partners} />
 
         <MissionVisionSection />
+        <CarouselPosts/>
         <StatsSection
           stats={safeStats.map((stat: any) => ({
             value: stat.value ?? "",
