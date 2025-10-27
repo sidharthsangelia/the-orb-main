@@ -130,15 +130,15 @@ export default async function Page() {
       <div className=" w-full max-w-full   ">
         <LucyHero />
         <OurPartners partners={partners} />
-
-        <MissionVisionSection />
-        <CarouselPosts/>
+{/* 
+        <MissionVisionSection /> */}
         <StatsSection
           stats={safeStats.map((stat: any) => ({
             value: stat.value ?? "",
             label: stat.label ?? "",
           }))}
         />
+        <CarouselPosts/>
 
         {heroPost ? (
           <>
