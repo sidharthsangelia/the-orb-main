@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, User, Instagram, Linkedin } from "lucide-react";
+import { Mail, User, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
-export default function NewsletterHorizontalCard() {
+export default function HomepageNewsletterCard() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,142 +20,114 @@ export default function NewsletterHorizontalCard() {
     }
 
     setIsSubmitting(true);
-    setStatusMessage("");
-
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),
       });
-
       const data = await res.json();
-
       if (res.ok) {
         setSubmitted(true);
-        setStatusMessage("You're subscribed!");
+        toast.success("You’re subscribed! 👋");
         setName("");
         setEmail("");
-        toast.success("You’re subscribed. See you in your inbox 👋");
       } else {
-        setStatusMessage(data.error || "Something went wrong.");
-        toast.error("We hit a snag. Try again!");
+        toast.error(data.error || "Something went wrong.");
       }
-    } catch (error) {
-      setStatusMessage("Failed to subscribe. Please try again.");
-      toast.error("Network issue — please retry in a moment.");
+    } catch {
+      toast.error("Network issue — please retry.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="relative w-[90%] my-16 max-w-6xl mx-auto bg-card/50 backdrop-blur-xl border border-border/30 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row items-stretch">
-      
-      {/* Left section — Text & background */}
-      <div
-        className="flex-1 relative px-6 py-8 md:px-10 md:py-14 flex flex-col justify-center rounded-3xl space-y-5 text-white"
-        style={{
-          backgroundImage: "url('/abstractbg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/85 md:bg-black/80 rounded-3xl"></div>
+    <section
+      className="relative w-[92%] max-w-6xl mx-auto my-20 overflow-hidden rounded-3xl border border-border/40
+      bg-gradient-to-br from-background/80 via-card/70 to-background/90 backdrop-blur-xl
+      shadow-[0_8px_40px_-10px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_50px_-8px_rgba(0,0,0,0.35)]
+      transition-all duration-500 group"
+    >
+      {/* Subtle gradient border ring */}
+      <div className="absolute inset-0 rounded-3xl pointer-events-none border border-transparent bg-gradient-to-r from-primary/30 via-secondary/30 to-primary/30 opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
 
-        <div className="relative z-10 max-w-full md:max-w-md">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Go beyond surface-level climate stories.
+      {/* Light texture tint behind content */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary-rgb),0.05),transparent_70%)]" />
+
+      {/* Faint accent glows */}
+      <div className="absolute -top-12 -right-12 w-52 h-52 bg-gradient-to-tr from-primary/25 to-secondary/25 blur-3xl rounded-full opacity-50" />
+      <div className="absolute -bottom-12 -left-12 w-52 h-52 bg-gradient-to-tr from-secondary/20 to-primary/20 blur-3xl rounded-full opacity-50" />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10 px-8 md:px-12 py-14 md:py-16">
+        {/* Left Section */}
+        <div className="flex-1 text-center md:text-left space-y-4">
+          <p className="text-xs uppercase tracking-wider text-primary font-medium">
+            The Órb Newsletter
+          </p>
+          <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent leading-tight">
+            Go beyond the headlines.
           </h2>
-          <p className="text-sm sm:text-base md:text-base leading-relaxed mt-2 max-w-full">
-            Subscribe to <span className="font-semibold text-primary">The Órb</span> for stories on climate justice, sustainability, and changemakers shaping the Global South.
+          <p className="text-sm md:text-base text-muted-foreground/90 max-w-md mx-auto md:mx-0 leading-relaxed">
+            Subscribe for deep climate stories, bold perspectives, and changemakers driving sustainability across the Global South.
           </p>
-          <p className="text-xs text-muted-foreground mt-2 italic">
-            Don’t just read about change — be part of it.
+          <p className="text-xs text-muted-foreground/80 italic">
+            Be part of the conversation shaping our planet’s future 🌍
           </p>
         </div>
-      </div>
 
-      {/* Right section — Form + socials */}
-      <div className="flex-1 px-6 py-8 md:px-10 md:py-14 flex flex-col justify-center space-y-5 bg-card/60">
-        {!submitted ? (
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your Name"
-                className="w-full pl-10 pr-4 py-3 bg-card/70 border border-border/30 rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:border-primary/60 focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300"
-              />
-            </div>
+        {/* Right Section - Form */}
+        <div className="flex-1 w-full max-w-md">
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    className="w-full pl-9 pr-4 py-3 bg-card/60 border border-border/30 rounded-lg text-sm placeholder:text-muted-foreground/50 focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all duration-300"
+                  />
+                </div>
+                <div className="relative flex-1">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full pl-9 pr-4 py-3 bg-card/60 border border-border/30 rounded-lg text-sm placeholder:text-muted-foreground/50 focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all duration-300"
+                  />
+                </div>
+              </div>
 
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-3 bg-card/70 border border-border/30 rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:border-primary/60 focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300"
-              />
-            </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full mt-1 px-6 py-3 bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground rounded-lg font-medium flex items-center justify-center gap-2 hover:from-primary hover:to-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_-5px_rgba(var(--primary-rgb),0.4)]"
+              >
+                <Send className="w-4 h-4" />
+                {isSubmitting ? "Subscribing..." : "Subscribe Now"}
+              </Button>
 
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full mt-1 px-6 py-3 bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground rounded-xl font-semibold hover:from-primary hover:to-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? "Subscribing..." : "Subscribe Now"}
-            </Button>
-
-            {statusMessage && (
-              <p className="text-sm text-muted-foreground mt-1">
-                {statusMessage}
+              {statusMessage && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {statusMessage}
+                </p>
+              )}
+            </form>
+          ) : (
+            <div className="text-center py-8 rounded-lg border border-primary/20 bg-primary/5">
+              <p className="text-primary font-medium">
+                🎉 You’re subscribed! Check your inbox soon.
               </p>
-            )}
-          </form>
-        ) : (
-          <div className="py-6 text-center">
-            <p className="text-primary font-medium">
-              You’re subscribed! Check your inbox soon. 👋
-            </p>
-          </div>
-        )}
-
-        {/* Divider */}
-        <div className="relative flex items-center justify-center py-2">
-          <span className="absolute inset-x-0 h-px bg-border/30"></span>
-          <span className="relative px-3 text-xs text-muted-foreground bg-card/60">
-            or connect with us
-          </span>
+            </div>
+          )}
         </div>
-
-        {/* Social Icons */}
-        <div className="flex items-center justify-center gap-4">
-          {[
-            { Icon: Instagram, href: "https://www.instagram.com/theorb.official?theme=dark", label: "Instagram" },
-            { Icon: Linkedin, href: "https://www.linkedin.com/company/the-orb-cloud", label: "LinkedIn" },
-          ].map(({ Icon, href, label }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="p-3 rounded-xl bg-card/70 border border-border/30 hover:border-primary/50 hover:bg-card/80 transition-all duration-300 group"
-            >
-              <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-all duration-300" />
-            </a>
-          ))}
-        </div>
-
-        <p className="pt-2 text-xs text-muted-foreground text-center">
-          We respect your privacy. Unsubscribe anytime.
-        </p>
       </div>
-    </div>
+    </section>
   );
 }

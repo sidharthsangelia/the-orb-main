@@ -12,6 +12,7 @@ import {
 } from "@/sanity/lib/queries";
 import { client } from "@/sanity/lib/client";
 import { BookOpen, Leaf, Users, Lightbulb } from "lucide-react";
+import HomepageNewsletterCard from "../NewsletterCard";
 
 export default function ResourcesPageComponent() {
   const [guides, setGuides] = useState<any[]>([]);
@@ -100,9 +101,9 @@ export default function ResourcesPageComponent() {
       </div>
 
 
-      
-      <div className="py-20 " />
+      <HomepageNewsletterCard/>
       <CTA />
+      <div className="" />
     </div>
     
 

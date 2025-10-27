@@ -17,6 +17,7 @@ import { EmptyState } from "@/components/blog/EmptyState";
 import type { Post, PostsData, Category, TrendingPost } from "@/types/post";
 import { SearchResults } from "@/components/blog/SearchResult";
 import { TrendingPostsMarquee } from "@/components/blog/TrendingPostMarquee";
+import HomepageNewsletterCard from "../NewsletterCard";
 
 const POSTS_PER_PAGE = 12;
 
@@ -462,7 +463,7 @@ export default function AllPostsPage() {
       )}
 
       {/* Bottom CTA Section */}
-      {!loading && posts.length > 0 && <CTA />}
+      {!loading && posts.length > 0 &&<> <HomepageNewsletterCard/><CTA /></>}
     </div>
   );
 }

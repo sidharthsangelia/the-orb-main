@@ -15,6 +15,7 @@ import DateComponent from "@/components/date";
 import MoreStories from "@/components/more-stories";
 import CustomPortableText from "@/components/portable-text";
 import { CTA } from "@/components/about/Cta";
+import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -47,12 +48,12 @@ export async function generateMetadata(
     openGraph: {
       title: post?.title,
       description: post?.excerpt ?? undefined,
-      type: 'article',
+      type: "article",
       publishedTime: post?.date,
       authors: post?.author?.name ? [post?.author?.name] : [],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: post?.title,
       description: post?.excerpt ?? undefined,
     },
@@ -80,7 +81,6 @@ export default async function PostPage({ params }: Props) {
           {post.author && (
             <div className="flex items-center gap-3">
               <Avatar name={post.author.name} picture={post.author.picture} />
-             
             </div>
           )}
           {post.author && (
@@ -91,11 +91,7 @@ export default async function PostPage({ params }: Props) {
 
         {/* Cover Image */}
         <div className="mb-6">
-          <CoverImage
-            image={post.coverImage}
-            priority
-        
-          />
+          <CoverImage image={post.coverImage} priority />
         </div>
 
         {/* Blog Body */}
@@ -127,6 +123,7 @@ export default async function PostPage({ params }: Props) {
         </div>
       </section>
 
+      <NewsletterArticleCard />
       {/* CTA */}
       <div className="mt-12 sm:mt-16 flex justify-center">
         <CTA />

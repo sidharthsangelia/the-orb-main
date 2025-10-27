@@ -12,7 +12,7 @@ export default async function MoreStories(params: {
   const data = await sanityFetch({ query: moreStoriesQuery, params });
 
   return (
-    <section className="container mx-auto px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <section className="container mx-auto px-4 pb-4 sm:px-6 lg:px-8 lg:pt-8">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {data?.map((post) => {
           const { _id, title, slug, coverImage, excerpt, author } = post;

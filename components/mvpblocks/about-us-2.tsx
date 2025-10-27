@@ -9,6 +9,9 @@ import { StatsSection } from "../about/Stats";
 import { WhatWeDo } from "../about/WhatWeDo";
 import { sanityFetch } from '@/sanity/lib/fetch';
 import { aboutPageQuery } from '@/sanity/lib/queries';
+import NewsletterArticleCard from '../NewsLetterArticleCard';
+import NewsletterHomepageCard from '../NewsLetterCardThin';
+import HomepageNewsletterCard from '../NewsletterCard';
 
 export default async function AboutUs() {
   const aboutPageResult = await sanityFetch({ 
@@ -171,7 +174,9 @@ export default async function AboutUs() {
         
         {/* Journey Timeline */}
         <JourneyTimeline journey={data.journey} />
-                
+
+        {/* <NewsletterHomepageCard/> */}
+                <HomepageNewsletterCard/>
         {/* Call to Action */}
         <div className="relative z-20">
           <CTA />
