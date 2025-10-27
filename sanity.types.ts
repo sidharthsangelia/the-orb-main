@@ -786,13 +786,6 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes = CommunityPage | CommunityRole | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Newsletter | Subscriber | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./app/(blog)/posts/[slug]/page.tsx
-// Variable: postSlugs
-// Query: *[_type == "post" && defined(slug.current)]{"slug": slug.current}
-export type PostSlugsResult = Array<{
-  slug: string | null;
-}>;
-
 // Source: ./app/sitemap.ts
 // Variable: sitemapPostsQuery
 // Query: *[_type == "post" && defined(slug.current)] {    "slug": slug.current,    _updatedAt,    date,    _id  } | order(date desc, _updatedAt desc)
@@ -2038,7 +2031,6 @@ export type ResourceDetailQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"post\" && defined(slug.current)]{\"slug\": slug.current}": PostSlugsResult;
     "\n  *[_type == \"post\" && defined(slug.current)] {\n    \"slug\": slug.current,\n    _updatedAt,\n    date,\n    _id\n  } | order(date desc, _updatedAt desc)\n": SitemapPostsQueryResult;
     "\n  *[_type == \"category\" && defined(slug.current)] {\n    \"slug\": slug.current,\n    _updatedAt,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  }\n": AllCategoriesQueryResult;
     "\n*[\"guides\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"type\": type,\n  \"downloadCount\": downloadCount,\n  \"category\": categories[0]->title,\n   author-> {\n      name,\n      picture\n    },\n}\n": GuidesQueryResult;

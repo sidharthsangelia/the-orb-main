@@ -16,6 +16,7 @@ import MoreStories from "@/components/more-stories";
 import CustomPortableText from "@/components/portable-text";
 import { CTA } from "@/components/about/Cta";
 import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
+import SocialShare from "@/components/blog/SocialShare";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -102,6 +103,11 @@ export default async function PostPage({ params }: Props) {
           />
         )}
       </article>
+
+      <SocialShare
+        url={`https://theorbearth.in/posts/${post.slug}`}
+        title={post.title}
+      />
 
       {/* Continue Reading */}
       <section className="py-12 sm:py-16">
