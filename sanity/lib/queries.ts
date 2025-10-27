@@ -108,7 +108,8 @@ const postFields = /* groq */ `
   "date": coalesce(date, _updatedAt),
   "author": author->{
     "name": coalesce(name, "Anonymous"), 
-    picture
+    picture,
+    bio
   },
   "category": category->{
     title,

@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { postQuery, settingsQuery } from "@/sanity/lib/queries";
-import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import { resolveOpenGraphImage, urlForImage } from "@/sanity/lib/utils";
 import Avatar from "@/components/avatar";
 import CoverImage from "@/components/cover-image";
 import DateComponent from "@/components/date";
@@ -17,6 +17,8 @@ import CustomPortableText from "@/components/portable-text";
 import { CTA } from "@/components/about/Cta";
 import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
 import SocialShare from "@/components/blog/SocialShare";
+import AuthorCard from "@/components/blog/AuthorCard";
+import Image from "next/image";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -108,6 +110,24 @@ export default async function PostPage({ params }: Props) {
         url={`https://theorbearth.in/posts/${post.slug}`}
         title={post.title}
       />
+
+      {/* Author Details Card */}
+
+      {post.author && (
+        <AuthorCard
+          name={post.author.name}
+          picture={
+            post.author.picture?.asset?._ref
+              ? (urlForImage(post.author.picture)
+                  ?.height(256)
+                  .width(256)
+                  .fit("crop")
+                  .url() as string)
+              : "/default-avatar.jpg"
+          }
+          bio={post.author.bio}
+        />
+      )}
 
       {/* Continue Reading */}
       <section className="py-12 sm:py-16">
