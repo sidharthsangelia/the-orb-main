@@ -77,6 +77,7 @@ export type CommunityRole = {
   color?: string;
   icon?: string;
   actions?: Array<string>;
+  joinTeamUrl?: string;
 };
 
 export type FounderMessage = {
@@ -1871,7 +1872,7 @@ export type FounderMessageBySlugQueryResult = {
 // Query: *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {    _id,    title,    showInstagram,    showLinkedin,    showTwitter,    "instagramPosts": instagramPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "linkedinPosts": linkedinPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "twitterPosts": twitterPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    lastUpdated,    _createdAt,    _updatedAt  }
 export type SocialMediaPostsQueryResult = null;
 // Variable: COMMUNITY_ROLES_QUERY
-// Query: *[_type == "communityRole"]{  key,  title,  impact,  description,  skills,  color,  icon,  actions} | order(title asc)
+// Query: *[_type == "communityRole"]{  key,  title,  impact,  description,  skills,  color,  icon,  actions,  joinTeamUrl} | order(title asc)
 export type COMMUNITY_ROLES_QUERYResult = Array<{
   key: string | null;
   title: string | null;
@@ -1881,6 +1882,7 @@ export type COMMUNITY_ROLES_QUERYResult = Array<{
   color: string | null;
   icon: string | null;
   actions: Array<string> | null;
+  joinTeamUrl: string | null;
 }>;
 // Variable: aboutPageQuery
 // Query: *[_type == "aboutPage"][0] {    title,    tagline,    introText,    stats[] {      value,      label    },    mission,    vision,    coreValues[] {      title,      description,      icon    },    whatWeDo[] {      title,      description,      icon    },    journey[] {      year,      title,      description    },    seoTitle,    seoDescription  }
@@ -2063,7 +2065,7 @@ declare module "@sanity/client" {
     "\n  *[_type == \"founderMessage\" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageQueryResult;
     "\n  *[_type == \"founderMessage\" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageBySlugQueryResult;
     "\n  *[_type == \"socialMediaPosts\"] | order(_createdAt desc) [0] {\n    _id,\n    title,\n    showInstagram,\n    showLinkedin,\n    showTwitter,\n    \"instagramPosts\": instagramPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    \"linkedinPosts\": linkedinPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    \"twitterPosts\": twitterPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    lastUpdated,\n    _createdAt,\n    _updatedAt\n  }\n": SocialMediaPostsQueryResult;
-    "\n*[_type == \"communityRole\"]{\n  key,\n  title,\n  impact,\n  description,\n  skills,\n  color,\n  icon,\n  actions\n} | order(title asc)\n": COMMUNITY_ROLES_QUERYResult;
+    "\n*[_type == \"communityRole\"]{\n  key,\n  title,\n  impact,\n  description,\n  skills,\n  color,\n  icon,\n  actions,\n  joinTeamUrl\n} | order(title asc)\n": COMMUNITY_ROLES_QUERYResult;
     "\n  *[_type == \"aboutPage\"][0] {\n    title,\n    tagline,\n    introText,\n    stats[] {\n      value,\n      label\n    },\n    mission,\n    vision,\n    coreValues[] {\n      title,\n      description,\n      icon\n    },\n    whatWeDo[] {\n      title,\n      description,\n      icon\n    },\n    journey[] {\n      year,\n      title,\n      description\n    },\n    seoTitle,\n    seoDescription\n  }\n": AboutPageQueryResult;
     "*[_type == \"communityPage\"][0] {\n  heroSection {\n    badge,\n    mainHeading,\n    secondaryHeading,\n    description,\n    joinMovementUrl,\n    founderMessageUrl,\n    impactStats[] {\n      value,\n      label,\n      icon\n    }\n  },\n  testimonialsSection {\n    title,\n    description,\n    testimonials[] {\n      name,\n      role,\n      content,\n      avatar\n    }\n  },\n  achievementsSection {\n    title,\n    description,\n    achievements[] {\n      title,\n      description,\n      icon\n    }\n  },\n  ctaSection {\n    title,\n    description,\n    primaryButtonText,\n    secondaryButtonText,\n    hashtags\n  }\n}": CommunityPageQueryResult;
     "\n  *[_type == \"post\" && categories[]->slug.current match $type && slug.current == $slug][0] {\n    _id,\n    title,\n    slug,\n    content,\n    excerpt,\n    coverImage {\n      asset-> {\n        url,\n        metadata {\n          lqip\n        }\n      },\n      alt\n    },\n    author-> {\n      name,\n      picture\n    },\n    date,\n    categories[]-> {\n      title,\n      slug\n    },\n    readingTime\n  }\n": ResourceDetailQueryResult;
