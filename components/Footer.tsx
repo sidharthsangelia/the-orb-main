@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import Link from "next/link";
 import { PortableText } from "@portabletext/react";
@@ -13,8 +14,11 @@ import {
   Facebook,
   Youtube,
   MessageCircle, // Threads
-  PenTool, // Pinterest/Dribbble
+  PenTool,
+  ReceiptText, // Pinterest/Dribbble
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import {motion} from "framer-motion";
 
 interface SocialLink {
   platform?: string;
@@ -109,6 +113,8 @@ export default function Footer({ siteSettings }: FooterProps) {
   };
 
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+  const issubscribePage = pathname === "/subscribe";
 
   return (
     <footer className="bg-[#0c0d0d] text-[#eae4d2] border-t border-[#575846]/20">
@@ -134,6 +140,22 @@ export default function Footer({ siteSettings }: FooterProps) {
                 {description}
               </p>
             )}
+          
+            <div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              { !issubscribePage && (
+                <Link
+                href="/subscribe"
+                className="inline-flex items-center space-x-2 rounded-full bg-gradient-to-r from-[#487052] to-[#509e8e] px-6 py-2.5 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-[#487052]/25 relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[#509e8e] to-[#487052] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative">Join Our Newsletter</span>
+                <ReceiptText className="h-4 w-4 relative" />
+              </Link>
+              )}
+              
+            </motion.div>
+            </div>
           </div>
 
           {/* Contact Information */}

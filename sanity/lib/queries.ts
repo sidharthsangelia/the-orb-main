@@ -308,6 +308,8 @@ export const categoryQuery = defineQuery(`
   }
 `);
 
+
+
 export const carouselPostsQuery =
   defineQuery(`*[_type == "carouselPost"] | order(publishedAt desc){
   _id,
@@ -663,7 +665,8 @@ export const COMMUNITY_ROLES_QUERY = defineQuery(
   skills,
   color,
   icon,
-  actions
+  actions,
+  joinTeamUrl
 } | order(title asc)
 `
 )

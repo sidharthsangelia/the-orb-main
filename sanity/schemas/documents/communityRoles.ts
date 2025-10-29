@@ -51,5 +51,11 @@ export default defineType({
       type: "array",
       of: [{ type: "string" }],
     }),
+    defineField({
+      name: "joinTeamUrl",
+      title: "Join Team URL",
+      type: "url",
+      initialValue: 'https://forms.google.com/your-form-link'
+    }),
   ],
 });

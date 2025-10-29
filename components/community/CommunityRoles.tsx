@@ -1,9 +1,11 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, ChevronRight, LucideIcon } from "lucide-react";
+import { CheckCircle, ChevronRight, LucideIcon, FileUser } from "lucide-react";
 import * as Icons from "lucide-react";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { COMMUNITY_ROLES_QUERY } from "@/sanity/lib/queries";
+import Link from "next/link";
+import { Url } from "next/dist/shared/lib/router/router";
 
 // Type definitions
 interface Role {
@@ -15,6 +17,7 @@ interface Role {
   color: string | null;
   skills?: string[] | null;
   actions?: string[] | null;
+  joinTeamUrl: string | null;
 }
 
 interface RoleData {
@@ -72,7 +75,7 @@ export const CommunityRoles = async () => {
           <div
             className={`absolute inset-0 bg-gradient-to-br ${role.color || 'from-primary to-secondary'} rounded-3xl blur-xl opacity-50`}
           ></div>
-          <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-8">
+          <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-6  mb-10">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h4 className="font-semibold">What You'll Do</h4>
@@ -87,6 +90,19 @@ export const CommunityRoles = async () => {
                 ))}
               </div>
             </div>
+          </div>
+          <div>
+            <Link
+                href={role.joinTeamUrl || ''}
+                className="flex items-center justify-center"
+              >
+                <button className="group px-6 py-3 border-2 border-primary/30 bg-background/50 rounded-full backdrop-blur-sm font-semibold hover:border-primary hover:bg-primary/5 transition-all duration-300 w-full sm:w-auto">
+                  <span className="flex items-center justify-center gap-2">
+                    <FileUser className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <span>Apply now</span>
+                  </span>
+                </button>
+              </Link>
           </div>
         </div>
       </div>
