@@ -164,7 +164,7 @@ export default function NewsletterArticleCard() {
           {/* Social buttons with enhanced styling */}
           <div className="flex justify-center gap-3 pt-3">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/theorb.official/?theme=dark"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative p-3.5 bg-white/80 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/60 dark:border-emerald-700/40 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5"
@@ -172,7 +172,7 @@ export default function NewsletterArticleCard() {
               <Instagram className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/the-orb-cloud/"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative p-3.5 bg-white/80 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/60 dark:border-emerald-700/40 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5"
