@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import type { Post, Category, TrendingPost } from "@/types/post";
 import { TrendingPostsMarquee } from "@/components/blog/TrendingPostMarquee";
+import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
 
 const POSTS_PER_PAGE = 12;
 
@@ -566,6 +567,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
       {/* Bottom CTA Section */}
       {!loading && posts.length > 0 && (
         <div className="border-t border-border">
+          <NewsletterArticleCard/>
           <CTA />
         </div>
       )}

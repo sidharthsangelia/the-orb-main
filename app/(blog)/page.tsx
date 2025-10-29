@@ -25,6 +25,7 @@ import { CTA } from "@/components/about/Cta";
 import PostRowGrid from "@/components/TriplePostGrid";
 import NewsletterCard from "@/components/NewsletterCard";
 import CarouselPosts from "@/components/CarouselPosts";
+import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
 
 export const revalidate = 10; // Revalidate every 10 seconds
 
@@ -183,7 +184,8 @@ export default async function Page() {
           <Onboarding />
         )}
 
-        <NewsletterCard />
+        {/* <NewsletterCard /> */}
+        <NewsletterArticleCard/>
         <CoreValuesSection
           coreValues={safeCoreValues.map((cv: any) => ({
             title: cv.title ?? "",
@@ -192,7 +194,7 @@ export default async function Page() {
           }))}
         />
 
-        <CTA />
+        {/* <CTA /> */}
       </div>
     </div>
   );

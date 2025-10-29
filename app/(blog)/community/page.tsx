@@ -10,6 +10,7 @@ import { communityPageQuery } from "@/sanity/lib/queries";
 import { Metadata } from "next";
 import { CTA } from "@/components/about/Cta";
 import NewsletterHorizontalCard from "@/components/NewsletterCard";
+import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
 
 
 export const metadata: Metadata = {
@@ -151,8 +152,9 @@ const CommunityPage = async () => {
         
         {/* Enhanced CTA Section */}
         {/* <EnhancedCTA data={pageData.ctaSection} /> */}
-        <NewsletterHorizontalCard/>
-        <CTA />
+        {/* <NewsletterHorizontalCard/> */}
+        <NewsletterArticleCard/>
+        {/* <CTA /> */}
       </div>
     );
   } catch (error) {
@@ -175,7 +177,8 @@ const CommunityPage = async () => {
         
         {/* Enhanced CTA Section */}
         {/* <EnhancedCTA data={defaultData.ctaSection} /> */}
-        <CTA/>
+          <NewsletterArticleCard/>
+        {/* <CTA/> */}
       </div>
     );
   }

@@ -125,7 +125,7 @@ export default async function PostPage({ params }: Props) {
                   .url() as string)
               : "/default-avatar.jpg"
           }
-          bio={post.author.bio}
+          bio={post.author.bio ?? undefined}
         />
       )}
 

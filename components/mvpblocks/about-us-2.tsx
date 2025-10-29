@@ -176,11 +176,12 @@ export default async function AboutUs() {
         <JourneyTimeline journey={data.journey} />
 
         {/* <NewsletterHomepageCard/> */}
-                <HomepageNewsletterCard/>
+                {/* <HomepageNewsletterCard/> */}
+                <NewsletterArticleCard/>
         {/* Call to Action */}
-        <div className="relative z-20">
+        {/* <div className="relative z-20">
           <CTA />
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -93,6 +93,7 @@ export const CommunityRoles = async () => {
           </div>
           <div>
             <Link
+            target="_blank"
                 href={role.joinTeamUrl || ''}
                 className="flex items-center justify-center"
               >
