@@ -80,7 +80,7 @@ export default async function RootLayout({
     <html 
       lang="en" 
       className={inter.variable} 
-      suppressHydrationWarning={true} // ← Prevents theme flicker warnings
+      suppressHydrationWarning={true} 
     >
       <body>
         <ThemeProvider

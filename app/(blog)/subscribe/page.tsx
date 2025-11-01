@@ -16,24 +16,22 @@ export default function NewsletterSubscribe() {
   const [mounted, setMounted] = useState(false);
   const { setTheme } = useTheme();
 
-  // ──────────────────────────────────────────────────────
-  // Aggressive theme enforcement on /subscribe
-  // ──────────────────────────────────────────────────────
+
   useEffect(() => {
     setMounted(true);
     if (mounted) {
       const savedTheme = localStorage.getItem("theme");
-      // If theme is light or invalid, force reset to dark
+  
       if (!savedTheme || savedTheme === "light" || !["dark", "light", "system"].includes(savedTheme)) {
         localStorage.setItem("theme", "dark");
         setTheme("dark");
         document.documentElement.classList.add("dark");
         document.documentElement.classList.remove("light");
       } else {
-        setTheme(savedTheme); // Respect valid user preference
+        setTheme(savedTheme); 
       }
-      // Debug log to track theme state
-      console.log("Subscribe page theme:", localStorage.getItem("theme"), document.documentElement.classList);
+      
+      
     }
   }, [mounted, setTheme]);
 

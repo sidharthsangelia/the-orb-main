@@ -46,11 +46,10 @@ export default function Header(props: {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false); // ← Added to wait for hydration
+  const [mounted, setMounted] = useState(false); 
 
   useEffect(() => {
-    setMounted(true); // ← Set after mount
-    const handleScroll = () => {
+    setMounted(true);     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
@@ -98,7 +97,7 @@ export default function Header(props: {
   const pathname = usePathname();
   const issubscribePage = pathname === "/subscribe";
 
-  if (!mounted) return null; // ← Skip render until mounted (prevents light flash)
+  if (!mounted) return null;
 
   return (
     <motion.header
