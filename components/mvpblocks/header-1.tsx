@@ -46,9 +46,10 @@ export default function Header(props: {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { theme } = useTheme();
-
+  const [mounted, setMounted] = useState(false); // ← Added to wait for hydration
 
   useEffect(() => {
+    setMounted(true); // ← Set after mount
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -96,6 +97,8 @@ export default function Header(props: {
 
   const pathname = usePathname();
   const issubscribePage = pathname === "/subscribe";
+
+  if (!mounted) return null; // ← Skip render until mounted (prevents light flash)
 
   return (
     <motion.header
@@ -292,15 +295,18 @@ export default function Header(props: {
                 {/* Mobile CTA Buttons */}
                 <div className="space-y-3 px-6 py-4 border-t border-[#575846]/10">
                  <ThemeToggleButton/>
-                 
+                 { !issubscribePage && (
                   <Link
-                    href="https://docs.google.com/forms/d/1ZSRthPLYMao1a4z1e9aXsNaR-PFQOtZn0UJkOVvnyEo/viewform?edit_requested=true"
+                    href="/subscribe"
                     className="flex items-center justify-center space-x-2 w-full rounded-xl bg-gradient-to-r from-[#487052] to-[#509e8e] py-3 text-center font-semibold text-white transition-all duration-200 hover:shadow-lg"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <span>Join Movement</span>
-                    <Leaf className="h-4 w-4" />
+                    <span>Join Our Newsletter</span>
+                    <ReceiptText className="h-4 w-4" />
                   </Link>
+                 )}
+                 
+                  
                 </div>
               </div>
             </motion.div>

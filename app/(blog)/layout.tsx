@@ -1,3 +1,4 @@
+
 import "../globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
@@ -16,10 +17,10 @@ import Header1 from "@/components/mvpblocks/header-1";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google'
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch({
     query: settingsQuery,
-    // Metadata should never contain stega
     stega: false,
   });
   const title = settings?.title || demo.title;
@@ -27,7 +28,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage);
   let metadataBase: URL | undefined = undefined;
-  // metadataBase property does not exist on ogImage, so we leave it undefined or set it as needed
   return {
     metadataBase,
     title: {
@@ -61,55 +61,46 @@ export default async function RootLayout({
       ? urlForImage(data.logo)?.url?.() ?? undefined
       : undefined;
 
-
-const footerData = {
-  title: data?.title,
-  description: data?.description,
-  // footerText: data?.footerText,
-  socialLinks: data?.socialLinks,
-  contactEmail: data?.contactEmail,
-  phoneNumber: data?.phoneNumber,
-  addressLine1: data?.addressLine1,
-  addressLine2: data?.addressLine2,
-  city: data?.city,
-  state: data?.state,
-  zipCode: data?.zipCode,
-  country: data?.country,
-  googleMapsLink: data?.googleMapsLink,
-};
-
-
-  // Removed the problematic footer line since it's not used anywhere
-  // const footer = data?.footer || [];
-  // const { isEnabled: isDraftMode } = await draftMode();
+  const footerData = {
+    title: data?.title,
+    description: data?.description,
+    socialLinks: data?.socialLinks,
+    contactEmail: data?.contactEmail,
+    phoneNumber: data?.phoneNumber,
+    addressLine1: data?.addressLine1,
+    addressLine2: data?.addressLine2,
+    city: data?.city,
+    state: data?.state,
+    zipCode: data?.zipCode,
+    country: data?.country,
+    googleMapsLink: data?.googleMapsLink,
+  };
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`} suppressHydrationWarning>
+    <html 
+      lang="en" 
+      className={inter.variable} 
+      suppressHydrationWarning={true} // ← Prevents theme flicker warnings
+    >
       <body>
-          {/* {isDraftMode && <AlertBanner />} */}
-           
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-        <Header1
-          title={data?.title}
-          description={data?.description}
-          logo={logoUrl}
-        />
-          {/* <section className="min-h-screen"> */}
-            {children}
-          {/* </section> */}
-            
-            {siteSettings && <Footer siteSettings={footerData} />}
-          </ThemeProvider>
-                  
-          <SpeedInsights />
-            
-          <GoogleAnalytics gaId="G-QWJWTC258D" />
-        </body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header1
+            title={data?.title}
+            description={data?.description}
+            logo={logoUrl}
+          />
+          {children}
+          {siteSettings && <Footer siteSettings={footerData} />}
+        </ThemeProvider>
+
+        <SpeedInsights />
+        <GoogleAnalytics gaId="G-QWJWTC258D" />
+      </body>
     </html>
   );
 }

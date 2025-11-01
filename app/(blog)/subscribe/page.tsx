@@ -1,9 +1,11 @@
+// app/subscribe/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Mail, User, Newspaper, Globe, Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
+import { useTheme } from "next-themes";
 
 export default function NewsletterSubscribe() {
   const [name, setName] = useState("");
@@ -11,6 +13,29 @@ export default function NewsletterSubscribe() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { setTheme } = useTheme();
+
+  // ──────────────────────────────────────────────────────
+  // Aggressive theme enforcement on /subscribe
+  // ──────────────────────────────────────────────────────
+  useEffect(() => {
+    setMounted(true);
+    if (mounted) {
+      const savedTheme = localStorage.getItem("theme");
+      // If theme is light or invalid, force reset to dark
+      if (!savedTheme || savedTheme === "light" || !["dark", "light", "system"].includes(savedTheme)) {
+        localStorage.setItem("theme", "dark");
+        setTheme("dark");
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else {
+        setTheme(savedTheme); // Respect valid user preference
+      }
+      // Debug log to track theme state
+      console.log("Subscribe page theme:", localStorage.getItem("theme"), document.documentElement.classList);
+    }
+  }, [mounted, setTheme]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +97,8 @@ export default function NewsletterSubscribe() {
     },
   ];
 
+  if (!mounted) return null;
+
   return (
     <div className="relative min-h-screen bg-background text-foreground flex items-center justify-center overflow-hidden">
       {/* Background Blobs */}
@@ -114,10 +141,6 @@ export default function NewsletterSubscribe() {
               </div>
             ))}
           </div>
-
-          {/* <p className="text-sm md:text-base text-muted-foreground pt-2 max-w-md mx-auto md:mx-0 italic">
-            Don't just read about change. Be part of it. Subscribe now.
-          </p> */}
         </div>
 
         {/* Right side — Subscribe card */}
@@ -177,8 +200,8 @@ export default function NewsletterSubscribe() {
                 <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
               </div>
 
-              <Button className="w-52 mt-4 px-4 py-3 bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground rounded-xl font-medium hover:from-primary hover:to-secondary transition-all duration-300">
-                Go back to Home
+              <Button asChild className="w-52 mt-4 px-4 py-3 bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground rounded-xl font-medium hover:from-primary hover:to-secondary transition-all duration-300">
+                <a href="/">Go back to Home</a>
               </Button>
             </div>
           )}
