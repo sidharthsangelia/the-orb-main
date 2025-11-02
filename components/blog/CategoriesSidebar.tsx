@@ -130,7 +130,7 @@ export function CategoriesSidebar({
           </Link>
         ))}
         
-        {displayCategories.length >= 6 && (
+        {/* {displayCategories.length >= 6 && (
           <div className="pt-2 border-t border-border">
             <Button 
               asChild 
@@ -143,7 +143,7 @@ export function CategoriesSidebar({
               </Link>
             </Button>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );
