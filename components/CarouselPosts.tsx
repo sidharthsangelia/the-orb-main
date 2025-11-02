@@ -39,7 +39,7 @@ export default async function CarouselPosts() {
 
   return (
     <section className="w-full  py-12 md:py-16 bg-background">
-      <div className="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl  mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-8 md:mb-12 text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-[#0c0d0d] dark:text-[#eae4d2] mb-4 sm:mb-6">

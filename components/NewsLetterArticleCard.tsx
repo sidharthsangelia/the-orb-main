@@ -5,6 +5,8 @@ import { Mail, User, Sparkles, Send, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
+import { WhatsappIcon } from "react-share";
+
 export default function NewsletterArticleCard() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -67,18 +69,18 @@ export default function NewsletterArticleCard() {
 
           <span className="flex">
             <h2 className="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Subscribe for deeper climate insights
+              The Climate Stories That Actually Matter. Delivered to You.
             </h2>
-            <h2 className="text-2xl sm:text-3xl font-semibold bg-clip-text">🌍</h2>
+            {/* <h2 className="text-2xl sm:text-3xl font-semibold bg-clip-text">🌍</h2> */}
           </span>
 
           <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-            Join{" "}
             <span className="font-medium text-foreground">
-              The Órb Newsletter
+              Subscribe to The Órb
             </span>{" "}
-            — your weekly dose of stories on climate justice, sustainability,
-            and changemakers from the Global South.
+            for powerful voices from the Global South, grassroots changemakers
+            rewriting the future, and real opportunities to make an impact not
+            just read about it
           </p>
 
           {!submitted ? (
@@ -128,7 +130,9 @@ export default function NewsletterArticleCard() {
           )}
 
           {statusMessage && (
-            <p className="text-xs text-muted-foreground mt-1">{statusMessage}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {statusMessage}
+            </p>
           )}
 
           <p className="pt-3 text-[0.7rem] text-muted-foreground">
@@ -142,9 +146,15 @@ export default function NewsletterArticleCard() {
         {/* Decorative soft green glow */}
         <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-emerald-300/30 to-teal-300/30 dark:from-emerald-500/20 dark:to-teal-500/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-gradient-to-tr from-green-300/25 to-emerald-300/25 dark:from-green-500/15 dark:to-emerald-500/15 rounded-full blur-3xl" />
-        
+
         {/* Subtle leaf pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 20c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10z' fill='%2310b981' fill-opacity='0.4'/%3E%3C/svg%3E\")"}} />
+        <div
+          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 20c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10z' fill='%2310b981' fill-opacity='0.4'/%3E%3C/svg%3E\")",
+          }}
+        />
 
         <div className="relative z-10 space-y-4">
           {/* Icon with subtle animation */}
@@ -157,12 +167,14 @@ export default function NewsletterArticleCard() {
               Join Our Community
             </h3>
             <p className="text-xs leading-relaxed text-emerald-800/70 dark:text-emerald-200/70 px-2">
-              Connect with changemakers and stay updated on climate action stories
+              Connect with changemakers and stay updated on climate action
+              stories
             </p>
           </div>
 
           {/* Social buttons with enhanced styling */}
           <div className="flex justify-center gap-3 pt-3">
+            {/* Instagram */}
             <a
               href="https://www.instagram.com/theorb.official/?theme=dark"
               target="_blank"
@@ -171,6 +183,8 @@ export default function NewsletterArticleCard() {
             >
               <Instagram className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
             </a>
+
+            {/* LinkedIn */}
             <a
               href="https://www.linkedin.com/company/the-orb-cloud/"
               target="_blank"
@@ -179,12 +193,40 @@ export default function NewsletterArticleCard() {
             >
               <Linkedin className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
             </a>
+
+            {/* WhatsApp */}
+            <a
+              href="https://whatsapp.com/channel/0029VbAtD317j6gAIbcpgB3X" // <-- replace with your actual number or link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative p-3.5 bg-white/80 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/60 dark:border-emerald-700/40 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+            >
+              <img
+                src="/whatsapp.svg"
+                alt="WhatsApp"
+                className="w-5 h-5 opacity-90 group-hover:scale-110 transition-transform duration-300"
+              />
+            </a>
+
+            {/* Discord */}
+            {/* <a
+              href="https://discord.gg/4hgUBy4vV" // <-- replace with your Discord invite link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative p-3.5 bg-white/80 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/60 dark:border-emerald-700/40 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+            >
+              <img
+                src="/discord.svg"
+                alt="Discord"
+                className="w-5 h-5 opacity-90 group-hover:scale-110 transition-transform duration-300"
+              />
+            </a> */}
           </div>
 
           {/* Subtle call to action */}
           <div className="pt-2">
             <p className="text-[0.65rem] text-emerald-700/60 dark:text-emerald-300/50 font-medium tracking-wide">
-              Follow for daily inspiration
+              Follow for daily insights
             </p>
           </div>
         </div>
