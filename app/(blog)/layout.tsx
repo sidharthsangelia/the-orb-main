@@ -1,11 +1,7 @@
 import "../globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import {
-  VisualEditing,
-  toPlainText,
-  type PortableTextBlock,
-} from "next-sanity";
+import { toPlainText, type PortableTextBlock } from "next-sanity";
 import { Inter } from "next/font/google";
 
 import * as demo from "@/sanity/lib/demo";

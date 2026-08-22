@@ -1,5 +1,5 @@
 // schemas/documents/category.ts
-import { TagIcon } from "@sanity/icons";
+import { TagIcon } from "@sanity/icons/Tag";
 import { defineField, defineType } from "sanity";
 
 export default defineType({

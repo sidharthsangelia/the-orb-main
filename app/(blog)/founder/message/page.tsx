@@ -87,7 +87,7 @@ const portableTextComponents = {
   },
 };
 
-const FounderMessagePage = async (): Promise<JSX.Element> => {
+const FounderMessagePage = async (): Promise<React.JSX.Element> => {
   // Fetch data from Sanity
   let data: FounderMessageQueryResult | null = null;
 

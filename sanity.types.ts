@@ -12,6 +12,8 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: schema.json
 export type CommunityPage = {
   _id: string;
@@ -80,6 +82,13 @@ export type CommunityRole = {
   joinTeamUrl?: string;
 };
 
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type FounderMessage = {
   _id: string;
   _type: "founderMessage";
@@ -91,12 +100,7 @@ export type FounderMessage = {
   founderName?: string;
   founderTitle?: string;
   founderImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -129,12 +133,7 @@ export type FounderMessage = {
     metaTitle?: string;
     metaDescription?: string;
     ogImage?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -143,6 +142,28 @@ export type FounderMessage = {
   };
   publishedAt?: string;
   isActive?: boolean;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
 };
 
 export type AboutPage = {
@@ -187,6 +208,13 @@ export type AboutPage = {
   seoDescription?: string;
 };
 
+export type CategoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "category";
+};
+
 export type CarouselPost = {
   _id: string;
   _type: "carouselPost";
@@ -196,12 +224,7 @@ export type CarouselPost = {
   title?: string;
   slides?: Array<{
     image?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -212,12 +235,22 @@ export type CarouselPost = {
     _type: "slide";
     _key: string;
   }>;
-  category?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "category";
+  category?: CategoryReference;
+};
+
+export type Seo = {
+  _type: "seo";
+  metaTitle?: string;
+  metaDescription?: string;
+  ogImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
   };
+  keywords?: Array<string>;
 };
 
 export type Category = {
@@ -231,12 +264,7 @@ export type Category = {
   description?: string;
   color?: Color;
   image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -248,6 +276,29 @@ export type Category = {
   seo?: Seo;
 };
 
+export type Color = {
+  _type: "color";
+  hex?: string;
+  alpha?: number;
+  hsl?: HslaColor;
+  hsv?: HsvaColor;
+  rgb?: RgbaColor;
+};
+
+export type AuthorReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "author";
+};
+
+export type PostReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "post";
+};
+
 export type Post = {
   _id: string;
   _type: "post";
@@ -256,46 +307,39 @@ export type Post = {
   _rev: string;
   title?: string;
   slug?: Slug;
-  content?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-    _key: string;
-  }>;
+  content?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
   excerpt?: string;
   coverImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -303,53 +347,24 @@ export type Post = {
     caption?: string;
     _type: "image";
   };
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
+  categories?: Array<
+    {
+      _key: string;
+    } & CategoryReference
+  >;
   tags?: Array<string>;
   date?: string;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
-  };
+  author?: AuthorReference;
   status?: "draft" | "published" | "archived";
   featured?: boolean;
   isTrending?: boolean;
   readingTime?: number;
-  relatedPosts?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "post";
-  }>;
+  relatedPosts?: Array<
+    {
+      _key: string;
+    } & PostReference
+  >;
   seo?: Seo;
-};
-
-export type Seo = {
-  _type: "seo";
-  metaTitle?: string;
-  metaDescription?: string;
-  ogImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  keywords?: Array<string>;
 };
 
 export type Author = {
@@ -361,12 +376,7 @@ export type Author = {
   name?: string;
   slug?: Slug;
   picture?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -433,12 +443,7 @@ export type Partner = {
   _rev: string;
   name?: string;
   logo?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -459,19 +464,23 @@ export type Settings = {
   title?: string;
   description?: string;
   logo?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
   };
   socialLinks?: Array<{
-    platform?: "instagram" | "linkedin" | "github" | "twitter" | "facebook" | "youtube" | "threads" | "pinterest" | "dribbble";
+    platform?:
+      | "instagram"
+      | "linkedin"
+      | "github"
+      | "twitter"
+      | "facebook"
+      | "youtube"
+      | "threads"
+      | "pinterest"
+      | "dribbble";
     url?: string;
     _type: "socialLink";
     _key: string;
@@ -486,12 +495,7 @@ export type Settings = {
   country?: string;
   googleMapsLink?: string;
   ogImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -499,12 +503,7 @@ export type Settings = {
     _type: "image";
   };
   favicon?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -524,17 +523,21 @@ export type SanityAssistInstructionTask = {
 
 export type SanityAssistTaskStatus = {
   _type: "sanity.assist.task.status";
-  tasks?: Array<{
-    _key: string;
-  } & SanityAssistInstructionTask>;
+  tasks?: Array<
+    {
+      _key: string;
+    } & SanityAssistInstructionTask
+  >;
 };
 
 export type SanityAssistSchemaTypeAnnotations = {
   _type: "sanity.assist.schemaType.annotations";
   title?: string;
-  fields?: Array<{
-    _key: string;
-  } & SanityAssistSchemaTypeField>;
+  fields?: Array<
+    {
+      _key: string;
+    } & SanityAssistSchemaTypeField
+  >;
 };
 
 export type SanityAssistOutputType = {
@@ -547,14 +550,16 @@ export type SanityAssistOutputField = {
   path?: string;
 };
 
+export type AssistInstructionContextReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "assist.instruction.context";
+};
+
 export type SanityAssistInstructionContext = {
   _type: "sanity.assist.instruction.context";
-  reference?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "assist.instruction.context";
-  };
+  reference?: AssistInstructionContextReference;
 };
 
 export type AssistInstructionContext = {
@@ -587,18 +592,23 @@ export type SanityAssistInstructionUserInput = {
 };
 
 export type SanityAssistInstructionPrompt = Array<{
-  children?: Array<{
-    marks?: Array<string>;
-    text?: string;
-    _type: "span";
-    _key: string;
-  } | {
-    _key: string;
-  } & SanityAssistInstructionFieldRef | {
-    _key: string;
-  } & SanityAssistInstructionContext | {
-    _key: string;
-  } & SanityAssistInstructionUserInput>;
+  children?: Array<
+    | {
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }
+    | ({
+        _key: string;
+      } & SanityAssistInstructionFieldRef)
+    | ({
+        _key: string;
+      } & SanityAssistInstructionContext)
+    | ({
+        _key: string;
+      } & SanityAssistInstructionUserInput)
+  >;
   style?: "normal";
   listItem?: never;
   markDefs?: null;
@@ -619,28 +629,24 @@ export type SanityAssistInstruction = {
   title?: string;
   userId?: string;
   createdById?: string;
-  output?: Array<{
-    _key: string;
-  } & SanityAssistOutputField | {
-    _key: string;
-  } & SanityAssistOutputType>;
+  output?: Array<
+    | ({
+        _key: string;
+      } & SanityAssistOutputField)
+    | ({
+        _key: string;
+      } & SanityAssistOutputType)
+  >;
 };
 
 export type SanityAssistSchemaTypeField = {
   _type: "sanity.assist.schemaType.field";
   path?: string;
-  instructions?: Array<{
-    _key: string;
-  } & SanityAssistInstruction>;
-};
-
-export type Color = {
-  _type: "color";
-  hex?: string;
-  alpha?: number;
-  hsl?: HslaColor;
-  hsv?: HsvaColor;
-  rgb?: RgbaColor;
+  instructions?: Array<
+    {
+      _key: string;
+    } & SanityAssistInstruction
+  >;
 };
 
 export type RgbaColor = {
@@ -693,20 +699,16 @@ export type SanityImageDimensions = {
   aspectRatio?: number;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
+export type SanityImageMetadata = {
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  thumbHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
 };
 
 export type SanityFileAsset = {
@@ -729,6 +731,13 @@ export type SanityFileAsset = {
   path?: string;
   url?: string;
   source?: SanityAssetSourceData;
+};
+
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
 };
 
 export type SanityImageAsset = {
@@ -754,17 +763,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData;
 };
 
-export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
-
 export type Geopoint = {
   _type: "geopoint";
   lat?: number;
@@ -772,29 +770,61 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
+export type AllSanitySchemaTypes =
+  | CommunityPage
+  | CommunityRole
+  | SanityImageAssetReference
+  | FounderMessage
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Slug
+  | AboutPage
+  | CategoryReference
+  | CarouselPost
+  | Seo
+  | Category
+  | Color
+  | AuthorReference
+  | PostReference
+  | Post
+  | Author
+  | Newsletter
+  | Subscriber
+  | Partner
+  | Settings
+  | SanityAssistInstructionTask
+  | SanityAssistTaskStatus
+  | SanityAssistSchemaTypeAnnotations
+  | SanityAssistOutputType
+  | SanityAssistOutputField
+  | AssistInstructionContextReference
+  | SanityAssistInstructionContext
+  | AssistInstructionContext
+  | SanityAssistInstructionUserInput
+  | SanityAssistInstructionPrompt
+  | SanityAssistInstructionFieldRef
+  | SanityAssistInstruction
+  | SanityAssistSchemaTypeField
+  | RgbaColor
+  | HsvaColor
+  | HslaColor
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint;
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
-
-export type AllSanitySchemaTypes = CommunityPage | CommunityRole | FounderMessage | AboutPage | CarouselPost | Category | Post | Seo | Author | Newsletter | Subscriber | Partner | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | Color | RgbaColor | HsvaColor | HslaColor | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
-export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./app/(blog)/posts/[slug]/page.tsx
+// Source: app/(blog)/posts/[slug]/page.tsx
 // Variable: postSlugs
 // Query: *[_type == "post" && defined(slug.current)]{"slug": slug.current}
 export type PostSlugsResult = Array<{
   slug: string | null;
 }>;
 
-// Source: ./app/sitemap.ts
+// Source: app/sitemap.ts
 // Variable: sitemapPostsQuery
 // Query: *[_type == "post" && defined(slug.current)] {    "slug": slug.current,    _updatedAt,    date,    _id  } | order(date desc, _updatedAt desc)
 export type SitemapPostsQueryResult = Array<{
@@ -803,6 +833,8 @@ export type SitemapPostsQueryResult = Array<{
   date: string | null;
   _id: string;
 }>;
+
+// Source: app/sitemap.ts
 // Variable: allCategoriesQuery
 // Query: *[_type == "category" && defined(slug.current)] {    "slug": slug.current,    _updatedAt,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])  }
 export type AllCategoriesQueryResult = Array<{
@@ -811,7 +843,7 @@ export type AllCategoriesQueryResult = Array<{
   postCount: number;
 }>;
 
-// Source: ./sanity/lib/queries.ts
+// Source: sanity/lib/queries.ts
 // Variable: guidesQuery
 // Query: *["guides" in categories[]->slug.current && status == "published"]{  _id,  title,  "slug": slug.current,  "description": coalesce(excerpt, ""),  "image": coverImage.asset->url,  "type": type,  "downloadCount": downloadCount,  "category": categories[0]->title,   author-> {      name,      picture    },}
 export type GuidesQueryResult = Array<{
@@ -826,12 +858,7 @@ export type GuidesQueryResult = Array<{
   author: {
     name: string | null;
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -840,6 +867,8 @@ export type GuidesQueryResult = Array<{
     } | null;
   } | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: educationQuery
 // Query: *[_type == "post" && "education" in categories[]->slug.current && status == "published"]{  _id,  title,  "slug": slug.current,  "description": coalesce(excerpt, ""),  "image": coverImage.asset->url,  "type": type,  "duration": duration,  "level": level,  author-> {      name,      picture    },}
 export type EducationQueryResult = Array<{
@@ -854,12 +883,7 @@ export type EducationQueryResult = Array<{
   author: {
     name: string | null;
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -868,6 +892,8 @@ export type EducationQueryResult = Array<{
     } | null;
   } | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: climateStoriesQuery
 // Query: *[_type == "post" && "climate-stories" in categories[]->slug.current && status == "published"]{  _id,  title,  "slug": slug.current,  "description": coalesce(excerpt, ""),  "image": coverImage.asset->url,  organization,  impact,  readTime,  date,  author-> {      name,      picture    },}
 export type ClimateStoriesQueryResult = Array<{
@@ -883,12 +909,7 @@ export type ClimateStoriesQueryResult = Array<{
   author: {
     name: string | null;
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -897,6 +918,8 @@ export type ClimateStoriesQueryResult = Array<{
     } | null;
   } | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: youthVoicesQuery
 // Query: *[_type == "post" && "youth-voices" in categories[]->slug.current && status == "published"]{  _id,  title,  "slug": slug.current,  "description": coalesce(excerpt, ""),  "image": coverImage.asset->url,  "author": author->name,  readTime,  likes,  date,  location,  author-> {      name,      picture    },}
 export type YouthVoicesQueryResult = Array<{
@@ -908,12 +931,7 @@ export type YouthVoicesQueryResult = Array<{
   author: {
     name: string | null;
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -926,6 +944,8 @@ export type YouthVoicesQueryResult = Array<{
   date: string | null;
   location: null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: allPostsQuery
 // Query: {    "posts": *[_type == "post" && defined(slug.current)]       | order(date desc, _updatedAt desc)  {          _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)      },    "total": count(*[_type == "post" && defined(slug.current)])  }
 export type AllPostsQueryResult = {
@@ -936,12 +956,7 @@ export type AllPostsQueryResult = {
     slug: string | null;
     excerpt: string | null;
     coverImage: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -953,12 +968,7 @@ export type AllPostsQueryResult = {
     author: {
       name: string | "Anonymous";
       picture: {
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
+        asset?: SanityImageAssetReference;
         media?: unknown;
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
@@ -984,6 +994,8 @@ export type AllPostsQueryResult = {
   }>;
   total: number;
 };
+
+// Source: sanity/lib/queries.ts
 // Variable: postsIndexShapeQuery
 // Query: {  "posts": *[  _type == "post"  && defined(slug.current)  && ($category == "" || $category in categories[]->slug.current)  && (    $q == ""    || title match $q    || excerpt match $q    || author->name match $q    || count(categories[@->title match $q]) > 0  )]    | order(date desc, _updatedAt desc)  [0...20] {        _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)    },  "total": count(*[  _type == "post"  && defined(slug.current)  && ($category == "" || $category in categories[]->slug.current)  && (    $q == ""    || title match $q    || excerpt match $q    || author->name match $q    || count(categories[@->title match $q]) > 0  )]),  // Resolved alongside the rows so the results header can name the active  // topic without a second round trip.  "categoryTitle": *[_type == "category" && slug.current == $category][0].title}
 export type PostsIndexShapeQueryResult = {
@@ -994,12 +1006,7 @@ export type PostsIndexShapeQueryResult = {
     slug: string | null;
     excerpt: string | null;
     coverImage: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1011,12 +1018,7 @@ export type PostsIndexShapeQueryResult = {
     author: {
       name: string | "Anonymous";
       picture: {
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
+        asset?: SanityImageAssetReference;
         media?: unknown;
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
@@ -1043,9 +1045,13 @@ export type PostsIndexShapeQueryResult = {
   total: number;
   categoryTitle: string | null;
 };
+
+// Source: sanity/lib/queries.ts
 // Variable: postsIndexCountQuery
 // Query: count(*[  _type == "post"  && defined(slug.current)  && ($category == "" || $category in categories[]->slug.current)  && (    $q == ""    || title match $q    || excerpt match $q    || author->name match $q    || count(categories[@->title match $q]) > 0  )])
 export type PostsIndexCountQueryResult = number;
+
+// Source: sanity/lib/queries.ts
 // Variable: postsIndexFacetsQuery
 // Query: {    "total": count(*[      _type == "post"      && defined(slug.current)      && (        $q == ""        || title match $q        || excerpt match $q        || author->name match $q        || count(categories[@->title match $q]) > 0      )    ]),    "categories": *[_type == "category" && defined(slug.current)]    | order(order asc, title asc) {    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6"),    "postCount": count(*[      _type == "post"      && defined(slug.current)      && references(^._id)      && (        $q == ""        || title match $q        || excerpt match $q        || author->name match $q        || count(categories[@->title match $q]) > 0        )      ])    }  }
 export type PostsIndexFacetsQueryResult = {
@@ -1058,6 +1064,8 @@ export type PostsIndexFacetsQueryResult = {
     postCount: number;
   }>;
 };
+
+// Source: sanity/lib/queries.ts
 // Variable: featuredPostsQuery
 // Query: *[_type == "post" && defined(slug.current) && featured == true]   | order(date desc, _updatedAt desc) [0...3] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type FeaturedPostsQueryResult = Array<{
@@ -1067,12 +1075,7 @@ export type FeaturedPostsQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1084,12 +1087,7 @@ export type FeaturedPostsQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1113,6 +1111,8 @@ export type FeaturedPostsQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: recentPostsQuery
 // Query: *[_type == "post" && defined(slug.current)]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type RecentPostsQueryResult = Array<{
@@ -1122,12 +1122,7 @@ export type RecentPostsQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1139,12 +1134,7 @@ export type RecentPostsQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1168,6 +1158,8 @@ export type RecentPostsQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: postsByAuthorQuery
 // Query: *[_type == "post" && defined(slug.current) && author->slug.current == $authorSlug]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type PostsByAuthorQueryResult = Array<{
@@ -1177,12 +1169,7 @@ export type PostsByAuthorQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1194,12 +1181,7 @@ export type PostsByAuthorQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1223,6 +1205,8 @@ export type PostsByAuthorQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: relatedPostsQuery
 // Query: *[_type == "post" && defined(slug.current) && _id != $postId &&     (category->_id == $categoryId || author->_id == $authorId)]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type RelatedPostsQueryResult = Array<{
@@ -1232,12 +1216,7 @@ export type RelatedPostsQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1249,12 +1228,7 @@ export type RelatedPostsQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1278,6 +1252,8 @@ export type RelatedPostsQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: searchPostsQuery
 // Query: *[_type == "post" && defined(slug.current) &&     (title match $searchTerm + "*" || excerpt match $searchTerm + "*" ||      pt::text(content) match $searchTerm + "*")]   | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type SearchPostsQueryResult = Array<{
@@ -1287,12 +1263,7 @@ export type SearchPostsQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1304,12 +1275,7 @@ export type SearchPostsQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1333,6 +1299,8 @@ export type SearchPostsQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
 export type SettingsQueryResult = {
@@ -1344,19 +1312,23 @@ export type SettingsQueryResult = {
   title?: string;
   description?: string;
   logo?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
   };
   socialLinks?: Array<{
-    platform?: "dribbble" | "facebook" | "github" | "instagram" | "linkedin" | "pinterest" | "threads" | "twitter" | "youtube";
+    platform?:
+      | "dribbble"
+      | "facebook"
+      | "github"
+      | "instagram"
+      | "linkedin"
+      | "pinterest"
+      | "threads"
+      | "twitter"
+      | "youtube";
     url?: string;
     _type: "socialLink";
     _key: string;
@@ -1371,12 +1343,7 @@ export type SettingsQueryResult = {
   country?: string;
   googleMapsLink?: string;
   ogImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1384,12 +1351,7 @@ export type SettingsQueryResult = {
     _type: "image";
   };
   favicon?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1397,6 +1359,8 @@ export type SettingsQueryResult = {
   };
   metadataBase?: string;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: heroQuery
 // Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type HeroQueryResult = {
@@ -1406,12 +1370,7 @@ export type HeroQueryResult = {
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1423,12 +1382,7 @@ export type HeroQueryResult = {
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1452,6 +1406,8 @@ export type HeroQueryResult = {
   tags: Array<string> | null;
   readingTime: number;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: moreStoriesQuery
 // Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type MoreStoriesQueryResult = Array<{
@@ -1461,12 +1417,7 @@ export type MoreStoriesQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1478,12 +1429,7 @@ export type MoreStoriesQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1507,41 +1453,41 @@ export type MoreStoriesQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: postQuery
 // Query: *[_type == "post" && slug.current == $slug] [0] {    content,    _updatedAt,    seo,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type PostQueryResult = {
-  content: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-    _key: string;
-  }> | null;
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
   _updatedAt: string;
   seo: Seo | null;
   _id: string;
@@ -1550,12 +1496,7 @@ export type PostQueryResult = {
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1567,12 +1508,7 @@ export type PostQueryResult = {
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1596,6 +1532,8 @@ export type PostQueryResult = {
   tags: Array<string> | null;
   readingTime: number;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: relatedStoriesQuery
 // Query: *[_type == "post" && _id != $skip && defined(slug.current)]  | order(date desc, _updatedAt desc) [0...12] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200),    "relevance": count(categories[@._ref in $categoryIds])  }
 export type RelatedStoriesQueryResult = Array<{
@@ -1605,12 +1543,7 @@ export type RelatedStoriesQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1622,12 +1555,7 @@ export type RelatedStoriesQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1652,6 +1580,8 @@ export type RelatedStoriesQueryResult = Array<{
   readingTime: number;
   relevance: number | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: heroPostsGridQuery
 // Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type HeroPostsGridQueryResult = Array<{
@@ -1661,12 +1591,7 @@ export type HeroPostsGridQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1678,12 +1603,7 @@ export type HeroPostsGridQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1707,6 +1627,8 @@ export type HeroPostsGridQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: tripleCardGridQuery
 // Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type TripleCardGridQueryResult = Array<{
@@ -1716,12 +1638,7 @@ export type TripleCardGridQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1733,12 +1650,7 @@ export type TripleCardGridQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1762,6 +1674,8 @@ export type TripleCardGridQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: trendingPostsQuery
 // Query: *[_type == "post" && defined(slug.current) && isTrending == true] | order(date desc) [0...10] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)  }
 export type TrendingPostsQueryResult = Array<{
@@ -1771,12 +1685,7 @@ export type TrendingPostsQueryResult = Array<{
   slug: string | null;
   excerpt: string | null;
   coverImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1788,12 +1697,7 @@ export type TrendingPostsQueryResult = Array<{
   author: {
     name: string | "Anonymous";
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1817,6 +1721,8 @@ export type TrendingPostsQueryResult = Array<{
   tags: Array<string> | null;
   readingTime: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: partnersQuery
 // Query: *[_type == "partner"] | order(_createdAt desc) {  _id,  title,  "logo": logo.asset->url,  website}
 export type PartnersQueryResult = Array<{
@@ -1825,6 +1731,8 @@ export type PartnersQueryResult = Array<{
   logo: string | null;
   website: string | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: categoriesQuery
 // Query: *[_type == "category" && defined(slug.current)] | order(title asc) {    _id,    title,    slug,    description,    color,    image,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])  }
 export type CategoriesQueryResult = Array<{
@@ -1834,12 +1742,7 @@ export type CategoriesQueryResult = Array<{
   description: string | null;
   color: Color | null;
   image: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -1848,6 +1751,8 @@ export type CategoriesQueryResult = Array<{
   } | null;
   postCount: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: categoryQuery
 // Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    seo  }
 export type CategoryQueryResult = {
@@ -1859,6 +1764,8 @@ export type CategoryQueryResult = {
   image: string | null;
   seo: Seo | null;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: carouselPostsQuery
 // Query: *[_type == "carouselPost"] | order(publishedAt desc){  _id,  title,  slug,  slides[]{    image{      asset->{        url      },      alt    },    caption,    order  },  description,  author->{    name  },  publishedAt}
 export type CarouselPostsQueryResult = Array<{
@@ -1879,6 +1786,8 @@ export type CarouselPostsQueryResult = Array<{
   author: null;
   publishedAt: null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: sidebarCategoriesQuery
 // Query: *[_type == "category" && defined(slug.current)]   | order(order asc, title asc) {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    "image": image.asset->url,    featured,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])  }
 export type SidebarCategoriesQueryResult = Array<{
@@ -1891,6 +1800,8 @@ export type SidebarCategoriesQueryResult = Array<{
   featured: boolean | null;
   postCount: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: trendingPostsMarqueeQuery
 // Query: *[_type == "post" && defined(slug.current) && isTrending == true]   | order(date desc) [0...10] {    _id,    title,    "slug": slug.current,    "author": author->name,    // Same dead-field bug as postFields had: the schema stores an array of    // references under "categories", so "category->title" always resolved to    // null and every badge in the marquee came out empty.    "category": categories[0]->title,    "date": coalesce(date, _updatedAt)  }
 export type TrendingPostsMarqueeQueryResult = Array<{
@@ -1901,6 +1812,8 @@ export type TrendingPostsMarqueeQueryResult = Array<{
   category: string | null;
   date: string;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: featuredCategoriesQuery
 // Query: *[_type == "category" && defined(slug.current) && featured == true]   | order(order asc, title asc) [0...6] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"])  }
 export type FeaturedCategoriesQueryResult = Array<{
@@ -1918,11 +1831,15 @@ export type FeaturedCategoriesQueryResult = Array<{
   } | null;
   postCount: number;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: allCategorySlugsQuery
 // Query: *[_type == "category" && defined(slug.current)] {    "slug": slug.current  }
 export type AllCategorySlugsQueryResult = Array<{
   slug: string | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: categoryWithRecentPostsQuery
 // Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    featured,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),    "recentPosts": *[_type == "post" && references(^._id) && defined(slug.current)]       | order(date desc) [0...3] {          _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)      }  }
 export type CategoryWithRecentPostsQueryResult = {
@@ -1947,12 +1864,7 @@ export type CategoryWithRecentPostsQueryResult = {
     slug: string | null;
     excerpt: string | null;
     coverImage: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1964,12 +1876,7 @@ export type CategoryWithRecentPostsQueryResult = {
     author: {
       name: string | "Anonymous";
       picture: {
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
+        asset?: SanityImageAssetReference;
         media?: unknown;
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
@@ -1994,6 +1901,8 @@ export type CategoryWithRecentPostsQueryResult = {
     readingTime: number;
   }>;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: categoryWithPostsQuery
 // Query: *[_type == "category" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    "color": coalesce(color.hex, "#3B82F6"),    image {      asset-> {        _id,        url      },      alt    },    featured,    order,    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),    seo {      metaTitle,      metaDescription,      ogImage {        asset-> {          url        }      }    }  }
 export type CategoryWithPostsQueryResult = {
@@ -2022,6 +1931,8 @@ export type CategoryWithPostsQueryResult = {
     } | null;
   } | null;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: founderMessageQuery
 // Query: *[_type == "founderMessage" && isActive == true][0] {    _id,    _createdAt,    _updatedAt,    title,    slug,    founderName,    founderTitle,    founderImage {      asset-> {        _id,        url,        metadata {          dimensions {            width,            height,            aspectRatio          },          lqip        }      },      alt,      hotspot,      crop    },    message,    featuredQuote {      text,      showQuote    },    seo {      metaTitle,      metaDescription,      ogImage {        asset-> {          url        }      }    },    publishedAt,    isActive  }
 export type FounderMessageQueryResult = {
@@ -2081,8 +1992,10 @@ export type FounderMessageQueryResult = {
     } | null;
   } | null;
   publishedAt: string | null;
-  isActive: boolean | null;
+  isActive: true;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: founderMessageBySlugQuery
 // Query: *[_type == "founderMessage" && slug.current == $slug && isActive == true][0] {    _id,    _createdAt,    _updatedAt,    title,    slug,    founderName,    founderTitle,    founderImage {      asset-> {        _id,        url,        metadata {          dimensions {            width,            height,            aspectRatio          },          lqip        }      },      alt,      hotspot,      crop    },    message,    featuredQuote {      text,      showQuote    },    seo {      metaTitle,      metaDescription,      ogImage {        asset-> {          url        }      }    },    publishedAt,    isActive  }
 export type FounderMessageBySlugQueryResult = {
@@ -2144,12 +2057,16 @@ export type FounderMessageBySlugQueryResult = {
   publishedAt: string | null;
   isActive: boolean | null;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: socialMediaPostsQuery
 // Query: *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {    _id,    title,    showInstagram,    showLinkedin,    showTwitter,    "instagramPosts": instagramPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "linkedinPosts": linkedinPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    "twitterPosts": twitterPosts[isActive == true]{      embedHtml,      fallbackDescription,      isActive    },    lastUpdated,    _createdAt,    _updatedAt  }
 export type SocialMediaPostsQueryResult = null;
+
+// Source: sanity/lib/queries.ts
 // Variable: COMMUNITY_ROLES_QUERY
 // Query: *[_type == "communityRole"]{  key,  title,  impact,  description,  skills,  color,  icon,  actions,  joinTeamUrl} | order(title asc)
-export type COMMUNITY_ROLES_QUERYResult = Array<{
+export type COMMUNITY_ROLES_QUERY_RESULT = Array<{
   key: string | null;
   title: string | null;
   impact: string | null;
@@ -2160,6 +2077,8 @@ export type COMMUNITY_ROLES_QUERYResult = Array<{
   actions: Array<string> | null;
   joinTeamUrl: string | null;
 }>;
+
+// Source: sanity/lib/queries.ts
 // Variable: aboutPageQuery
 // Query: *[_type == "aboutPage"][0] {    title,    tagline,    introText,    stats[] {      value,      label    },    mission,    vision,    coreValues[] {      title,      description,      icon    },    whatWeDo[] {      title,      description,      icon    },    journey[] {      year,      title,      description    },    seoTitle,    seoDescription  }
 export type AboutPageQueryResult = {
@@ -2190,6 +2109,8 @@ export type AboutPageQueryResult = {
   seoTitle: string | null;
   seoDescription: string | null;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: communityPageQuery
 // Query: *[_type == "communityPage"][0] {  heroSection {    badge,    mainHeading,    secondaryHeading,    description,    joinMovementUrl,    founderMessageUrl,    impactStats[] {      value,      label,      icon    }  },  testimonialsSection {    title,    description,    testimonials[] {      name,      role,      content,      avatar    }  },  achievementsSection {    title,    description,    achievements[] {      title,      description,      icon    }  },  ctaSection {    title,    description,    primaryButtonText,    secondaryButtonText,    hashtags  }}
 export type CommunityPageQueryResult = {
@@ -2233,44 +2154,44 @@ export type CommunityPageQueryResult = {
     hashtags: string | null;
   } | null;
 } | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: resourceDetailQuery
 // Query: *[_type == "post" && categories[]->slug.current match $type && slug.current == $slug][0] {    _id,    title,    slug,    content,    excerpt,    coverImage {      asset-> {        url,        metadata {          lqip        }      },      alt    },    author-> {      name,      picture    },    date,    categories[]-> {      title,      slug    },    readingTime  }
 export type ResourceDetailQueryResult = {
   _id: string;
   title: string | null;
   slug: Slug | null;
-  content: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-    _key: string;
-  }> | null;
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
   excerpt: string | null;
   coverImage: {
     asset: {
@@ -2284,12 +2205,7 @@ export type ResourceDetailQueryResult = {
   author: {
     name: string | null;
     picture: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
+      asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -2309,46 +2225,46 @@ export type ResourceDetailQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"post\" && defined(slug.current)]{\"slug\": slug.current}": PostSlugsResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] {\n    \"slug\": slug.current,\n    _updatedAt,\n    date,\n    _id\n  } | order(date desc, _updatedAt desc)\n": SitemapPostsQueryResult;
-    "\n  *[_type == \"category\" && defined(slug.current)] {\n    \"slug\": slug.current,\n    _updatedAt,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  }\n": AllCategoriesQueryResult;
-    "\n*[\"guides\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"type\": type,\n  \"downloadCount\": downloadCount,\n  \"category\": categories[0]->title,\n   author-> {\n      name,\n      picture\n    },\n}\n": GuidesQueryResult;
-    "\n*[_type == \"post\" && \"education\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"type\": type,\n  \"duration\": duration,\n  \"level\": level,\n  author-> {\n      name,\n      picture\n    },\n}\n": EducationQueryResult;
-    "\n*[_type == \"post\" && \"climate-stories\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  organization,\n  impact,\n  readTime,\n  date,\n  author-> {\n      name,\n      picture\n    },\n}\n": ClimateStoriesQueryResult;
-    "\n*[_type == \"post\" && \"youth-voices\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"author\": author->name,\n  readTime,\n  likes,\n  date,\n  location,\n  author-> {\n      name,\n      picture\n    },\n}\n": YouthVoicesQueryResult;
-    "\n  {\n    \"posts\": *[_type == \"post\" && defined(slug.current)]\n       | order(date desc, _updatedAt desc)  {\n        \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n      },\n    \"total\": count(*[_type == \"post\" && defined(slug.current)])\n  }\n": AllPostsQueryResult;
-    "{\n  \"posts\": *[\n  _type == \"post\"\n  && defined(slug.current)\n  && ($category == \"\" || $category in categories[]->slug.current)\n  && (\n    $q == \"\"\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n]\n    | order(date desc, _updatedAt desc)\n  [0...20] {\n      \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n    },\n  \"total\": count(*[\n  _type == \"post\"\n  && defined(slug.current)\n  && ($category == \"\" || $category in categories[]->slug.current)\n  && (\n    $q == \"\"\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n]),\n  // Resolved alongside the rows so the results header can name the active\n  // topic without a second round trip.\n  \"categoryTitle\": *[_type == \"category\" && slug.current == $category][0].title\n}": PostsIndexShapeQueryResult;
-    "\n  count(*[\n  _type == \"post\"\n  && defined(slug.current)\n  && ($category == \"\" || $category in categories[]->slug.current)\n  && (\n    $q == \"\"\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n])\n": PostsIndexCountQueryResult;
-    "\n  {\n    \"total\": count(*[\n      _type == \"post\"\n      && defined(slug.current)\n      && (\n        $q == \"\"\n        || title match $q\n        || excerpt match $q\n        || author->name match $q\n        || count(categories[@->title match $q]) > 0\n      )\n    ]),\n    \"categories\": *[_type == \"category\" && defined(slug.current)]\n    | order(order asc, title asc) {\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"postCount\": count(*[\n      _type == \"post\"\n      && defined(slug.current)\n      && references(^._id)\n      && (\n        $q == \"\"\n        || title match $q\n        || excerpt match $q\n        || author->name match $q\n        || count(categories[@->title match $q]) > 0\n        )\n      ])\n    }\n  }\n": PostsIndexFacetsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && featured == true] \n  | order(date desc, _updatedAt desc) [0...3] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": FeaturedPostsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": RecentPostsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && author->slug.current == $authorSlug] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": PostsByAuthorQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && _id != $postId && \n    (category->_id == $categoryId || author->_id == $authorId)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": RelatedPostsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && \n    (title match $searchTerm + \"*\" || excerpt match $searchTerm + \"*\" || \n     pt::text(content) match $searchTerm + \"*\")] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": SearchPostsQueryResult;
-    "*[_type == \"settings\"][0]": SettingsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": HeroQueryResult;
-    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": MoreStoriesQueryResult;
-    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content,\n    _updatedAt,\n    seo,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": PostQueryResult;
-    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)]\n  | order(date desc, _updatedAt desc) [0...12] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n,\n    \"relevance\": count(categories[@._ref in $categoryIds])\n  }\n": RelatedStoriesQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": HeroPostsGridQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": TripleCardGridQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && isTrending == true] | order(date desc) [0...10] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": TrendingPostsQueryResult;
-    "*[_type == \"partner\"] | order(_createdAt desc) {\n  _id,\n  title,\n  \"logo\": logo.asset->url,\n  website\n}": PartnersQueryResult;
-    "\n  *[_type == \"category\" && defined(slug.current)] | order(title asc) {\n    _id,\n    title,\n    slug,\n    description,\n    color,\n    image,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  }\n": CategoriesQueryResult;
-    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    seo\n  }\n": CategoryQueryResult;
-    "*[_type == \"carouselPost\"] | order(publishedAt desc){\n  _id,\n  title,\n  slug,\n  slides[]{\n    image{\n      asset->{\n        url\n      },\n      alt\n    },\n    caption,\n    order\n  },\n  description,\n  author->{\n    name\n  },\n  publishedAt\n}": CarouselPostsQueryResult;
-    "\n  *[_type == \"category\" && defined(slug.current)] \n  | order(order asc, title asc) {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"image\": image.asset->url,\n    featured,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  }\n": SidebarCategoriesQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current) && isTrending == true] \n  | order(date desc) [0...10] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"author\": author->name,\n    // Same dead-field bug as postFields had: the schema stores an array of\n    // references under \"categories\", so \"category->title\" always resolved to\n    // null and every badge in the marquee came out empty.\n    \"category\": categories[0]->title,\n    \"date\": coalesce(date, _updatedAt)\n  }\n": TrendingPostsMarqueeQueryResult;
-    "\n  *[_type == \"category\" && defined(slug.current) && featured == true] \n  | order(order asc, title asc) [0...6] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current) && status == \"published\"])\n  }\n": FeaturedCategoriesQueryResult;
-    "\n  *[_type == \"category\" && defined(slug.current)] {\n    \"slug\": slug.current\n  }\n": AllCategorySlugsQueryResult;
-    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n    \"recentPosts\": *[_type == \"post\" && references(^._id) && defined(slug.current)] \n      | order(date desc) [0...3] {\n        \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n      }\n  }\n": CategoryWithRecentPostsQueryResult;
-    "\n  *[_type == \"category\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    order,\n    \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n": CategoryWithPostsQueryResult;
-    "\n  *[_type == \"founderMessage\" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageQueryResult;
-    "\n  *[_type == \"founderMessage\" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n": FounderMessageBySlugQueryResult;
-    "\n  *[_type == \"socialMediaPosts\"] | order(_createdAt desc) [0] {\n    _id,\n    title,\n    showInstagram,\n    showLinkedin,\n    showTwitter,\n    \"instagramPosts\": instagramPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    \"linkedinPosts\": linkedinPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    \"twitterPosts\": twitterPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    lastUpdated,\n    _createdAt,\n    _updatedAt\n  }\n": SocialMediaPostsQueryResult;
-    "\n*[_type == \"communityRole\"]{\n  key,\n  title,\n  impact,\n  description,\n  skills,\n  color,\n  icon,\n  actions,\n  joinTeamUrl\n} | order(title asc)\n": COMMUNITY_ROLES_QUERYResult;
-    "\n  *[_type == \"aboutPage\"][0] {\n    title,\n    tagline,\n    introText,\n    stats[] {\n      value,\n      label\n    },\n    mission,\n    vision,\n    coreValues[] {\n      title,\n      description,\n      icon\n    },\n    whatWeDo[] {\n      title,\n      description,\n      icon\n    },\n    journey[] {\n      year,\n      title,\n      description\n    },\n    seoTitle,\n    seoDescription\n  }\n": AboutPageQueryResult;
-    "*[_type == \"communityPage\"][0] {\n  heroSection {\n    badge,\n    mainHeading,\n    secondaryHeading,\n    description,\n    joinMovementUrl,\n    founderMessageUrl,\n    impactStats[] {\n      value,\n      label,\n      icon\n    }\n  },\n  testimonialsSection {\n    title,\n    description,\n    testimonials[] {\n      name,\n      role,\n      content,\n      avatar\n    }\n  },\n  achievementsSection {\n    title,\n    description,\n    achievements[] {\n      title,\n      description,\n      icon\n    }\n  },\n  ctaSection {\n    title,\n    description,\n    primaryButtonText,\n    secondaryButtonText,\n    hashtags\n  }\n}": CommunityPageQueryResult;
-    "\n  *[_type == \"post\" && categories[]->slug.current match $type && slug.current == $slug][0] {\n    _id,\n    title,\n    slug,\n    content,\n    excerpt,\n    coverImage {\n      asset-> {\n        url,\n        metadata {\n          lqip\n        }\n      },\n      alt\n    },\n    author-> {\n      name,\n      picture\n    },\n    date,\n    categories[]-> {\n      title,\n      slug\n    },\n    readingTime\n  }\n": ResourceDetailQueryResult;
+    '*[_type == "post" && defined(slug.current)]{"slug": slug.current}': PostSlugsResult;
+    '\n  *[_type == "post" && defined(slug.current)] {\n    "slug": slug.current,\n    _updatedAt,\n    date,\n    _id\n  } | order(date desc, _updatedAt desc)\n': SitemapPostsQueryResult;
+    '\n  *[_type == "category" && defined(slug.current)] {\n    "slug": slug.current,\n    _updatedAt,\n    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])\n  }\n': AllCategoriesQueryResult;
+    '\n*["guides" in categories[]->slug.current && status == "published"]{\n  _id,\n  title,\n  "slug": slug.current,\n  "description": coalesce(excerpt, ""),\n  "image": coverImage.asset->url,\n  "type": type,\n  "downloadCount": downloadCount,\n  "category": categories[0]->title,\n   author-> {\n      name,\n      picture\n    },\n}\n': GuidesQueryResult;
+    '\n*[_type == "post" && "education" in categories[]->slug.current && status == "published"]{\n  _id,\n  title,\n  "slug": slug.current,\n  "description": coalesce(excerpt, ""),\n  "image": coverImage.asset->url,\n  "type": type,\n  "duration": duration,\n  "level": level,\n  author-> {\n      name,\n      picture\n    },\n}\n': EducationQueryResult;
+    '\n*[_type == "post" && "climate-stories" in categories[]->slug.current && status == "published"]{\n  _id,\n  title,\n  "slug": slug.current,\n  "description": coalesce(excerpt, ""),\n  "image": coverImage.asset->url,\n  organization,\n  impact,\n  readTime,\n  date,\n  author-> {\n      name,\n      picture\n    },\n}\n': ClimateStoriesQueryResult;
+    '\n*[_type == "post" && "youth-voices" in categories[]->slug.current && status == "published"]{\n  _id,\n  title,\n  "slug": slug.current,\n  "description": coalesce(excerpt, ""),\n  "image": coverImage.asset->url,\n  "author": author->name,\n  readTime,\n  likes,\n  date,\n  location,\n  author-> {\n      name,\n      picture\n    },\n}\n': YouthVoicesQueryResult;
+    '\n  {\n    "posts": *[_type == "post" && defined(slug.current)]\n       | order(date desc, _updatedAt desc)  {\n        \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n      },\n    "total": count(*[_type == "post" && defined(slug.current)])\n  }\n': AllPostsQueryResult;
+    '{\n  "posts": *[\n  _type == "post"\n  && defined(slug.current)\n  && ($category == "" || $category in categories[]->slug.current)\n  && (\n    $q == ""\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n]\n    | order(date desc, _updatedAt desc)\n  [0...20] {\n      \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n    },\n  "total": count(*[\n  _type == "post"\n  && defined(slug.current)\n  && ($category == "" || $category in categories[]->slug.current)\n  && (\n    $q == ""\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n]),\n  // Resolved alongside the rows so the results header can name the active\n  // topic without a second round trip.\n  "categoryTitle": *[_type == "category" && slug.current == $category][0].title\n}': PostsIndexShapeQueryResult;
+    '\n  count(*[\n  _type == "post"\n  && defined(slug.current)\n  && ($category == "" || $category in categories[]->slug.current)\n  && (\n    $q == ""\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n])\n': PostsIndexCountQueryResult;
+    '\n  {\n    "total": count(*[\n      _type == "post"\n      && defined(slug.current)\n      && (\n        $q == ""\n        || title match $q\n        || excerpt match $q\n        || author->name match $q\n        || count(categories[@->title match $q]) > 0\n      )\n    ]),\n    "categories": *[_type == "category" && defined(slug.current)]\n    | order(order asc, title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6"),\n    "postCount": count(*[\n      _type == "post"\n      && defined(slug.current)\n      && references(^._id)\n      && (\n        $q == ""\n        || title match $q\n        || excerpt match $q\n        || author->name match $q\n        || count(categories[@->title match $q]) > 0\n        )\n      ])\n    }\n  }\n': PostsIndexFacetsQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && featured == true] \n  | order(date desc, _updatedAt desc) [0...3] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': FeaturedPostsQueryResult;
+    '\n  *[_type == "post" && defined(slug.current)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': RecentPostsQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && author->slug.current == $authorSlug] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': PostsByAuthorQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && _id != $postId && \n    (category->_id == $categoryId || author->_id == $authorId)] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': RelatedPostsQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && \n    (title match $searchTerm + "*" || excerpt match $searchTerm + "*" || \n     pt::text(content) match $searchTerm + "*")] \n  | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': SearchPostsQueryResult;
+    '*[_type == "settings"][0]': SettingsQueryResult;
+    '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': HeroQueryResult;
+    '\n  *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': MoreStoriesQueryResult;
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content,\n    _updatedAt,\n    seo,\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': PostQueryResult;
+    '\n  *[_type == "post" && _id != $skip && defined(slug.current)]\n  | order(date desc, _updatedAt desc) [0...12] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n,\n    "relevance": count(categories[@._ref in $categoryIds])\n  }\n': RelatedStoriesQueryResult;
+    '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[0...5] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': HeroPostsGridQueryResult;
+    '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc)[1...4] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': TripleCardGridQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && isTrending == true] | order(date desc) [0...10] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n  }\n': TrendingPostsQueryResult;
+    '*[_type == "partner"] | order(_createdAt desc) {\n  _id,\n  title,\n  "logo": logo.asset->url,\n  website\n}': PartnersQueryResult;
+    '\n  *[_type == "category" && defined(slug.current)] | order(title asc) {\n    _id,\n    title,\n    slug,\n    description,\n    color,\n    image,\n    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])\n  }\n': CategoriesQueryResult;
+    '\n  *[_type == "category" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "color": coalesce(color.hex, "#3B82F6"),\n    "image": image.asset->url,\n    seo\n  }\n': CategoryQueryResult;
+    '*[_type == "carouselPost"] | order(publishedAt desc){\n  _id,\n  title,\n  slug,\n  slides[]{\n    image{\n      asset->{\n        url\n      },\n      alt\n    },\n    caption,\n    order\n  },\n  description,\n  author->{\n    name\n  },\n  publishedAt\n}': CarouselPostsQueryResult;
+    '\n  *[_type == "category" && defined(slug.current)] \n  | order(order asc, title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "color": coalesce(color.hex, "#3B82F6"),\n    "image": image.asset->url,\n    featured,\n    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])\n  }\n': SidebarCategoriesQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && isTrending == true] \n  | order(date desc) [0...10] {\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->name,\n    // Same dead-field bug as postFields had: the schema stores an array of\n    // references under "categories", so "category->title" always resolved to\n    // null and every badge in the marquee came out empty.\n    "category": categories[0]->title,\n    "date": coalesce(date, _updatedAt)\n  }\n': TrendingPostsMarqueeQueryResult;
+    '\n  *[_type == "category" && defined(slug.current) && featured == true] \n  | order(order asc, title asc) [0...6] {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "color": coalesce(color.hex, "#3B82F6"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"])\n  }\n': FeaturedCategoriesQueryResult;
+    '\n  *[_type == "category" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': AllCategorySlugsQueryResult;
+    '\n  *[_type == "category" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "color": coalesce(color.hex, "#3B82F6"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n    "recentPosts": *[_type == "post" && references(^._id) && defined(slug.current)] \n      | order(date desc) [0...3] {\n        \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{\n    "name": coalesce(name, "Anonymous"), \n    picture,\n    bio\n  },\n  // The schema field is "categories", an array of references. The previous\n  // projection dereferenced "category->", a field that does not exist, so\n  // every category badge on the site was silently fed null. "category" keeps\n  // the singular shape the existing cards read; "categories" exposes the\n  // full list for the article page.\n  "category": categories[0]->{\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n    "color": coalesce(color.hex, "#3B82F6")\n  },\n  "categoryIds": categories[]._ref,\n  tags,\n  "readingTime": round(length(pt::text(content)) / 5 / 200)\n\n      }\n  }\n': CategoryWithRecentPostsQueryResult;
+    '\n  *[_type == "category" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "color": coalesce(color.hex, "#3B82F6"),\n    image {\n      asset-> {\n        _id,\n        url\n      },\n      alt\n    },\n    featured,\n    order,\n    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': CategoryWithPostsQueryResult;
+    '\n  *[_type == "founderMessage" && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n': FounderMessageQueryResult;
+    '\n  *[_type == "founderMessage" && slug.current == $slug && isActive == true][0] {\n    _id,\n    _createdAt,\n    _updatedAt,\n    title,\n    slug,\n    founderName,\n    founderTitle,\n    founderImage {\n      asset-> {\n        _id,\n        url,\n        metadata {\n          dimensions {\n            width,\n            height,\n            aspectRatio\n          },\n          lqip\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    message,\n    featuredQuote {\n      text,\n      showQuote\n    },\n    seo {\n      metaTitle,\n      metaDescription,\n      ogImage {\n        asset-> {\n          url\n        }\n      }\n    },\n    publishedAt,\n    isActive\n  }\n': FounderMessageBySlugQueryResult;
+    '\n  *[_type == "socialMediaPosts"] | order(_createdAt desc) [0] {\n    _id,\n    title,\n    showInstagram,\n    showLinkedin,\n    showTwitter,\n    "instagramPosts": instagramPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    "linkedinPosts": linkedinPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    "twitterPosts": twitterPosts[isActive == true]{\n      embedHtml,\n      fallbackDescription,\n      isActive\n    },\n    lastUpdated,\n    _createdAt,\n    _updatedAt\n  }\n': SocialMediaPostsQueryResult;
+    '\n*[_type == "communityRole"]{\n  key,\n  title,\n  impact,\n  description,\n  skills,\n  color,\n  icon,\n  actions,\n  joinTeamUrl\n} | order(title asc)\n': COMMUNITY_ROLES_QUERY_RESULT;
+    '\n  *[_type == "aboutPage"][0] {\n    title,\n    tagline,\n    introText,\n    stats[] {\n      value,\n      label\n    },\n    mission,\n    vision,\n    coreValues[] {\n      title,\n      description,\n      icon\n    },\n    whatWeDo[] {\n      title,\n      description,\n      icon\n    },\n    journey[] {\n      year,\n      title,\n      description\n    },\n    seoTitle,\n    seoDescription\n  }\n': AboutPageQueryResult;
+    '*[_type == "communityPage"][0] {\n  heroSection {\n    badge,\n    mainHeading,\n    secondaryHeading,\n    description,\n    joinMovementUrl,\n    founderMessageUrl,\n    impactStats[] {\n      value,\n      label,\n      icon\n    }\n  },\n  testimonialsSection {\n    title,\n    description,\n    testimonials[] {\n      name,\n      role,\n      content,\n      avatar\n    }\n  },\n  achievementsSection {\n    title,\n    description,\n    achievements[] {\n      title,\n      description,\n      icon\n    }\n  },\n  ctaSection {\n    title,\n    description,\n    primaryButtonText,\n    secondaryButtonText,\n    hashtags\n  }\n}': CommunityPageQueryResult;
+    '\n  *[_type == "post" && categories[]->slug.current match $type && slug.current == $slug][0] {\n    _id,\n    title,\n    slug,\n    content,\n    excerpt,\n    coverImage {\n      asset-> {\n        url,\n        metadata {\n          lqip\n        }\n      },\n      alt\n    },\n    author-> {\n      name,\n      picture\n    },\n    date,\n    categories[]-> {\n      title,\n      slug\n    },\n    readingTime\n  }\n': ResourceDetailQueryResult;
   }
 }
