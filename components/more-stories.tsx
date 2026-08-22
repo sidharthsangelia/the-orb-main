@@ -1,72 +1,104 @@
 import Link from "next/link";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { moreStoriesQuery } from "@/sanity/lib/queries";
-import CoverImage from "./cover-image";
-import DateComponent from "./date";
-import Avatar from "./avatar";
+import { Image } from "next-sanity/image";
+import { Clock } from "lucide-react";
 
-export default async function MoreStories(params: {
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { relatedStoriesQuery } from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/utils";
+import DateComponent from "./date";
+
+export default async function MoreStories({
+  skip,
+  limit,
+  categoryIds,
+}: {
   skip: string;
   limit: number;
+  categoryIds: string[];
 }) {
-  const data = await sanityFetch({ query: moreStoriesQuery, params });
+  const pool = await sanityFetch({
+    query: relatedStoriesQuery,
+    params: { skip, categoryIds },
+  });
+
+  /*
+   * Rank by shared categories, then let recency break ties. Array.sort is
+   * stable, so the date ordering the query already applied survives within
+   * each relevance band — and a post with no category overlap still fills the
+   * grid rather than leaving a hole.
+   */
+  const posts = [...(pool ?? [])]
+    .sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
+    .slice(0, limit);
+
+  if (!posts.length) return null;
 
   return (
-    <section className="container mx-auto px-4 pb-4 sm:px-6 lg:px-8 lg:pt-8">
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {data?.map((post) => {
-          const { _id, title, slug, coverImage, excerpt, author } = post;
-          return (
-            <article
-              key={_id}
-              className="group rounded-xl overflow-hidden border border-border/20 bg-white dark:bg-muted/50 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-            >
-              {/* Cover image */}
-              <Link href={`/posts/${slug}`} className="block relative">
-                <CoverImage
-                  image={coverImage}
-                  priority={false}
-                 
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => {
+        const cover = post.coverImage?.asset?._ref
+          ? urlForImage(post.coverImage)?.width(800).height(500).fit("crop").url()
+          : null;
+
+        return (
+          <article
+            key={post._id}
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-shadow duration-300 hover:shadow-lg"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+              {cover && (
+                <Image
+                  src={cover}
+                  alt={post.coverImage?.alt || ""}
+                  fill
+                  sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-xl" />
-              </Link>
+              )}
+            </div>
 
-              {/* Content */}
-              <div className="p-5 flex flex-col h-full">
-                {/* Title */}
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 leading-snug group-hover:text-primary transition-colors">
-                  <Link href={`/posts/${slug}`} className="hover:underline">
-                    {title}
-                  </Link>
-                </h3>
+            <div className="flex flex-1 flex-col gap-3 p-5">
+              {post.category?.title && (
+                <span className="text-xs font-semibold uppercase tracking-wider text-brand-accent">
+                  {post.category.title}
+                </span>
+              )}
 
-                {/* Author + Date */}
-                <div className="mb-3 flex items-center gap-3 text-xs sm:text-sm text-muted-foreground">
-                  {author && (
-                    <div className="flex items-center gap-2">
-                      <Avatar name={author.name} picture={author.picture} />
-                      
-                    </div>
-                  )}
-                  {author && (
-                    <span className="hidden sm:inline text-muted-foreground/50">
-                      •
+              <h3 className="text-lg font-semibold leading-snug tracking-tight">
+                <Link href={`/posts/${post.slug}`}>
+                  {/* Stretched link: the whole card is the target, but the
+                      accessibility tree still sees exactly one link. */}
+                  <span className="absolute inset-0 z-10" aria-hidden="true" />
+                  {post.title}
+                </Link>
+              </h3>
+
+              {post.excerpt && (
+                <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                  {post.excerpt}
+                </p>
+              )}
+
+              <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 text-xs text-muted-foreground">
+                {post.author?.name && (
+                  <>
+                    <span className="font-medium text-foreground/80">
+                      {post.author.name}
                     </span>
-                  )}
-                  <DateComponent dateString={post.date} />
-                </div>
-
-                {/* Excerpt */}
-                {excerpt && (
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {excerpt}
-                  </p>
+                    <span aria-hidden="true">·</span>
+                  </>
                 )}
+                <DateComponent dateString={post.date} />
+                <span aria-hidden="true">·</span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" aria-hidden="true" />
+                  {Math.max(1, post.readingTime ?? 1)} min
+                </span>
               </div>
-            </article>
-          );
-        })}
-      </div>
-    </section>
+            </div>
+          </article>
+        );
+      })}
+    </div>
   );
 }

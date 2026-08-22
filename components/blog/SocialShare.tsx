@@ -24,9 +24,9 @@ type Props = {
 export default function SocialShare({ url, title }: Props) {
   return (
     <div className="border-t border-border mt-12 pt-8">
-      <h3 className="text-lg font-semibold text-foreground mb-6 text-center">
+      <h2 className="text-lg font-semibold text-foreground mb-6 text-center">
         Share this article
-      </h3>
+      </h2>
 
       <div className="flex justify-center flex-wrap gap-4 sm:gap-5">
         {/* WhatsApp */}

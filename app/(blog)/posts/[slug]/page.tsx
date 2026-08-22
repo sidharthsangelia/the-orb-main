@@ -1,28 +1,32 @@
 import { defineQuery } from "next-sanity";
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import { type PortableTextBlock } from "next-sanity";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { postQuery, settingsQuery } from "@/sanity/lib/queries";
+import { postQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage, urlForImage } from "@/sanity/lib/utils";
-import Avatar from "@/components/avatar";
-import CoverImage from "@/components/cover-image";
-import DateComponent from "@/components/date";
-import MoreStories from "@/components/more-stories";
+import { extractHeadings, MIN_HEADINGS } from "@/lib/portable-text";
+
 import CustomPortableText from "@/components/portable-text";
-import { CTA } from "@/components/about/Cta";
-import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
-import SocialShare from "@/components/blog/SocialShare";
+import MoreStories from "@/components/more-stories";
+import ArticleHeader from "@/components/blog/ArticleHeader";
+import ReadingProgress from "@/components/blog/ReadingProgress";
+import TableOfContents from "@/components/blog/TableOfContents";
 import AuthorCard from "@/components/blog/AuthorCard";
-import Image from "next/image";
+import SocialShare from "@/components/blog/SocialShare";
+import NewsletterArticleCard from "@/components/NewsLetterArticleCard";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+// Posts were fully static with no revalidation, so a published correction only
+// reached readers on the next deploy. Matches the cadence used on the homepage.
+export const revalidate = 60;
 
 const postSlugs = defineQuery(
   `*[_type == "post" && defined(slug.current)]{"slug": slug.current}`
@@ -36,124 +40,175 @@ export async function generateStaticParams() {
   });
 }
 
-// Remove the manual ogImage generation and simplify
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await sanityFetch({ query: postQuery, params, stega: false });
 
+  if (!post) return {};
+
+  // The `seo` object is authored per-post in Sanity and was previously ignored
+  // entirely; fall back to the article's own title/excerpt when it is empty.
+  const title = post.seo?.metaTitle || post.title;
+  const description = post.seo?.metaDescription || post.excerpt || undefined;
+  const ogImage =
+    resolveOpenGraphImage(post.seo?.ogImage) ??
+    resolveOpenGraphImage(post.coverImage);
+
   return {
-    title: post?.title,
-    description: post?.excerpt ?? undefined,
-    authors: post?.author?.name ? [{ name: post?.author?.name }] : [],
-    // Remove the manual openGraph images - Next.js will automatically use opengraph-image.tsx
+    title,
+    description,
+    keywords: post.seo?.keywords ?? post.tags ?? undefined,
+    authors: post.author?.name ? [{ name: post.author.name }] : [],
+    alternates: post.slug ? { canonical: `/posts/${post.slug}` } : undefined,
     openGraph: {
-      title: post?.title,
-      description: post?.excerpt ?? undefined,
+      title,
+      description,
       type: "article",
-      publishedTime: post?.date,
-      authors: post?.author?.name ? [post?.author?.name] : [],
+      publishedTime: post.date,
+      modifiedTime: post._updatedAt,
+      authors: post.author?.name ? [post.author.name] : [],
+      images: ogImage ? [ogImage] : [],
     },
     twitter: {
       card: "summary_large_image",
-      title: post?.title,
-      description: post?.excerpt ?? undefined,
+      title,
+      description,
+      images: ogImage ? [ogImage.url] : [],
     },
   };
 }
 
 export default async function PostPage({ params }: Props) {
-  const [post, settings] = await Promise.all([
-    sanityFetch({ query: postQuery, params }),
-    sanityFetch({ query: settingsQuery }),
-  ]);
+  const post = await sanityFetch({ query: postQuery, params });
 
   if (!post?._id) return notFound();
 
+  const content = (post.content ?? []) as PortableTextBlock[];
+  const headings = extractHeadings(content);
+
   return (
-    <div className="container pt-10 mx-auto px-4 sm:px-6 lg:px-8">
-      <article className="mx-auto pt-10 mb-16 max-w-3xl lg:max-w-4xl space-y-8">
-        {/* Title */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-tight">
-          {post.title}
-        </h1>
+    <>
+      <ReadingProgress targetId="article-body" />
 
-        {/* Author + Date */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-muted-foreground text-sm">
-          {post.author && (
-            <div className="flex items-center gap-3">
-              <Avatar name={post.author.name} picture={post.author.picture} />
-            </div>
-          )}
-          {post.author && (
-            <span className="hidden sm:inline text-muted-foreground/50">•</span>
-          )}
-          <DateComponent dateString={post.date} />
-        </div>
+      <div className="container py-10 lg:py-16">
+        {/*
+         * One grid governs the whole article. The text column is capped at a
+         * readable measure and the table of contents occupies the gutter
+         * beside it, so every band below shares the same left edge.
+         */}
+        <div className="mx-auto grid max-w-6xl gap-x-12 lg:grid-cols-[minmax(0,1fr)_15rem]">
+          <article className="min-w-0 lg:max-w-[46rem]">
+            <ArticleHeader
+              title={post.title}
+              excerpt={post.excerpt}
+              date={post.date}
+              readingTime={post.readingTime}
+              categories={post.categories}
+              author={post.author}
+              coverImage={post.coverImage}
+            />
 
-        {/* Cover Image */}
-        <div className="mb-6">
-          <CoverImage image={post.coverImage} priority />
-        </div>
+            {headings.length >= MIN_HEADINGS && (
+              <TableOfContents headings={headings} variant="inline" className="mt-8 lg:hidden" />
+            )}
 
-        {/* Blog Body */}
-        {post.content?.length && (
-          <CustomPortableText
-            className="prose dark:prose-invert prose-base sm:prose-lg max-w-none text-foreground leading-relaxed"
-            value={post.content as PortableTextBlock[]}
-          />
-        )}
-      </article>
-
-      <SocialShare
-        url={`https://theorbearth.in/posts/${post.slug}`}
-        title={post.title}
-      />
-
-      {/* Author Details Card */}
-
-      {post.author && (
-        <AuthorCard
-          name={post.author.name}
-          picture={
-            post.author.picture?.asset?._ref
-              ? (urlForImage(post.author.picture)
-                  ?.height(256)
-                  .width(256)
-                  .fit("crop")
-                  .url() as string)
-              : "/default-avatar.jpg"
-          }
-          bio={post.author.bio ?? undefined}
-        />
-      )}
-
-      {/* Continue Reading */}
-      <section className="py-12 sm:py-16">
-        <div className="max-w-6xl mx-auto text-center px-2 sm:px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-10">
-            Continue Reading
-          </h2>
-          <Suspense
-            fallback={
-              <div className="flex justify-center items-center py-12">
-                <div className="text-muted-foreground">
-                  Loading related stories...
-                </div>
+            {content.length > 0 && (
+              <div id="article-body" className="mt-10">
+                <CustomPortableText
+                  // max-w-none lets the grid own the measure; prose's own
+                  // 65ch would fight the column width set above.
+                  className="prose prose-lg max-w-none dark:prose-invert prose-headings:scroll-mt-28 prose-p:leading-[1.75] prose-img:rounded-xl"
+                  value={content}
+                />
               </div>
-            }
-          >
-            <MoreStories skip={post._id} limit={3} />
+            )}
+
+            {!!post.tags?.length && (
+              <div className="mt-12 border-t border-border pt-6">
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Topics
+                </h2>
+                <ul className="flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <li
+                      key={tag}
+                      className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {post.slug && (
+              <SocialShare
+                url={`https://theorbearth.in/posts/${post.slug}`}
+                title={post.title}
+              />
+            )}
+
+            {post.author && (
+              <AuthorCard
+                name={post.author.name}
+                picture={
+                  post.author.picture?.asset?._ref
+                    ? (urlForImage(post.author.picture)
+                        ?.height(256)
+                        .width(256)
+                        .fit("crop")
+                        .url() as string)
+                    : "/default-avatar.jpg"
+                }
+                bio={post.author.bio ?? undefined}
+              />
+            )}
+          </article>
+
+          {/* Gutter rail — hidden below lg, where the collapsible copy above
+              takes over. */}
+          <aside className="hidden lg:block">
+            {headings.length >= MIN_HEADINGS && <TableOfContents headings={headings} variant="rail" />}
+          </aside>
+        </div>
+      </div>
+
+      <section className="section-y border-t border-border bg-muted/30">
+        <div className="container">
+          <SectionHeading
+            eyebrow="Keep reading"
+            title="Related stories"
+            description="More reporting from the youth driving India's climate response."
+            align="left"
+            className="mb-10"
+          />
+          <Suspense fallback={<RelatedSkeleton />}>
+            <MoreStories
+              skip={post._id}
+              limit={3}
+              categoryIds={post.categoryIds ?? []}
+            />
           </Suspense>
         </div>
       </section>
 
-      <NewsletterArticleCard />
-      {/* CTA */}
-      <div className="mt-12 sm:mt-16 flex justify-center">
-        <CTA />
+      <div className="section-y">
+        <NewsletterArticleCard />
       </div>
+    </>
+  );
+}
+
+function RelatedSkeleton() {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="space-y-3">
+          <Skeleton className="aspect-[16/10] w-full rounded-2xl" />
+          <Skeleton className="h-5 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
+      ))}
     </div>
   );
 }

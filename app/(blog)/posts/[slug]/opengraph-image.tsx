@@ -13,7 +13,8 @@ export const size = {
 export const contentType = 'image/png'
 
 type Props = {
-  params: { slug: string }
+  // Next 15 passes route params as a promise.
+  params: Promise<{ slug: string }>
 }
 
 export default async function Image({ params }: Props) {
@@ -30,7 +31,7 @@ export default async function Image({ params }: Props) {
       (
         <div
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #487052 0%, #509e8e 100%)',
             width: '100%',
             height: '100%',
             display: 'flex',
