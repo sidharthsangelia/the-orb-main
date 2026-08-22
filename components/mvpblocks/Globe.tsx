@@ -31,68 +31,114 @@ const Earth: React.FC<EarthProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    let width = 0;
-    const onResize = () =>
-      canvasRef.current && (width = canvasRef.current.offsetWidth);
-    window.addEventListener('resize', onResize);
-    onResize();
-    let phi = 0;
+  /*
+   * Callers pass colours as inline array literals, so a plain dependency
+   * array would tear down and rebuild the WebGL context on every parent
+   * render. Key the effect on the *values* instead and read the latest
+   * config from a ref.
+   */
+  const configKey = [
+    theta,
+    dark,
+    scale,
+    diffuse,
+    mapSamples,
+    mapBrightness,
+    baseColor.join(),
+    markerColor.join(),
+    glowColor.join(),
+  ].join('|');
 
-    onResize();
-    const globe = createGlobe(canvasRef.current!, {
-      devicePixelRatio: 2,
+  const configRef = useRef({
+    theta,
+    dark,
+    scale,
+    diffuse,
+    mapSamples,
+    mapBrightness,
+    baseColor,
+    markerColor,
+    glowColor,
+  });
+  configRef.current = {
+    theta,
+    dark,
+    scale,
+    diffuse,
+    mapSamples,
+    mapBrightness,
+    baseColor,
+    markerColor,
+    glowColor,
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    let phi = 0;
+    let width = canvas.offsetWidth;
+
+    const globe = createGlobe(canvas, {
+      devicePixelRatio: Math.min(window.devicePixelRatio, 2),
       width: width * 2,
       height: width * 2,
       phi: 0,
-      theta: theta,
-      dark: dark,
-      scale: scale,
-      diffuse: diffuse,
-      mapSamples: mapSamples,
-      mapBrightness: mapBrightness,
-      baseColor: baseColor,
-      markerColor: markerColor,
-      glowColor: glowColor,
+      ...configRef.current,
       opacity: 1,
       offset: [0, 0],
-      markers: [
-        // longitude latitude
-      ],
+      markers: [],
       onRender: (state: Record<string, any>) => {
-        // Called on every animation frame.
-        // `state` will be an empty object, return updated params.\
+        // cobe sizes off these every frame, so keeping them in sync here is
+        // what actually makes the globe responsive — the previous version
+        // measured once on mount and stretched on any resize.
+        state.width = width * 2;
+        state.height = width * 2;
         state.phi = phi;
-        phi += 0.003;
+        if (!prefersReducedMotion) phi += 0.003;
       },
     });
 
+    const observer = new ResizeObserver(([entry]) => {
+      const next = entry.contentRect.width;
+      if (next > 0) width = next;
+    });
+    observer.observe(canvas);
+
+    // Fade in once the first frame has painted, avoiding a black square flash
+    const raf = requestAnimationFrame(() => {
+      canvas.style.opacity = '1';
+    });
+
     return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
       globe.destroy();
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configKey]);
 
- return (
-  <div
-    className={cn(
-      'flex items-center justify-center z-[10] w-full mx-auto',
-      // Mobile: smaller size and centered, Desktop: larger and positioned
-      'max-w-[280px] h-[280px] sm:max-w-[320px] sm:h-[320px] md:max-w-[380px] md:h-[380px] lg:max-w-[470px] lg:h-[470px]',
-      className
-    )}
-  >
-    <canvas
-      ref={canvasRef}
-      style={{
-        width: '100%',
-        height: '100%',
-        maxWidth: '100%',
-        aspectRatio: '1',
-      }}
-    />
-  </div>
-);
-
+  return (
+    <div
+      // Purely decorative — it conveys nothing a screen reader needs.
+      aria-hidden="true"
+      className={cn(
+        'z-10 mx-auto flex w-full items-center justify-center',
+        'aspect-square max-w-[260px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[440px] xl:max-w-[480px]',
+        className,
+      )}
+    >
+      <canvas
+        ref={canvasRef}
+        className="h-full w-full opacity-0 transition-opacity duration-700"
+        style={{ aspectRatio: '1' }}
+      />
+    </div>
+  );
 };
 
 export default Earth;
