@@ -111,11 +111,25 @@ const postFields = /* groq */ `
     picture,
     bio
   },
-  "category": category->{
+  // The schema field is "categories", an array of references. The previous
+  // projection dereferenced "category->", a field that does not exist, so
+  // every category badge on the site was silently fed null. "category" keeps
+  // the singular shape the existing cards read; "categories" exposes the
+  // full list for the article page.
+  "category": categories[0]->{
     title,
+    "slug": slug.current,
     "color": coalesce(color.hex, "#3B82F6")
   },
-  "readingTime": round(length(pt::text(content)) / 5 / 180 )
+  "categories": categories[]->{
+    _id,
+    title,
+    "slug": slug.current,
+    "color": coalesce(color.hex, "#3B82F6")
+  },
+  "categoryIds": categories[]._ref,
+  tags,
+  "readingTime": round(length(pt::text(content)) / 5 / 200)
 `;
 
 // Query to fetch all posts with pagination
@@ -126,6 +140,91 @@ export const allPostsQuery = defineQuery(`
         ${postFields}
       },
     "total": count(*[_type == "post" && defined(slug.current)])
+  }
+`);
+
+// The archive filter, shared by the projection below and the facet counts, so a
+// category's badge can never disagree with the grid it links to.
+//
+// $category and $q are always strings — "" means "not applied". GROQ has no
+// optional-parameter syntax, so the guard has to be written as a disjunction.
+const postsIndexFilter = /* groq */ `
+  _type == "post"
+  && defined(slug.current)
+  && ($category == "" || $category in categories[]->slug.current)
+  && (
+    $q == ""
+    || title match $q
+    || excerpt match $q
+    || author->name match $q
+    || count(categories[@->title match $q]) > 0
+  )
+`;
+
+/*
+ * The archive listing. The previous allPostsQuery accepted $limit and $offset
+ * and then ignored them — it had no slice at all — so every "page" fetched the
+ * entire post collection and rendered it, while the pager underneath advertised
+ * page numbers that changed nothing. This one actually slices.
+ */
+export const postsIndexQuery = defineQuery(`
+  {
+    "posts": *[${postsIndexFilter}]
+      | order(date desc, _updatedAt desc)
+      [$offset...$offset + $limit] {
+        ${postFields}
+      },
+    "total": count(*[${postsIndexFilter}]),
+    // Resolved alongside the rows so the results header can name the active
+    // topic without a second round trip.
+    "categoryTitle": *[_type == "category" && slug.current == $category][0].title
+  }
+`);
+
+/*
+ * Count only. Used to reject an out-of-range page *before* the response starts
+ * streaming: once a Suspense boundary has flushed the shell, notFound() can no
+ * longer change the status line, and the 404 renders under a 200.
+ */
+export const postsIndexCountQuery = defineQuery(`
+  count(*[${postsIndexFilter}])
+`);
+
+// Facet counts for the filter rail. Counted over the same predicate as the
+// listing (minus the category clause, which each row supplies itself), so the
+// number on a chip is exactly how many stories that chip will show.
+export const postsIndexFacetsQuery = defineQuery(`
+  {
+    "total": count(*[
+      _type == "post"
+      && defined(slug.current)
+      && (
+        $q == ""
+        || title match $q
+        || excerpt match $q
+        || author->name match $q
+        || count(categories[@->title match $q]) > 0
+      )
+    ]),
+    "categories": *[_type == "category" && defined(slug.current)]
+    | order(order asc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    "color": coalesce(color.hex, "#3B82F6"),
+    "postCount": count(*[
+      _type == "post"
+      && defined(slug.current)
+      && references(^._id)
+      && (
+        $q == ""
+        || title match $q
+        || excerpt match $q
+        || author->name match $q
+        || count(categories[@->title match $q]) > 0
+        )
+      ])
+    }
   }
 `);
 
@@ -238,9 +337,12 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]`);
 //   }
 // `);
 
+// The featured card renders a headline, an excerpt and a photo — it never
+// touched `content`, but the projection shipped the article's entire body to
+// the browser on every home page render. `readingTime` inside postFields still
+// measures the body server-side via pt::text(), so nothing is lost.
 export const heroQuery = defineQuery(`
   *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {
-    content,
     ${postFields}
   }
 `);
@@ -254,7 +356,21 @@ export const moreStoriesQuery = defineQuery(`
 export const postQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
     content,
+    _updatedAt,
+    seo,
     ${postFields}
+  }
+`);
+
+// Candidate pool for "Continue reading". Relevance is the number of
+// categories shared with the article being read; the caller sorts on it and
+// falls back to recency, so a post with no category matches still fills the
+// grid rather than leaving a gap.
+export const relatedStoriesQuery = defineQuery(`
+  *[_type == "post" && _id != $skip && defined(slug.current)]
+  | order(date desc, _updatedAt desc) [0...12] {
+    ${postFields},
+    "relevance": count(categories[@._ref in $categoryIds])
   }
 `);
 
@@ -334,9 +450,16 @@ export const carouselPostsQuery =
 }`);
 
 // Categories with post counts for sidebar
+/*
+ * No [0...8] slice: there are nine categories, so the ninth was silently
+ * unreachable from the sidebar — and the "View all categories" escape hatch is
+ * commented out. postCount also counted status == "published" only, while every
+ * listing on the site shows all posts, so each chip under-reported its own
+ * archive. Both now match what a reader actually gets.
+ */
 export const sidebarCategoriesQuery = defineQuery(`
   *[_type == "category" && defined(slug.current)] 
-  | order(order asc, title asc) [0...8] {
+  | order(order asc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -344,19 +467,22 @@ export const sidebarCategoriesQuery = defineQuery(`
     "color": coalesce(color.hex, "#3B82F6"),
     "image": image.asset->url,
     featured,
-    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current) && status == "published"])
+    "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)])
   }
 `);
 
 // Trending posts for marquee
 export const trendingPostsMarqueeQuery = defineQuery(`
-  *[_type == "post" && defined(slug.current) && isTrending == true && status == "published"] 
+  *[_type == "post" && defined(slug.current) && isTrending == true] 
   | order(date desc) [0...10] {
     _id,
     title,
     "slug": slug.current,
     "author": author->name,
-    "category": category->title,
+    // Same dead-field bug as postFields had: the schema stores an array of
+    // references under "categories", so "category->title" always resolved to
+    // null and every badge in the marquee came out empty.
+    "category": categories[0]->title,
     "date": coalesce(date, _updatedAt)
   }
 `);
