@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { cn } from "@/lib/utils";
-import DateComponent from './date';
-import { urlForImage } from '@/sanity/lib/utils';
+import Image from "next/image";
+import Link from "next/link";
+import { Clock, User } from "lucide-react";
+
+import { CategoryChip } from "@/components/ui/category-chip";
+import { urlForImage } from "@/sanity/lib/utils";
 
 type Post = {
   title: string;
@@ -14,83 +15,152 @@ type Post = {
     name: string;
     picture?: any;
   };
+  category?: {
+    title?: string | null;
+    color?: string | null;
+  } | null;
+  readingTime?: number;
 };
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+});
+
+function formatDate(value: string) {
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : dateFormatter.format(parsed);
+}
 
 function PostCard({ post }: { post: Post }) {
   const imageUrl = post.coverImage
-    ? urlForImage(post.coverImage)?.width(1651).height(1000).url()
-    : 'https://images.unsplash.com/photo-1544077960-604201fe74bc?auto=format&fit=crop&w=1651&q=80';
+    ? urlForImage(post.coverImage)?.width(900).height(1125).fit("crop").url()
+    : null;
+
+  const authorImage = post.author?.picture
+    ? urlForImage(post.author.picture)?.width(72).height(72).fit("crop").url()
+    : null;
+
+  const published = formatDate(post.date);
+  const minutes = Math.max(1, post.readingTime ?? 1);
 
   return (
-    <div className="w-full group/card"> {/* 🔥 was w-96, now w-full */}
-      <Link href={`/posts/${post.slug}`}>
+    /*
+     * A fixed aspect ratio rather than the old `h-96`: at three across on a
+     * 1280px container that height left the cards wider than they were tall,
+     * so the photograph was cropped to a letterbox strip and the text block
+     * filled most of the card.
+     */
+    <article className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-2xl border border-border/60 bg-muted shadow-sm transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background">
+      {imageUrl ? (
+        /*
+         * Was a CSS `background-image`, which meant no optimisation, no
+         * lazy-loading and no responsive sizes — three full-size photos
+         * downloading eagerly on every home page visit.
+         */
+        <Image
+          src={imageUrl}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw"
+          className="-z-10 object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+      ) : (
         <div
-          className={cn(
-            "relative h-96 rounded-lg shadow-xl flex flex-col justify-between p-8 cursor-pointer overflow-hidden",
-            "bg-cover bg-center transition-transform duration-500 group-hover/card:scale-[1.02]"
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-gradient-to-br from-brand/40 to-brand-accent/40"
+        />
+      )}
+
+      {/*
+       * Two scrim layers, not one. A flat wash tames blown-out skies and pale
+       * photographs that the old single bottom gradient left white-on-white,
+       * while the gradient carries the text block itself to AA contrast.
+       */}
+      <div aria-hidden className="absolute inset-0 -z-10 bg-black/15" />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/55 via-45% to-transparent"
+      />
+
+      {post.category && (
+        <CategoryChip
+          category={post.category}
+          tone="onImage"
+          className="absolute left-5 top-5 shadow-sm"
+        />
+      )}
+
+      <div className="p-5 sm:p-6">
+        <h3 className="text-balance text-lg font-semibold leading-snug text-white sm:text-xl">
+          <Link
+            href={`/posts/${post.slug}`}
+            /* Stretched link — the whole card is the hit target, and it is the
+               card's only tab stop. */
+            className="line-clamp-2 rounded-sm outline-none after:absolute after:inset-0 after:content-['']"
+          >
+            {post.title}
+          </Link>
+        </h3>
+
+        {post.excerpt && (
+          <p className="mt-2.5 line-clamp-2 text-sm leading-relaxed text-white/75">
+            {post.excerpt}
+          </p>
+        )}
+
+        <div className="mt-5 flex items-center gap-2.5 border-t border-white/15 pt-4">
+          {authorImage ? (
+            <Image
+              height={32}
+              width={32}
+              alt=""
+              src={authorImage}
+              className="h-8 w-8 shrink-0 rounded-full border border-white/25 object-cover"
+            />
+          ) : (
+            <span
+              aria-hidden
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15"
+            >
+              <User className="h-4 w-4 text-white/80" />
+            </span>
           )}
-          style={{
-            backgroundImage: `url(${imageUrl})`
-          }}
-        >
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition duration-300 rounded-lg"></div>
-          
-          {/* Author */}
-          <div className="flex flex-row items-center space-x-4 z-10">
-            {post.author?.picture ? (
-              <Image
-                height={40}
-                width={40}
-                alt={post.author.name || "Author"}
-                src={urlForImage(post.author.picture)?.width(100).height(100).url() || "/default-avatar.png"}
-                className="h-10 w-10 rounded-full border border-white/20 object-cover shadow-md"
-              />
-            ) : (
-              <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-semibold">
-                {post.author?.name?.[0] || "?"}
-              </div>
+
+          <p className="min-w-0 truncate text-sm font-medium text-white/90">
+            {post.author?.name || "The Órb"}
+          </p>
+
+          <span aria-hidden className="text-white/30">
+            •
+          </span>
+
+          <p className="flex shrink-0 items-center gap-1.5 text-xs text-white/70">
+            {published && <time dateTime={post.date}>{published}</time>}
+            {published && (
+              <span aria-hidden className="text-white/30">
+                •
+              </span>
             )}
-            <div className="flex flex-col">
-              <p className="text-sm font-medium text-white">
-                {post.author?.name || "Unknown Author"}
-              </p>
-              <div className="text-xs text-gray-300">
-                <DateComponent dateString={post.date} />
-              </div>
-            </div>
-          </div>
-          
-          {/* Content */}
-          <div className="z-10">
-            <h1 className="font-semibold text-xl md:text-2xl text-white leading-snug drop-shadow">
-              {post.title}
-            </h1>
-            {post.excerpt && (
-              <p className="mt-3 text-sm text-gray-200 leading-relaxed line-clamp-3">
-                {post.excerpt}
-              </p>
-            )}
-          </div>
+            <Clock className="h-3.5 w-3.5" aria-hidden />
+            {minutes} min
+          </p>
         </div>
-      </Link>
-    </div>
+      </div>
+    </article>
   );
 }
 
-
-// Main component to display cards in a horizontal row
 export default function PostRowGrid({ posts }: { posts: Post[] }) {
+  if (!posts?.length) return null;
+
   return (
-    <div className="w-full py-12">
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
-        </div>
+    <div className="container">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <PostCard key={post.slug} post={post} />
+        ))}
       </div>
     </div>
   );
 }
-
