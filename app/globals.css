@@ -2,265 +2,424 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Light Mode - Natural, Airy, Elegant */
-  --background: 45 41% 89%; /* Soft ivory base */
-  --foreground: 180 6% 8%; /* Deep charcoal for text */
-
-  --card: 45 41% 94%; /* Lighter ivory for cards */
-  --card-foreground: 180 6% 8%;
-
-  --popover: 45 41% 96%; /* Nearly white ivory */
-  --popover-foreground: 180 6% 8%;
-
-  --primary: 139 21% 36%; /* Earthy forest green */
-  --primary-foreground: 45 41% 96%;
-
-  --secondary: 166 33% 47%; /* Teal green accent */
-  --secondary-foreground: 45 41% 96%;
-
-  --muted: 45 31% 91%; /* Muted ivory */
-  --muted-foreground: 61 11% 31%; /* Olive tone for muted text */
-
-  --accent: 166 28% 52%; /* Slightly brighter teal for accents */
-  --accent-foreground: 45 41% 96%;
-
-  --destructive: 0 65% 51%; /* Muted red for warnings */
-  --destructive-foreground: 45 41% 96%;
-
-  --border: 45 21% 82%; /* Soft border from ivory family */
-  --input: 45 35% 93%; /* Input background */
-  --ring: 139 21% 36%; /* Focus ring matches primary */
-
-  /* Chart colors using palette variations */
-  --chart-1: 139 21% 36%; /* Forest green */
-  --chart-2: 166 33% 47%; /* Teal green */
-  --chart-3: 61 11% 31%; /* Olive tone */
-  --chart-4: 45 15% 65%; /* Mid-tone neutral */
-  --chart-5: 139 15% 25%; /* Darker forest green */
-
-  /* Sidebar specific colors */
-  --sidebar: 45 35% 92%; /* Slightly warmer sidebar */
-  --sidebar-foreground: 180 6% 8%;
-  --sidebar-primary: 139 21% 36%;
-  --sidebar-primary-foreground: 45 41% 96%;
-  --sidebar-accent: 166 33% 47%;
-  --sidebar-accent-foreground: 45 41% 96%;
-  --sidebar-border: 45 21% 85%;
-  --sidebar-ring: 139 21% 36%;
-
-  /* Typography - Eco-friendly, readable fonts */
-  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-serif: 'Crimson Text', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-  /* Border radius for organic feel */
-  --radius: 0.75rem;
-
-  /* Soft, natural shadows */
-  --shadow-2xs: 0px 1px 2px 0px hsl(61 11% 31% / 0.04);
-  --shadow-xs: 0px 1px 3px 0px hsl(61 11% 31% / 0.06);
-  --shadow-sm: 0px 2px 4px -1px hsl(61 11% 31% / 0.08), 0px 1px 2px -1px hsl(61 11% 31% / 0.06);
-  --shadow: 0px 4px 6px -2px hsl(61 11% 31% / 0.08), 0px 2px 4px -2px hsl(61 11% 31% / 0.06);
-  --shadow-md: 0px 6px 10px -3px hsl(61 11% 31% / 0.10), 0px 2px 4px -2px hsl(61 11% 31% / 0.06);
-  --shadow-lg: 0px 10px 15px -3px hsl(61 11% 31% / 0.12), 0px 4px 6px -2px hsl(61 11% 31% / 0.08);
-  --shadow-xl: 0px 20px 25px -5px hsl(61 11% 31% / 0.12), 0px 10px 10px -5px hsl(61 11% 31% / 0.06);
-  --shadow-2xl: 0px 25px 50px -12px hsl(61 11% 31% / 0.20);
-
-  /* Spacing and tracking */
-  --tracking-normal: -0.005em;
-  --spacing: 0.25rem;
-
-  /* Additional eco-themed colors */
-  --success: 139 35% 45%; /* Success green */
-  --success-foreground: 45 41% 96%;
-  --warning: 45 85% 55%; /* Natural amber warning */
-  --warning-foreground: 61 11% 15%;
-  --info: 166 40% 50%; /* Info teal */
-  --info-foreground: 45 41% 96%;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-.dark {
-  /* Dark Mode - Deep, Calming, Atmospheric */
-  --background: 180 6% 4%; /* Deep charcoal base */
-  --foreground: 45 35% 92%; /* Brighter warm ivory text */
-
-  --card: 180 6% 6%; /* Slightly lighter charcoal */
-  --card-foreground: 45 35% 92%;
-
-  --popover: 180 6% 5%; /* Popover background */
-  --popover-foreground: 45 35% 92%;
-
-  --primary: 166 40% 55%; /* Slightly more vibrant teal */
-  --primary-foreground: 180 6% 4%;
-
-  --secondary: 139 30% 45%; /* More vibrant forest green */
-  --secondary-foreground: 45 35% 92%;
-
-  --muted: 180 6% 8%; /* Muted dark background */
-  --muted-foreground: 45 20% 72%; /* Brighter muted text */
-
-  --accent: 166 40% 55%; /* More vibrant accent teal */
-  --accent-foreground: 180 6% 4%;
-
-  --destructive: 0 60% 52%; /* Slightly brighter red for dark mode */
-  --destructive-foreground: 45 35% 92%;
-
-  --border: 180 6% 14%; /* Slightly more visible borders */
-  --input: 180 6% 8%; /* Input background */
-  --ring: 166 40% 55%; /* Brighter focus ring */
-
-  /* Chart colors for dark mode */
-  --chart-1: 166 40% 55%; /* Vibrant teal */
-  --chart-2: 139 30% 45%; /* Vibrant forest green */
-  --chart-3: 45 30% 75%; /* Brighter neutral */
-  --chart-4: 61 20% 45%; /* More vibrant olive tone */
-  --chart-5: 166 30% 38%; /* Darker teal */
-
-  /* Dark sidebar */
-  --sidebar: 180 6% 6%;
-  --sidebar-foreground: 45 35% 92%;
-  --sidebar-primary: 139 30% 45%;
-  --sidebar-primary-foreground: 45 35% 92%;
-  --sidebar-accent: 166 40% 55%;
-  --sidebar-accent-foreground: 180 6% 4%;
-  --sidebar-border: 180 6% 14%;
-  --sidebar-ring: 166 40% 55%;
-
-  /* Same typography */
-  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-serif: 'Crimson Text', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-  --radius: 0.75rem;
-
-  /* Deeper shadows for dark mode */
-  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.15);
-  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.20);
-  --shadow-sm: 0px 2px 4px -1px hsl(0 0% 0% / 0.25), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
-  --shadow: 0px 4px 6px -2px hsl(0 0% 0% / 0.25), 0px 2px 4px -2px hsl(0 0% 0% / 0.15);
-  --shadow-md: 0px 6px 10px -3px hsl(0 0% 0% / 0.30), 0px 2px 4px -2px hsl(0 0% 0% / 0.20);
-  --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.35), 0px 4px 6px -2px hsl(0 0% 0% / 0.25);
-  --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.40), 0px 10px 10px -5px hsl(0 0% 0% / 0.20);
-  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.50);
-
-  --tracking-normal: -0.005em;
-  --spacing: 0.25rem;
-
-  /* Dark mode eco colors */
-  --success: 139 38% 52%;
-  --success-foreground: 180 6% 4%;
-  --warning: 45 80% 65%;
-  --warning-foreground: 61 11% 10%;
-  --info: 166 45% 58%;
-  --info-foreground: 180 6% 4%;
-}
-
-body {
-  letter-spacing: var(--tracking-normal);
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: var(--font-sans);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Additional utility classes for the eco theme */
-.eco-gradient-primary {
-  background: linear-gradient(135deg, 
-    hsl(var(--primary)) 0%, 
-    hsl(var(--secondary)) 100%
-  );
-}
-
-.eco-gradient-accent {
-  background: linear-gradient(135deg, 
-    hsl(var(--accent)) 0%, 
-    hsl(var(--primary)) 100%
-  );
-}
-
-.eco-glass {
-  background: hsl(var(--background) / 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid hsl(var(--border) / 0.5);
-}
-
-/* Focus states for accessibility */
-*:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 2px;
-  border-radius: var(--radius);
-}
-
-/* Smooth transitions for theme switching */
-* {
-  transition: 
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
 @layer base {
+  :root {
+    /* Light Mode - Natural, Airy, Elegant */
+    --background: 45 41% 89%; /* Soft ivory base */
+    --foreground: 180 6% 8%; /* Deep charcoal for text */
+
+    --card: 45 41% 94%; /* Lighter ivory for cards */
+    --card-foreground: 180 6% 8%;
+
+    --popover: 45 41% 96%; /* Nearly white ivory */
+    --popover-foreground: 180 6% 8%;
+
+    --primary: 139 21% 36%; /* Earthy forest green */
+    --primary-foreground: 45 41% 96%;
+
+    --secondary: 166 33% 47%; /* Teal green accent */
+    --secondary-foreground: 45 41% 96%;
+
+    --muted: 45 31% 91%; /* Muted ivory */
+    --muted-foreground: 61 11% 31%; /* Olive tone for muted text */
+
+    --accent: 166 28% 52%; /* Slightly brighter teal for accents */
+    --accent-foreground: 45 41% 96%;
+
+    --destructive: 0 65% 51%; /* Muted red for warnings */
+    --destructive-foreground: 45 41% 96%;
+
+    --border: 45 21% 82%; /* Soft border from ivory family */
+    --input: 45 21% 82%; /* Input border matches border */
+    --ring: 139 21% 36%; /* Focus ring matches primary */
+
+    /*
+     * Brand marks. Unlike --primary/--secondary these do NOT swap roles
+     * between themes, so gradients, the logo and the wordmark stay
+     * recognisably "The Orb" in both light and dark.
+     */
+    --brand: 139 21% 36%; /* #487052 forest green */
+    --brand-accent: 166 33% 47%; /* #509e8e teal */
+    --brand-foreground: 45 41% 96%;
+
+    /* Ink + surface used by the footer, which is dark in both themes */
+    --ink: 180 6% 4%; /* #0c0d0d */
+    --ink-foreground: 45 35% 92%; /* #eae4d2 */
+
+    /* Chart colors using palette variations */
+    --chart-1: 139 21% 36%; /* Forest green */
+    --chart-2: 166 33% 47%; /* Teal green */
+    --chart-3: 61 11% 31%; /* Olive tone */
+    --chart-4: 45 15% 65%; /* Mid-tone neutral */
+    --chart-5: 139 15% 25%; /* Darker forest green */
+
+    /* Sidebar specific colors */
+    --sidebar: 45 35% 92%; /* Slightly warmer sidebar */
+    --sidebar-foreground: 180 6% 8%;
+    --sidebar-primary: 139 21% 36%;
+    --sidebar-primary-foreground: 45 41% 96%;
+    --sidebar-accent: 166 33% 47%;
+    --sidebar-accent-foreground: 45 41% 96%;
+    --sidebar-border: 45 21% 85%;
+    --sidebar-ring: 139 21% 36%;
+
+    /* Additional eco-themed colors */
+    --success: 139 35% 45%; /* Success green */
+    --success-foreground: 45 41% 96%;
+    --warning: 45 85% 55%; /* Natural amber warning */
+    --warning-foreground: 61 11% 15%;
+    --info: 166 40% 50%; /* Info teal */
+    --info-foreground: 45 41% 96%;
+
+    /* Typography - Eco-friendly, readable fonts */
+    --font-serif: "Crimson Text", Georgia, serif;
+    --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+    /* Border radius for organic feel */
+    --radius: 0.75rem;
+
+    /* Header height, so pages can offset the fixed header consistently */
+    --header-height: 4rem;
+
+    /* Soft, natural shadows */
+    --shadow-2xs: 0px 1px 2px 0px hsl(61 11% 31% / 0.04);
+    --shadow-xs: 0px 1px 3px 0px hsl(61 11% 31% / 0.06);
+    --shadow-sm: 0px 2px 4px -1px hsl(61 11% 31% / 0.08), 0px 1px 2px -1px hsl(61 11% 31% / 0.06);
+    --shadow: 0px 4px 6px -2px hsl(61 11% 31% / 0.08), 0px 2px 4px -2px hsl(61 11% 31% / 0.06);
+    --shadow-md: 0px 6px 10px -3px hsl(61 11% 31% / 0.1), 0px 2px 4px -2px hsl(61 11% 31% / 0.06);
+    --shadow-lg: 0px 10px 15px -3px hsl(61 11% 31% / 0.12), 0px 4px 6px -2px hsl(61 11% 31% / 0.08);
+    --shadow-xl: 0px 20px 25px -5px hsl(61 11% 31% / 0.12), 0px 10px 10px -5px hsl(61 11% 31% / 0.06);
+    --shadow-2xl: 0px 25px 50px -12px hsl(61 11% 31% / 0.2);
+
+    --tracking-normal: -0.005em;
+  }
+
+  .dark {
+    /* Dark Mode - Deep, Calming, Atmospheric */
+    --background: 180 6% 4%; /* Deep charcoal base */
+    --foreground: 45 35% 92%; /* Brighter warm ivory text */
+
+    --card: 180 6% 6%; /* Slightly lighter charcoal */
+    --card-foreground: 45 35% 92%;
+
+    --popover: 180 6% 5%; /* Popover background */
+    --popover-foreground: 45 35% 92%;
+
+    --primary: 166 40% 55%; /* Slightly more vibrant teal */
+    --primary-foreground: 180 6% 4%;
+
+    --secondary: 139 30% 45%; /* More vibrant forest green */
+    --secondary-foreground: 45 35% 92%;
+
+    --muted: 180 6% 8%; /* Muted dark background */
+    --muted-foreground: 45 20% 72%; /* Brighter muted text */
+
+    --accent: 166 40% 55%; /* More vibrant accent teal */
+    --accent-foreground: 180 6% 4%;
+
+    --destructive: 0 60% 52%; /* Slightly brighter red for dark mode */
+    --destructive-foreground: 45 35% 92%;
+
+    --border: 180 6% 14%; /* Slightly more visible borders */
+    --input: 180 6% 16%; /* Input border, a touch above surface */
+    --ring: 166 40% 55%; /* Brighter focus ring */
+
+    /* Brand marks lift slightly so they hold contrast on charcoal */
+    --brand: 139 30% 48%;
+    --brand-accent: 166 40% 55%;
+    --brand-foreground: 180 6% 4%;
+
+    --ink: 180 6% 4%;
+    --ink-foreground: 45 35% 92%;
+
+    /* Chart colors for dark mode */
+    --chart-1: 166 40% 55%; /* Vibrant teal */
+    --chart-2: 139 30% 45%; /* Vibrant forest green */
+    --chart-3: 45 30% 75%; /* Brighter neutral */
+    --chart-4: 61 20% 45%; /* More vibrant olive tone */
+    --chart-5: 166 30% 38%; /* Darker teal */
+
+    /* Dark sidebar */
+    --sidebar: 180 6% 6%;
+    --sidebar-foreground: 45 35% 92%;
+    --sidebar-primary: 139 30% 45%;
+    --sidebar-primary-foreground: 45 35% 92%;
+    --sidebar-accent: 166 40% 55%;
+    --sidebar-accent-foreground: 180 6% 4%;
+    --sidebar-border: 180 6% 14%;
+    --sidebar-ring: 166 40% 55%;
+
+    /* Dark mode eco colors */
+    --success: 139 38% 52%;
+    --success-foreground: 180 6% 4%;
+    --warning: 45 80% 65%;
+    --warning-foreground: 61 11% 10%;
+    --info: 166 45% 58%;
+    --info-foreground: 180 6% 4%;
+
+    /* Deeper shadows for dark mode */
+    --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.15);
+    --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.2);
+    --shadow-sm: 0px 2px 4px -1px hsl(0 0% 0% / 0.25), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+    --shadow: 0px 4px 6px -2px hsl(0 0% 0% / 0.25), 0px 2px 4px -2px hsl(0 0% 0% / 0.15);
+    --shadow-md: 0px 6px 10px -3px hsl(0 0% 0% / 0.3), 0px 2px 4px -2px hsl(0 0% 0% / 0.2);
+    --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.35), 0px 4px 6px -2px hsl(0 0% 0% / 0.25);
+    --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.4), 0px 10px 10px -5px hsl(0 0% 0% / 0.2);
+    --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.5);
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-height: 5rem;
+    }
+  }
+
   * {
     @apply border-border;
   }
+
+  html {
+    scroll-behavior: smooth;
+    /* Anchor targets clear the fixed header */
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+  }
+
   body {
     @apply bg-background text-foreground;
+    letter-spacing: var(--tracking-normal);
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  .theme {
-    --animate-marquee: marquee var(--duration) infinite linear;
-    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+  /* Headings sit tighter than body copy at display sizes */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: hsl(var(--brand-accent) / 0.3);
+  }
+
+  /* Focus states for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: calc(var(--radius) - 4px);
   }
 }
 
-/* Optional: Add some custom styles for The Órb */
-/* @layer components {
-  .prose-climate {
-    @apply prose prose-slate max-w-none;
+@layer components {
+  /*
+   * One vertical rhythm for every landing section. Sections opt in with
+   * `section-y`; anything that needs to sit flush against its neighbour
+   * overrides with its own padding.
+   */
+  .section-y {
+    @apply py-16 sm:py-20 lg:py-24;
   }
 
-  .climate-gradient {
-    background: linear-gradient(135deg, hsl(142, 71%, 45%) 0%, hsl(200, 95%, 50%) 100%);
+  .section-y-sm {
+    @apply py-10 sm:py-12 lg:py-16;
   }
 
-  .hero-text {
-    @apply text-4xl md:text-6xl font-bold tracking-tight;
+  .eco-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--brand)) 0%, hsl(var(--brand-accent)) 100%);
   }
-} */
 
-@theme inline {
-  @keyframes marquee {
-  from {
-    transform: translateX(0);
-    }
-  to {
-    transform: translateX(calc(-100% - var(--gap)));
-    }
+  .eco-gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
   }
-  @keyframes marquee-vertical {
+
+  .eco-glass {
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* Brand wordmark / gradient text */
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-brand to-brand-accent bg-clip-text text-transparent;
+    /* Keeps descenders from being clipped by background-clip */
+    padding-bottom: 0.05em;
+  }
+}
+
+@layer utilities {
+  /*
+   * Referenced by the hero + page background washes. Previously undefined,
+   * so every `bg-noise` / `bg-gradient-conic` layer rendered as nothing.
+   */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 180px 180px;
+  }
+
+  .bg-gradient-conic {
+    background-image: conic-gradient(
+      from 180deg at 50% 50%,
+      var(--tw-gradient-from),
+      var(--tw-gradient-via, var(--tw-gradient-to)),
+      var(--tw-gradient-to)
+    );
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+ * Archive rail collapse.
+ *
+ * State lives in `data-posts-rail` on <html>, set by an inline script before
+ * first paint: a reader who collapsed the rail last visit would otherwise watch
+ * it sit open through hydration and then snap shut. React never renders the
+ * attribute, so there is no hydration mismatch.
+ */
+@media (min-width: 1024px) {
+  .posts-shell {
+    display: grid;
+    /*
+     * Literal track values on both sides of the toggle, deliberately not a
+     * custom property. An unregistered CSS variable is not interpolatable, so
+     * feeding one into grid-template-columns makes the track recompute
+     * discretely — the transition below silently never ran and the column
+     * simply snapped between widths.
+     */
+    grid-template-columns: 15rem minmax(0, 1fr);
+    column-gap: 3rem;
+    align-items: start;
+    transition: grid-template-columns 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-posts-rail="collapsed"] .posts-shell {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+  }
+}
+
+/*
+ * Both rail trees occupy the same grid cell and cross-fade, rather than one
+ * being display:none. Each keeps the width it was designed for, so neither
+ * reflows while the column animates around it — the list is clipped as it
+ * fades, instead of rewrapping into a 3.5rem gutter.
+ */
+.posts-rail-stack {
+  display: grid;
+}
+
+.posts-rail-stack > * {
+  grid-area: 1 / 1;
+  transition:
+    opacity 180ms ease,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.posts-rail-expanded {
+  width: 15rem;
+}
+
+.posts-rail-strip {
+  width: 3.5rem;
+}
+
+/*
+ * visibility, not display — it still removes the hidden tree from the
+ * accessibility tree and from hit-testing, but unlike display it can be
+ * transitioned, so the fade actually plays out. The 0s delay is what holds the
+ * outgoing tree visible until its opacity has finished.
+ */
+.posts-rail-strip,
+[data-posts-rail="collapsed"] .posts-rail-expanded {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 140ms ease,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 140ms;
+}
+
+.posts-rail-expanded,
+[data-posts-rail="collapsed"] .posts-rail-strip {
+  opacity: 1;
+  visibility: visible;
+  /* Incoming tree waits for the outgoing one to clear before fading up. */
+  transition:
+    opacity 200ms ease 120ms,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
+}
+
+/* The list is wider than the collapsed column; clip rather than overlap the
+   grid while it fades out. */
+.posts-rail-clip {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+[data-posts-rail="collapsed"] .posts-rail-clip {
+  /* Nothing tall is visible once collapsed, so no scrollbar for a hidden tree. */
+  overflow-y: hidden;
+}
+
+.posts-rail-toggle-icon {
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-posts-rail="collapsed"] .posts-rail-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Trending: a deliberately slow drift, paused on hover and on keyboard focus. */
+.orb-trending-track {
+  animation: orb-trending-scroll 60s linear infinite;
+}
+
+.group:hover .orb-trending-track,
+.orb-trending-track:focus-within {
+  animation-play-state: paused;
+}
+
+@keyframes orb-trending-scroll {
   from {
     transform: translateY(0);
-    }
+  }
   to {
-    transform: translateY(calc(-100% - var(--gap)));
-    }
+    transform: translateY(-50%);
   }
 }
 
-/* In your global CSS file */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+@media (prefers-reduced-motion: reduce) {
+  /*
+   * The global reduce rule collapses every animation to 0.01ms and runs it
+   * once, which for a marquee means jumping straight to the end transform and
+   * resting on the duplicated copy. This has to be `none` so the list simply
+   * stays where it started.
+   */
+  .orb-trending-track {
+    animation: none !important;
+  }
+
+  .posts-shell,
+  .posts-rail-stack > *,
+  .posts-rail-toggle-icon {
+    transition: none !important;
+  }
 }
 
+/* Swiper overrides — used by the resources / category carousels */
 .swiper-container {
   position: relative;
   padding: 0 40px;
@@ -274,4 +433,37 @@ body {
 .swiper-button-prev:after,
 .swiper-button-next:after {
   content: none;
+}
+
+/*
+ * Respect the OS "reduce motion" setting. The hero globe, marquees and
+ * scroll parallax are all decorative.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Visual-story deck arrows reveal on hover or keyboard focus on pointer
+ * devices (see VisualStoryDeck). Touch screens have no hover state at all, so
+ * the reveal would never fire and the controls would be permanently invisible
+ * — there they stay on. !important because the Tailwind `opacity-0` utility
+ * this overrides carries identical specificity.
+ */
+@media (hover: none) {
+  .deck-controls {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
 }

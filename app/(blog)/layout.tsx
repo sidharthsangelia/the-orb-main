@@ -15,7 +15,8 @@ import { resolveOpenGraphImage, urlForImage } from "@/sanity/lib/utils";
 import Header1 from "@/components/mvpblocks/header-1";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Toaster } from "react-hot-toast";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch({
     query: settingsQuery,
@@ -26,10 +27,20 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = settings?.description || demo.description;
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage);
-  let metadataBase: URL | undefined = undefined;
-  // metadataBase property does not exist on ogImage, so we leave it undefined or set it as needed
+
+  /*
+   * Without a metadataBase, Next resolves Open Graph and Twitter image paths
+   * relative to nothing — the generated opengraph-image route produced URLs
+   * that social crawlers could not fetch. Prefer an explicit site URL, fall
+   * back to the Vercel deployment URL, then to the production domain.
+   */
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+    "https://theorbearth.in";
+
   return {
-    metadataBase,
+    metadataBase: new URL(siteUrl),
     title: {
       template: `%s | ${title}`,
       default: title,
@@ -84,32 +95,54 @@ const footerData = {
   // const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`} suppressHydrationWarning>
-      <body>
-          {/* {isDraftMode && <AlertBanner />} */}
-           
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body className="min-h-dvh bg-background text-foreground antialiased">
+        {/* {isDraftMode && <AlertBanner />} */}
+
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* Keyboard users can jump the fixed header and nav */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-foreground"
           >
-        <Header1
-          title={data?.title}
-          description={data?.description}
-          logo={logoUrl}
-        />
-          {/* <section className="min-h-screen"> */}
-            {children}
-          {/* </section> */}
-            
+            Skip to content
+          </a>
+
+          <div className="flex min-h-dvh flex-col">
+            <Header1
+              title={data?.title}
+              description={data?.description}
+              logo={logoUrl}
+            />
+
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+
             {siteSettings && <Footer siteSettings={footerData} />}
-          </ThemeProvider>
-                  
-          <SpeedInsights />
-            
-          <GoogleAnalytics gaId="G-QWJWTC258D" />
-        </body>
+          </div>
+
+          {/* Mounted once here — the newsletter forms call toast() but had no
+              renderer, so success/error toasts never actually appeared. */}
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              className:
+                "!bg-card !text-card-foreground !border !border-border !shadow-lg",
+              duration: 4000,
+            }}
+          />
+        </ThemeProvider>
+
+        <SpeedInsights />
+
+        <GoogleAnalytics gaId="G-QWJWTC258D" />
+      </body>
     </html>
   );
 }

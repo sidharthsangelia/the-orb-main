@@ -7,17 +7,43 @@ const config: Config = {
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./sanity/**/*.{ts,tsx}",
-    "./node_modules/@shadcn/ui/**/*.{js,ts,jsx,tsx}", // optional, for package usage
   ],
   theme: {
+    /*
+     * A single container definition so every section on the site lines up.
+     * Previously sections mixed `container mx-auto`, `max-w-6xl` and `w-[90%]`,
+     * which made cards visibly misalign from one band to the next.
+     */
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "1.5rem",
+        lg: "2rem",
+      },
+      screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1280px",
+      },
+    },
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)"],
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)"],
+        mono: ["var(--font-mono)"],
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "2xl": "calc(var(--radius) + 6px)",
+        "3xl": "calc(var(--radius) + 12px)",
+      },
+      spacing: {
+        header: "var(--header-height)",
       },
       colors: {
         background: "hsl(var(--background))",
@@ -50,6 +76,30 @@ const config: Config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        // Theme-stable brand marks — used for the logo, wordmark and CTAs so
+        // they read as "The Orb" in both light and dark.
+        brand: {
+          DEFAULT: "hsl(var(--brand))",
+          accent: "hsl(var(--brand-accent))",
+          foreground: "hsl(var(--brand-foreground))",
+        },
+        // Deliberately dark surface (the footer) — dark in both themes.
+        ink: {
+          DEFAULT: "hsl(var(--ink))",
+          foreground: "hsl(var(--ink-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,14 +111,25 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
       },
-
-      // ✅ CORRECTLY placed animation & keyframes here
+      boxShadow: {
+        xs: "var(--shadow-xs)",
+        sm: "var(--shadow-sm)",
+        DEFAULT: "var(--shadow)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+        xl: "var(--shadow-xl)",
+        "2xl": "var(--shadow-2xl)",
+      },
       animation: {
         scroll:
           "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
         marquee: "marquee var(--duration, 40s) linear infinite",
         "marquee-vertical":
           "marquee-vertical var(--duration, 40s) linear infinite",
+        // Referenced across the hero / subscribe backgrounds but never defined
+        // before, so those decorative layers rendered completely static.
+        "spin-slow": "spin 32s linear infinite",
+        "pulse-slow": "pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         scroll: {
@@ -76,13 +137,22 @@ const config: Config = {
             transform: "translate(calc(-50% - 0.5rem))",
           },
         },
+        /*
+         * Each repeated block must travel exactly its own width plus the gap
+         * to land where its predecessor started — that is what makes the loop
+         * seamless. At -50% the strip jumped on every cycle.
+         */
         marquee: {
-          from: { transform: "translateX(0%)" },
-          to: { transform: "translateX(calc(-50% - var(--gap)))" },
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" },
         },
         "marquee-vertical": {
-          from: { transform: "translateY(0%)" },
-          to: { transform: "translateY(-50%)" },
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "0.5" },
+          "50%": { opacity: "0.8" },
         },
       },
     },
