@@ -162,24 +162,51 @@ const postsIndexFilter = /* groq */ `
 `;
 
 /*
- * The archive listing. The previous allPostsQuery accepted $limit and $offset
- * and then ignored them — it had no slice at all — so every "page" fetched the
- * entire post collection and rendered it, while the pager underneath advertised
- * page numbers that changed nothing. This one actually slices.
+ * The archive listing, split either side of its slice.
+ *
+ * Everything except the slice lives in these two fragments, so the runtime
+ * query and the typegen twin below cannot drift apart: they are assembled from
+ * the same characters and differ only in what sits between them.
  */
-export const postsIndexQuery = defineQuery(`
-  {
-    "posts": *[${postsIndexFilter}]
-      | order(date desc, _updatedAt desc)
-      [$offset...$offset + $limit] {
-        ${postFields}
-      },
-    "total": count(*[${postsIndexFilter}]),
-    // Resolved alongside the rows so the results header can name the active
-    // topic without a second round trip.
-    "categoryTitle": *[_type == "category" && slug.current == $category][0].title
-  }
-`);
+const postsIndexHead = /* groq */ `
+  "posts": *[${postsIndexFilter}]
+    | order(date desc, _updatedAt desc)
+`;
+
+const postsIndexTail = /* groq */ ` {
+      ${postFields}
+    },
+  "total": count(*[${postsIndexFilter}]),
+  // Resolved alongside the rows so the results header can name the active
+  // topic without a second round trip.
+  "categoryTitle": *[_type == "category" && slug.current == $category][0].title
+`;
+
+/*
+ * The query that actually runs. The previous allPostsQuery accepted $limit and
+ * $offset and then ignored them — it had no slice at all — so every "page"
+ * fetched the entire post collection and rendered it, while the pager
+ * underneath advertised page numbers that changed nothing. This one slices.
+ *
+ * Deliberately NOT wrapped in defineQuery. Sanity's typegen only analyses
+ * defineQuery calls, and it rejects a slice built from parameters with
+ * "slicing must use constant numbers" — an error it printed on every build,
+ * including on the deploy host. Keeping this a plain string takes it out of
+ * typegen's view; postsIndexShapeQuery below supplies the result type.
+ */
+export const postsIndexQuery = /* groq */ `{${postsIndexHead}  [$offset...$offset + $limit]${postsIndexTail}}`;
+
+/*
+ * Never fetched. It exists so typegen has a constant-sliced version of the
+ * query above to derive PostsIndexShapeQueryResult from — the type
+ * PostsResults annotates the real response with. The slice bound is arbitrary;
+ * only the projection shape is read from it, and a slice always yields an
+ * array, so the generated type describes the paged response exactly.
+ *
+ * Do not delete this alongside "unused" exports: removing it silently drops
+ * the archive back to an untyped response.
+ */
+export const postsIndexShapeQuery = defineQuery(`{${postsIndexHead}  [0...20]${postsIndexTail}}`);
 
 /*
  * Count only. Used to reject an out-of-range page *before* the response starts

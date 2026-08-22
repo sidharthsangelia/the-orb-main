@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SearchX } from "lucide-react";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { postsIndexQuery } from "@/sanity/lib/queries";
-import type { AllPostsQueryResult } from "@/sanity.types";
+import type { PostsIndexShapeQueryResult } from "@/sanity.types";
 import { PostsGrid } from "@/components/blog/PostsGrid";
 import { PostsPagination } from "@/components/blog/PostsPagination";
 import {
@@ -30,9 +30,9 @@ export async function PostsResults({
 }: PostsResultsProps) {
   /*
    * Annotated rather than inferred: Sanity's typegen refuses a slice built from
-   * parameters ("slicing must use constant numbers"), so it emits no type for
-   * this query. The projection is character-for-character the one allPostsQuery
-   * uses, so its generated result describes these rows exactly.
+   * parameters ("slicing must use constant numbers"), so postsIndexQuery is
+   * kept out of its view and postsIndexShapeQuery — assembled from the same
+   * fragments with a constant slice — carries the type instead.
    */
   const data = (await sanityFetch({
     query: postsIndexQuery,
@@ -42,9 +42,9 @@ export async function PostsResults({
       category,
       q: toGroqMatch(q),
     },
-  })) as AllPostsQueryResult & { categoryTitle: string | null };
+  })) as PostsIndexShapeQueryResult;
 
-  type PostRow = AllPostsQueryResult["posts"][number];
+  type PostRow = PostsIndexShapeQueryResult["posts"][number];
 
   const posts = (data?.posts ?? []).filter(
     (post: PostRow): post is PostRow & { slug: string } =>

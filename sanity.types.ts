@@ -984,6 +984,65 @@ export type AllPostsQueryResult = {
   }>;
   total: number;
 };
+// Variable: postsIndexShapeQuery
+// Query: {  "posts": *[  _type == "post"  && defined(slug.current)  && ($category == "" || $category in categories[]->slug.current)  && (    $q == ""    || title match $q    || excerpt match $q    || author->name match $q    || count(categories[@->title match $q]) > 0  )]    | order(date desc, _updatedAt desc)  [0...20] {        _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{    "name": coalesce(name, "Anonymous"),     picture,    bio  },  // The schema field is "categories", an array of references. The previous  // projection dereferenced "category->", a field that does not exist, so  // every category badge on the site was silently fed null. "category" keeps  // the singular shape the existing cards read; "categories" exposes the  // full list for the article page.  "category": categories[0]->{    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,    "color": coalesce(color.hex, "#3B82F6")  },  "categoryIds": categories[]._ref,  tags,  "readingTime": round(length(pt::text(content)) / 5 / 200)    },  "total": count(*[  _type == "post"  && defined(slug.current)  && ($category == "" || $category in categories[]->slug.current)  && (    $q == ""    || title match $q    || excerpt match $q    || author->name match $q    || count(categories[@->title match $q]) > 0  )]),  // Resolved alongside the rows so the results header can name the active  // topic without a second round trip.  "categoryTitle": *[_type == "category" && slug.current == $category][0].title}
+export type PostsIndexShapeQueryResult = {
+  posts: Array<{
+    _id: string;
+    status: "draft" | "published";
+    title: string | "Untitled";
+    slug: string | null;
+    excerpt: string | null;
+    coverImage: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      caption?: string;
+      _type: "image";
+    } | null;
+    date: string;
+    author: {
+      name: string | "Anonymous";
+      picture: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+      bio: string | null;
+    } | null;
+    category: {
+      title: string | null;
+      slug: string | null;
+      color: string | "#3B82F6";
+    } | null;
+    categories: Array<{
+      _id: string;
+      title: string | null;
+      slug: string | null;
+      color: string | "#3B82F6";
+    }> | null;
+    categoryIds: Array<string> | null;
+    tags: Array<string> | null;
+    readingTime: number;
+  }>;
+  total: number;
+  categoryTitle: string | null;
+};
 // Variable: postsIndexCountQuery
 // Query: count(*[  _type == "post"  && defined(slug.current)  && ($category == "" || $category in categories[]->slug.current)  && (    $q == ""    || title match $q    || excerpt match $q    || author->name match $q    || count(categories[@->title match $q]) > 0  )])
 export type PostsIndexCountQueryResult = number;
@@ -2258,6 +2317,7 @@ declare module "@sanity/client" {
     "\n*[_type == \"post\" && \"climate-stories\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  organization,\n  impact,\n  readTime,\n  date,\n  author-> {\n      name,\n      picture\n    },\n}\n": ClimateStoriesQueryResult;
     "\n*[_type == \"post\" && \"youth-voices\" in categories[]->slug.current && status == \"published\"]{\n  _id,\n  title,\n  \"slug\": slug.current,\n  \"description\": coalesce(excerpt, \"\"),\n  \"image\": coverImage.asset->url,\n  \"author\": author->name,\n  readTime,\n  likes,\n  date,\n  location,\n  author-> {\n      name,\n      picture\n    },\n}\n": YouthVoicesQueryResult;
     "\n  {\n    \"posts\": *[_type == \"post\" && defined(slug.current)]\n       | order(date desc, _updatedAt desc)  {\n        \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n      },\n    \"total\": count(*[_type == \"post\" && defined(slug.current)])\n  }\n": AllPostsQueryResult;
+    "{\n  \"posts\": *[\n  _type == \"post\"\n  && defined(slug.current)\n  && ($category == \"\" || $category in categories[]->slug.current)\n  && (\n    $q == \"\"\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n]\n    | order(date desc, _updatedAt desc)\n  [0...20] {\n      \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n    },\n  \"total\": count(*[\n  _type == \"post\"\n  && defined(slug.current)\n  && ($category == \"\" || $category in categories[]->slug.current)\n  && (\n    $q == \"\"\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n]),\n  // Resolved alongside the rows so the results header can name the active\n  // topic without a second round trip.\n  \"categoryTitle\": *[_type == \"category\" && slug.current == $category][0].title\n}": PostsIndexShapeQueryResult;
     "\n  count(*[\n  _type == \"post\"\n  && defined(slug.current)\n  && ($category == \"\" || $category in categories[]->slug.current)\n  && (\n    $q == \"\"\n    || title match $q\n    || excerpt match $q\n    || author->name match $q\n    || count(categories[@->title match $q]) > 0\n  )\n])\n": PostsIndexCountQueryResult;
     "\n  {\n    \"total\": count(*[\n      _type == \"post\"\n      && defined(slug.current)\n      && (\n        $q == \"\"\n        || title match $q\n        || excerpt match $q\n        || author->name match $q\n        || count(categories[@->title match $q]) > 0\n      )\n    ]),\n    \"categories\": *[_type == \"category\" && defined(slug.current)]\n    | order(order asc, title asc) {\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\"),\n    \"postCount\": count(*[\n      _type == \"post\"\n      && defined(slug.current)\n      && references(^._id)\n      && (\n        $q == \"\"\n        || title match $q\n        || excerpt match $q\n        || author->name match $q\n        || count(categories[@->title match $q]) > 0\n        )\n      ])\n    }\n  }\n": PostsIndexFacetsQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current) && featured == true] \n  | order(date desc, _updatedAt desc) [0...3] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\n    \"name\": coalesce(name, \"Anonymous\"), \n    picture,\n    bio\n  },\n  // The schema field is \"categories\", an array of references. The previous\n  // projection dereferenced \"category->\", a field that does not exist, so\n  // every category badge on the site was silently fed null. \"category\" keeps\n  // the singular shape the existing cards read; \"categories\" exposes the\n  // full list for the article page.\n  \"category\": categories[0]->{\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categories\": categories[]->{\n    _id,\n    title,\n    \"slug\": slug.current,\n    \"color\": coalesce(color.hex, \"#3B82F6\")\n  },\n  \"categoryIds\": categories[]._ref,\n  tags,\n  \"readingTime\": round(length(pt::text(content)) / 5 / 200)\n\n  }\n": FeaturedPostsQueryResult;
