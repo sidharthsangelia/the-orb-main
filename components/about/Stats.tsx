@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import { Users, Globe, FileText, TreePine } from 'lucide-react';
 import { StatItem } from './StatItem';
 
@@ -11,90 +10,80 @@ interface StatData {
 
 interface StatsSectionProps {
   stats: StatData[];
+  className?: string;
 }
 
-// Icon mapping for different stat types - you can expand this based on your needs
 const getIconForStat = (label: string, index: number) => {
   const lowerLabel = label.toLowerCase();
-  
+  const iconClass = 'h-4 w-4 sm:h-5 sm:w-5';
+
   if (lowerLabel.includes('youth') || lowerLabel.includes('aware')) {
-    return <Users className="h-4 w-4 sm:h-5 sm:w-5" />;
-  } else if (lowerLabel.includes('engaged') || lowerLabel.includes('global')) {
-    return <Globe className="h-4 w-4 sm:h-5 sm:w-5" />;
-  } else if (lowerLabel.includes('stories') || lowerLabel.includes('published') || lowerLabel.includes('content')) {
-    return <FileText className="h-4 w-4 sm:h-5 sm:w-5" />;
-  } else if (lowerLabel.includes('cities') || lowerLabel.includes('locations') || lowerLabel.includes('reached')) {
-    return <TreePine className="h-4 w-4 sm:h-5 sm:w-5" />;
+    return <Users className={iconClass} />;
   }
-  
-  // Default icons based on index if no match found
+  if (lowerLabel.includes('engaged') || lowerLabel.includes('global')) {
+    return <Globe className={iconClass} />;
+  }
+  if (
+    lowerLabel.includes('stories') ||
+    lowerLabel.includes('published') ||
+    lowerLabel.includes('content')
+  ) {
+    return <FileText className={iconClass} />;
+  }
+  if (
+    lowerLabel.includes('cities') ||
+    lowerLabel.includes('locations') ||
+    lowerLabel.includes('reached')
+  ) {
+    return <TreePine className={iconClass} />;
+  }
+
   const defaultIcons = [
-    <Users className="h-4 w-4 sm:h-5 sm:w-5" />, 
-    <Globe className="h-4 w-4 sm:h-5 sm:w-5" />, 
-    <FileText className="h-4 w-4 sm:h-5 sm:w-5" />, 
-    <TreePine className="h-4 w-4 sm:h-5 sm:w-5" />
+    <Users key="users" className={iconClass} />,
+    <Globe key="globe" className={iconClass} />,
+    <FileText key="file" className={iconClass} />,
+    <TreePine key="tree" className={iconClass} />,
   ];
   return defaultIcons[index % defaultIcons.length];
 };
 
 const getColorForStat = (index: number) => {
   const colors = [
-    'from-[#487052] to-[#509e8e]',
-    'from-[#509e8e] to-[#487052]',
-    'from-[#575846] to-[#487052]',
-    'from-[#487052] to-[#575846]',
+    'from-brand to-brand-accent',
+    'from-brand-accent to-brand',
+    'from-muted-foreground to-brand',
+    'from-brand to-muted-foreground',
   ];
   return colors[index % colors.length];
 };
 
-// Extract numeric value and suffix from string like "94%" or "50,000+"
+// "94%" -> { 94, "%" }, "50,000+" -> { 50000, "+" }
 const parseStatValue = (value: string) => {
   const numericValue = value.replace(/[^\d]/g, '');
   const suffix = value.replace(/[\d,]/g, '');
   return {
-    numericValue: parseInt(numericValue) || 0,
-    suffix: suffix
+    numericValue: parseInt(numericValue, 10) || 0,
+    suffix,
   };
 };
 
-export const StatsSection = ({ stats }: StatsSectionProps) => {
-  const statsRef = useRef(null);
-
-  if (!stats || stats.length === 0) {
-    return null;
-  }
+export const StatsSection = ({ stats, className }: StatsSectionProps) => {
+  if (!stats || stats.length === 0) return null;
 
   return (
-    <div ref={statsRef} className="w-full max-w-full overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-16 sm:mb-20 lg:mb-24">
-        {/* Mobile 2x2 Grid Layout */}
-        <div className="grid gap-3 grid-cols-2 sm:hidden">
+    <section className={className} aria-label="The Órb by the numbers">
+      <div className="container">
+        {/*
+         * One grid for every breakpoint — 2 up on phones, 4 up from `sm`.
+         * This used to be two duplicated grids toggled with `sm:hidden`.
+         */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {stats.map((stat, index) => {
             const { numericValue, suffix } = parseStatValue(stat.value);
-            
-            return (
-              <StatItem
-                key={index}
-                value={numericValue}
-                label={stat.label}
-                icon={getIconForStat(stat.label, index)}
-                delay={index * 0.1}
-                decimalPlaces={0}
-                color={getColorForStat(index)}
-                suffix={suffix}
-              />
-            );
-          })}
-        </div>
 
-        {/* Desktop Layout - Original */}
-        <div className="hidden sm:grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, index) => {
-            const { numericValue, suffix } = parseStatValue(stat.value);
-            
             return (
               <StatItem
-                key={index}
+                key={`${stat.label}-${index}`}
                 value={numericValue}
                 label={stat.label}
                 icon={getIconForStat(stat.label, index)}
@@ -107,6 +96,6 @@ export const StatsSection = ({ stats }: StatsSectionProps) => {
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
