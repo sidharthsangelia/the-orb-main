@@ -91,7 +91,18 @@ const footerData = {
   // const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={inter.variable}
+      /*
+       * globals.css sets `scroll-behavior: smooth` so the article table of
+       * contents glides to its anchors. Next 16 no longer overrides that during
+       * route transitions unless this attribute is present, which would make
+       * every navigation animate a long scroll to the top instead of jumping.
+       */
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh bg-background text-foreground antialiased">
         {/* {isDraftMode && <AlertBanner />} */}
 

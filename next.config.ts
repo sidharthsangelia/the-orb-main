@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
         pathname: "/images/**",
       },
     ],
+    /*
+     * Next 16 serves only the qualities listed here (the default is [75]) and
+     * warns on any other value. The visual story decks ask for 85 on their
+     * portrait slides, so it has to be declared.
+     */
+    qualities: [75, 85],
   },
 };
 
